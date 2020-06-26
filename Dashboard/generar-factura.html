@@ -1,14 +1,27 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
+
+    <!-- 
+      - Al hacer click en una cita se vea nueva pagina detallada
+      - Nueva pagina con horarios trabajadores
+      
+      Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--Link factura-->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap-4.1.3-dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="bootstrap-4.1.3-dist/css/dashboard-init.css"/>
+    <link rel="stylesheet" href="bootstrap-4.1.3-dist/css/generar-factura.css"/>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js"></script>
 
     <title>Hello, world!</title>
@@ -25,9 +38,9 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-            <a class="nav-link" href="index.html">
-              <i class="fa fa-fw fa-dashboard active"></i>
-              <span class="nav-link-text active" >Inicio</span>
+            <a class="nav-link" href="dashboard-main.html">
+              <i class="fa fa-fw fa-dashboard"></i>
+              <span class="nav-link-text">Inicio</span>
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
@@ -38,8 +51,8 @@
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
             <a class="nav-link" href="generar-factura.html">
-              <i class="fa fa-fw fa-area-chart"></i>
-              <span class="nav-link-text">Generar factura</span>
+              <i class="fa fa-fw fa-area-chart active"></i>
+              <span class="nav-link-text active">Generar factura</span>
             </a>
           </li>
 
@@ -224,226 +237,103 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a class="link-color" href="#">Dashboard</a>
+            <a class="link-color" href="dashboard-main.html">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Inicio</li>
+          <li class="breadcrumb-item active">Factura</li>
         </ol>
-        <!-- Icon Cards-->
-        <div class="row">
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fa fa-fw fa-comments"></i>
-                </div>
-                <div class="mr-5">26 New Messages!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                  <i class="fa fa-angle-right"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fa fa-fw fa-list"></i>
-                </div>
-                <div class="mr-5">11 New Tasks!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                  <i class="fa fa-angle-right"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-success o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fa fa-fw fa-shopping-cart"></i>
-                </div>
-                <div class="mr-5">123 New Orders!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                  <i class="fa fa-angle-right"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-danger o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fa fa-fw fa-support"></i>
-                </div>
-                <div class="mr-5">13 New Tickets!</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left">View Details</span>
-                <span class="float-right">
-                  <i class="fa fa-angle-right"></i>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- Area Chart Example-->
-       <!---- <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-area-chart"></i> Area Chart Example</div>
-          <div class="card-body">
-            <canvas id="myAreaChart" width="100%" height="30"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>-->
-        <div class="row">
-          <div class="col-lg-12">
-            <!-- Example Bar Chart Card-->
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fa fa-bar-chart"></i> Bar Chart Example</div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-8 my-auto">
-                    <canvas id="myBarChart" width="100" height="50"></canvas>
-                  </div>
-                  <div class="col-sm-4 text-center my-auto">
-                    <div class="h4 mb-0 text-primary">10,000€</div>
-                    <div class="small text-muted">Beneficios Totales</div>
-                    <hr>
-                    
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-            
-            <!-- /Card Columns-->
-          </div>
-        </div>
-            <!-- Example Pie Chart Card-->
-            
-            <!--
-            <div class="col-lg-4">
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fa fa-pie-chart"></i> Pie Chart Example</div>
-              <div class="card-body">
-                <canvas id="myPieChart" width="100%" height="100"></canvas>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-        -->
-            <!-- Example Notifications Card-->
-            <!-- <div class="card mb-3">
-              <div class="card-header">
-                <i class="fa fa-bell-o"></i> Feed Example</div>
-              <div class="list-group list-group-flush small">
-                <a class="list-group-item list-group-item-action" href="#">
-                  <div class="media">
-                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                    <div class="media-body">
-                      <strong>David Miller</strong>posted a new article to
-                      <strong>David Miller Website</strong>.
-                      <div class="text-muted smaller">Today at 5:43 PM - 5m ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action" href="#">
-                  <div class="media">
-                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                    <div class="media-body">
-                      <strong>Samantha King</strong>sent you a new message!
-                      <div class="text-muted smaller">Today at 4:37 PM - 1hr ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action" href="#">
-                  <div class="media">
-                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                    <div class="media-body">
-                      <strong>Jeffery Wellings</strong>added a new photo to the album
-                      <strong>Beach</strong>.
-                      <div class="text-muted smaller">Today at 4:31 PM - 1hr ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action" href="#">
-                  <div class="media">
-                    <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
-                    <div class="media-body">
-                      <i class="fa fa-code-fork"></i>
-                      <strong>Monica Dennis</strong>forked the
-                      <strong>startbootstrap-sb-admin</strong>repository on
-                      <strong>GitHub</strong>.
-                      <div class="text-muted smaller">Today at 3:54 PM - 2hrs ago</div>
-                    </div>
-                  </div>
-                </a>
-                <a class="list-group-item list-group-item-action" href="#">View all activity...</a>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-        </div>
-    -->
-        <!-- Example DataTables Card-->
+      
+
         <div class="card mb-3 col-lg-12">
           <div class="card-header">
-            <i class="fa fa-table"></i> Data Table Example</div>
+            <i class="fa fa-table"></i> Factura ID
+          </div>
           <div class="card-body">
-            <div class="table-responsive">
-              <table style="cursor: pointer;" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Puesto</th>
-                    <th>Inicio</th>
-                    <th>Salario</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                  </tr>
-                  <tr>
-                    <td>Garrett Winters</td>
-                    <td>Accountant</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
-                  </tr>
-                  <tr>
-                    <td>Ashton Cox</td>
-                    <td>Junior Technical Author</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
-                  </tr>
-                  <tr>
-                    <td>Cedric Kelly</td>
-                    <td>Senior Javascript Developer</td>
-                    <td>2012/03/29</td>
-                    <td>$433,060</td>
-                  </tr>
-                  <tr>
-                    <td>Airi Satou</td>
-                    <td>Accountant</td>
-                    <td>2008/11/28</td>
-                    <td>$162,700</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+<div id="invoice">
+
+    <div class="toolbar hidden-print">
+        <div class="text-right">
+            <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Imprimir</button>
+        </div>
+        <hr>
+    </div>
+    <div class="invoice overflow-auto">
+        <div style="min-width: 600px">
+            <header>
+                <div class="row">
+                    <div class="col">
+                        <a target="_blank" href="#">
+                            <img src="resources/archivo.jpg" width="200" data-holder-rendered="true" />
+                            </a>
+                    </div>
+                    <div class="col company-details">
+                        <h2 class="name">
+                            <a target="_blank" href="#" class="name">
+                            Peluquería Privilege
+                            </a>
+                        </h2>
+                        <div>Calle Pepito 123</div>
+                        <div>678678678</div>
+                        <div>peluqueria@example.com</div>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div class="row contacts">
+                    <div class="col invoice-to">
+                        <div class="text-gray-light">FACTURA</div>
+                        <h2 class="to">Nombre cliente</h2>
+                    </div>
+                    <div class="col invoice-details">
+                        <h1 class="invoice-id">Nº Factura</h1>
+                        <div class="date">Fecha: 01/10/2018</div>
+                    </div>
+                </div>
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="text-left">Descripción</th>
+                            <th class="text-right">Precio</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td class="no">01</td>
+                            <td class="text-left"><h3>Corte de pelo</h3></td>
+                            <td class="unit">20.00€</td>
+                            <td class="total">20.00€</td>
+                        </tr>
+                        <tr>
+                            <td class="no">02</td>
+                            <td class="text-left"><h3>Recortar barba</h3></td>
+                            <td class="unit">40.00€</td>
+                            <td class="total">40.00€</td>
+                        </tr>
+                        <tr>
+                            <td class="no">03</td>
+                            <td class="text-left"><h3>Mechas</h3></td>
+                            <td class="unit">10.00€</td>
+                            <td class="total">10.00€</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td style="color:#E6495A"colspan="1">TOTAL</td>
+                            <td style="color:#E6495A">$6,500.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+            </main>
+            
+        </div>
+        <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+        <div></div>
+    </div>
+</div>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
@@ -483,7 +373,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
-    <script src="bootstrap-4.1.3-dist/js/dashboard.js"></script>
+    <script src="bootstrap-4.1.3-dist/js/dashboard-toggle-leftbar.js"></script>
+    <script src="bootstrap-4.1.3-dist/js/clickable-row-table.js"></script>
+    <script src="bootstrap-4.1.3-dist/js/generar-factura.js"></script>
+
+
 
 
   </body>

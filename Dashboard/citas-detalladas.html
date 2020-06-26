@@ -46,9 +46,9 @@
             </a>
           </li>
           <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
-            <a class="nav-link" href="charts.html">
+            <a class="nav-link" href="generar-factura.html">
               <i class="fa fa-fw fa-area-chart"></i>
-              <span class="nav-link-text">Charts</span>
+              <span class="nav-link-text">Generar factura</span>
             </a>
           </li>
 
@@ -243,32 +243,98 @@
           <div class="card-header">
             <i class="fa fa-table"></i> Cita ID
           </div>
-          <div class="card-body">
-            <dl class="aboutus_c">
-                <dt class="aboutus-heading">Teléfono</dt>
-                <dd class="aboutus-val">43424324324</dd>
-                <dt class="aboutus-heading">Nombre</dt>
-                <dd class="aboutus-val"><address class="fs_n">Pepito</address></dd>
-                <dt class="aboutus-heading">Phone</dt>
-                <dd class="aboutus-val"><address class="fs_n">0000-000-000</address></dd>
-                <dt class="aboutus-heading">E-Mail</dt>
-                <dd class="aboutus-val"><address class="fs_n">sample＠sample.com</address></dd>
-                <dt class="aboutus-heading">Home page</dt>
-                <dd class="aboutus-val">https://ryo.dev</dd>
-                <dt class="aboutus-heading">Established</dt>
-                <dd class="aboutus-val"><time datetime="2018-05">2018.05</time></dd>
-                <dt class="aboutus-heading">Business Detail</dt>
-                <dd class="aboutus-val">
-                  <p>Creating and modifying websites</p>
-                  <p>Production of various parts that can be used on the website</p>
-                  <p>Realizing the idea you came up with</p>
-                </dd>
-                <dt class="aboutus-heading">Paid-in Capital</dt>
-                <dd class="aboutus-val">000,000,000 yen</dd>
-                <dt class="aboutus-heading">President</dt>
-                <dd class="aboutus-val">RYO</dd>
-              </dl>            
-          </div>
+          <div class="wrap" data-pos="0">
+            <div class="headbar">
+                <i class="zmdi zmdi-arrow-left btnBack"></i> <span>Cita</span>
+            </div>
+            <div class="header">
+                <div class="bg"></div>
+                <div class="filter"></div>
+                <div class="title">
+                    <div class="fromPlace">
+                        10:30
+                    </div>
+                    <span class="separator"><i class="fa fa-location-arrow"></i></span>
+                    <div class="toPlace">
+                        11:00
+                    </div>
+                </div>
+                <div class="map"></div>
+            </div>
+    
+            <div class="content">
+                <section>
+                    <div class="form">
+                        <div class="control select">
+                            <div class="control-head">
+                                <i class="fa fa-mobile-phone"></i>
+                                <span class="close"><i class="fa fa-mobile-phone"></i></span>
+                                <div>
+                                    <h6>Teléfono</h6>
+                                    <span class="airport-name" data-role="from">674576761</span>
+                                </div>			
+                            </div>
+                            
+                        </div>
+                        <div class="control select">
+                            <div class="control-head">
+                                <i class="fa fa-user" style="font-size: 1.2em;"></i>
+                                <span class="close"><i class="fa fa-user"></i></span>
+                                <div>
+                                    <h6>Nombre</h6>
+                                    <span class="airport-name" data-role="to">Juanjo</span>
+                                </div>			
+                            </div>
+                        </div>
+                        <div class="control select">
+                            <div class="control-head">
+                                <i class="fa fa-tag" style="font-size: 1.2em;"></i>
+                                <span class="close"><i class="fa fa-tag"></i></span>
+                                <div>
+                                    <h6>Servicio</h6>
+                                    <span class="airport-name" data-role="to">Corte de pelo</span>
+                                </div>			
+                            </div>
+                        </div>
+                        <div class="control select">
+                            <div class="control-head">
+                                <i class="fa fa-clock-o" style="font-size: 1.2em;"></i>
+                                <span class="close"><i class="fa fa-clock-o"></i></span>
+                                <div>
+                                    <h6>Duración</h6>
+                                    <span class="airport-name" data-role="to">30 minutos</span>
+                                </div>			
+                            </div>
+                        </div>
+                        <div class="control select">
+                            <div class="control-head">
+                                <i class="fa fa-id-card " style="font-size: 1.2em;"></i>
+                                <span class="close"><i class="fa fa-id-card "></i></span>
+                                <div>
+                                    <h6>Profesional</h6>
+                                    <span class="airport-name" data-role="to">Manolo</span>
+                                </div>			
+                            </div>
+                        </div>
+                        <div class="control select">
+                            <div class="control-head">
+                                <div class="container">
+                                    <div class="row">
+                                      <div class="col-md-offset-3 col-md-6 text-center">
+                                        <button style="background-color: #E6495A; margin-top:1%;"class="btn btn-default">Editar cita</button>
+                                      </div>
+                                      <div class="col-md-offset-3 col-md-6 text-center">
+                                        <button style="background-color: #E6495A; margin-top:1%;"class="btn btn-default">Lo otro</button>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                            </div>
+                        </div>
+                </section>
+            </div>		
+        </div>
+
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
       </div>
@@ -304,6 +370,7 @@
         </div>
       </div>
     </div>
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
