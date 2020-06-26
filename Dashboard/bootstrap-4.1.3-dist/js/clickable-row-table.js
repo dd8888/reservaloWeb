@@ -13,7 +13,7 @@ $(document).ready(function(){
 
         $('.TreeTable tr').click(function () {
             var id = $(this).closest("tr").find('td:eq(0)').text();
-            window.location.replace("https://www.reservalo/cita/edit" + id);
+            window.location.replace("https://www.reservalo/cita/edit/" + id);
         });
     });
 });

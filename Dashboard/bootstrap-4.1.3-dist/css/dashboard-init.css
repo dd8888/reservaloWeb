@@ -38,7 +38,12 @@ html {
 
 
 }
-
+#dataTable tbody > tr:hover{
+  background: #E6495A;
+}
+#TreeTable tbody > tr:hover{
+  background: #E6495A;
+}
 /* Style buttons */
 .btn-xs {
   background-color: #E6495A; /* Blue background */
