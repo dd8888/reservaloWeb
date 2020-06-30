@@ -14,7 +14,91 @@ var myLineChart = new Chart(ctx, {
       label: "Beneficios",
       backgroundColor: "rgba(26, 200, 146, 1)",
       borderColor: "rgba(2,117,216,1)",
+      data: [15, 412, 251, 1841, 321, 984],
+    }],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false
+        },
+        ticks: {
+          maxTicksLimit: 6
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 2000,
+          maxTicksLimit: 5
+        },
+        gridLines: {
+          display: true
+        }
+      }],
+    },
+    legend: {
+      display: false
+    }
+  }
+});
+
+var ctx = document.getElementById("myBarChart2");
+var myLineChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Empleado 1", "Empleado 2", "Empleado 3", "Empleado 4", "Empleado 5", "Empleado 6"],
+    datasets: [{
+      label: "Beneficios",
+      backgroundColor: "rgba(286, 220, 46, 1)",
+      borderColor: "rgba(2,117,216,1)",
       data: [215, 312, 251, 841, 421, 984],
+    }],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false
+        },
+        ticks: {
+          maxTicksLimit: 6
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 2000,
+          maxTicksLimit: 5
+        },
+        gridLines: {
+          display: true
+        }
+      }],
+    },
+    legend: {
+      display: false
+    }
+  }
+});
+
+var ctx = document.getElementById("myBarChart3");
+var myLineChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Empleado 1", "Empleado 2", "Empleado 3", "Empleado 4", "Empleado 5", "Empleado 6"],
+    datasets: [{
+      label: "Beneficios",
+      backgroundColor: "rgba(26, 20, 46, 1)",
+      borderColor: "rgba(2,117,216,1)",
+      data: [1215, 312, 21, 881, 21, 984],
     }],
   },
   options: {

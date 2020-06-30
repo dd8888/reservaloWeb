@@ -23,6 +23,13 @@ html {
     min-height: calc(100vh - 56px);
     padding-top: 1rem;
   }
+ .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(100%);
+
+}
+
+
 
   .icon-top{
     margin-top: 0px;
