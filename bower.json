@@ -1,0 +1,13 @@
+{
+  "name": "reservaloWeb",
+  "homepage": "https://github.com/dd8888/reservaloWeb",
+  "authors": [
+    "dd8888 <doubled000000@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47"
+  }
+}
