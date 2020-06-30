@@ -47,6 +47,7 @@ var myLineChart = new Chart(ctx, {
   }
 });
 
+
 var ctx = document.getElementById("myBarChart2");
 var myLineChart = new Chart(ctx, {
   type: 'bar',
@@ -89,6 +90,7 @@ var myLineChart = new Chart(ctx, {
   }
 });
 
+
 var ctx = document.getElementById("myBarChart3");
 var myLineChart = new Chart(ctx, {
   type: 'bar',
@@ -127,6 +129,56 @@ var myLineChart = new Chart(ctx, {
     },
     legend: {
       display: false
+    }
+  }
+});
+
+
+var ctx = document.getElementById("compareChart");
+var myLineChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    datasets: [{
+      label: "Beneficios 2020",
+      backgroundColor: "rgba(40, 1, 19, 1)",
+      borderColor: "rgba(2,117,216,1)",
+      data: [2215, 7312, 2121, 4181, 1991, 9984, 4543, 5654, 1777, 2321, 4876, 7412],
+    },
+    {
+      label: "Beneficios 2019",
+      backgroundColor: "rgba(252, 90, 165, 1)",
+      borderColor: "rgba(2,117,216,1)",
+      data: [4215, 5312, 1121, 8181, 2991, 6984, 4543, 3654, 5777, 2321, 7876, 8412],
+    },
+  ],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false
+        },
+        ticks: {
+          maxTicksLimit: 12
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          max: 10000,
+          maxTicksLimit: 15
+        },
+        gridLines: {
+          display: true
+        }
+      }],
+    },
+    legend: {
+      display: true
     }
   }
 });
@@ -178,3 +230,4 @@ var myLineChart = new Chart(ctx, {
     event.preventDefault();
   });
 })(jQuery); // End of use strict
+

@@ -1,6 +1,7 @@
 html {
     position: relative;
     min-height: 100%;
+
   }
   
   body {
@@ -329,7 +330,7 @@ html {
   
   .content-wrapper {
     overflow-x: hidden;
-    background: white;
+    background: #343a40;
   }
   
   @media (min-width: 992px) {
