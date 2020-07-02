@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../css/dashboard-init.css'
 import '../../css/bootstrap.min.css'
+import { toggle } from '../../js/dashboard-toggle-leftbar'
 
 
 const logo = require('../../Resources/main-icon.png');
@@ -119,7 +120,7 @@ const Border = () => (
             </ul>
             <ul className="navbar-nav sidenav-toggler">
                 <li className="nav-item">
-                    <a className="nav-link text-center" id="sidenavToggler">
+                    <a onClick={toggle} className="nav-link text-center" id="sidenavToggler">
                         <i className="fa fa-fw fa-angle-left"></i>
                     </a>
                 </li>

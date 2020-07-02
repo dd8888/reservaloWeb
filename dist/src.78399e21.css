@@ -319,12 +319,12 @@ body.fixed-nav {
 
 body.sidenav-toggled #mainNav.fixed-top .sidenav-toggler {
   overflow-x: hidden;
-  width     : 70px;
+  width     : 55px;
 }
 
 body.sidenav-toggled #mainNav.fixed-top .sidenav-toggler .nav-item,
 body.sidenav-toggled #mainNav.fixed-top .sidenav-toggler .nav-link {
-  width: 70px !important;
+  width: 50px !important;
 }
 
 body.sidenav-toggled #mainNav.fixed-top #sidenavToggler i {
