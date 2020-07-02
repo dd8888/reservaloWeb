@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
   <!-- 
       - Al hacer click en una cita se vea nueva pagina detallada
       - Nueva pagina con horarios trabajadores
@@ -436,7 +438,11 @@
           <button class="btn-xs	"><i class="fa fa-caret-square-o-right"></i></button>
           <button class="btn-xs	"><i class="fa fa-caret-square-o-left"></i></button>
 
-          <input type="text" id="datepicker" autocomplete="off"></input>
+          <div>
+            <input placeholder="Select your date" type="text" name="checkIn" id="datepicker" value=""
+              class="calendar"><i class="fas fa-calendar-check icon"></i>
+          </div>
+
 
 
         </div>

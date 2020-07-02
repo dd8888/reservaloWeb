@@ -1,0 +1,51 @@
+{
+  "name": "curso-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel ./src/index.html --open",
+    "format": "prettier --write \"*.{js,jsx, json, css}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dd8888/reservaloWeb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dd8888/reservaloWeb/issues"
+  },
+  "homepage": "https://github.com/dd8888/reservaloWeb#readme",
+  "dependencies": {
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "parcel-bundler": "^1.12.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "npm run lint"
+    ],
+    "src/**/*.{js,jsx,json,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "trailingComa": "all",
+    "singleQuote": true
+  }
+}
