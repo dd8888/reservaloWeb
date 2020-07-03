@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import Border from './BorderTemplate/Border';
+import CitasPage from './CitasPage';
 
-const App = () => (
-    <Border />
-);
+function App() {
+    return (
+        <div>
+            <CitasPage />
+        </div>
+    );
+}
 
 export default App;

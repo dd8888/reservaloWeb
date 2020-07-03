@@ -16,6 +16,10 @@ body.sticky-footer .content-wrapper {
   min-height: calc(100vh - 56px - 56px);
 }
 
+#mainNav .navbar-collapse .sidenav-toggler {
+  display: none;
+}
+
 body.fixed-nav {
   padding-top: 56px;
 }
@@ -562,4 +566,3 @@ footer.sticky-footer {
     width: calc(100% - 55px);
   }
 }
-

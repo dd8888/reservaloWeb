@@ -1,8 +1,29 @@
 import React from 'react'
 import '../../css/dashboard-init.css'
 import '../../css/bootstrap.min.css'
+import PropTypes from 'prop-types'
 import { toggle } from '../../js/dashboard-toggle-leftbar'
 
+
+class Foo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        //toggle();
+    }
+    render() {
+        return <ul className="navbar-nav sidenav-toggler">
+            <li className="nav-item">
+                <a onClick={() => this.handleClick()} className="nav-link text-center" id="sidenavToggler">
+                    <i className="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>;
+    }
+}
 
 const logo = require('../../Resources/main-icon.png');
 
@@ -118,13 +139,21 @@ const Border = () => (
                     </a>
                 </li>
             </ul>
-            <ul className="navbar-nav sidenav-toggler">
-                <li className="nav-item">
-                    <a onClick={toggle} className="nav-link text-center" id="sidenavToggler">
-                        <i className="fa fa-fw fa-angle-left"></i>
-                    </a>
-                </li>
-            </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
@@ -234,4 +263,7 @@ const Border = () => (
     </nav >
 );
 
+Border.propTypes = {
+    isClicked: PropTypes.func
+};
 export default Border;

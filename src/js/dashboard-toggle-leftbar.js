@@ -1,9 +1,4 @@
-// Chart.js scripts
-// -- Set new default font family and font color to mimic Bootstrap's default styling
-
-// -- Area Chart Example
 export function toggle() {
-  "use strict"; // Start of use strict
   // Configure tooltips for collapsed side navigation
   $('.navbar-sidenav [data-toggle="tooltip"]').tooltip({
     template: '<div class="tooltip navbar-sidenav-tooltip" role="tooltip" style="pointer-events: none;"><div class="arrow"></div><div class="tooltip-inner"></div></div>'

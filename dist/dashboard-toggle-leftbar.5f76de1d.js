@@ -125,13 +125,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.toggle = toggle;
 
-// Chart.js scripts
-// -- Set new default font family and font color to mimic Bootstrap's default styling
-// -- Area Chart Example
 function toggle() {
-  "use strict"; // Start of use strict
   // Configure tooltips for collapsed side navigation
-
   $('.navbar-sidenav [data-toggle="tooltip"]').tooltip({
     template: '<div class="tooltip navbar-sidenav-tooltip" role="tooltip" style="pointer-events: none;"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
   }); // Toggle the side navigation
@@ -196,7 +191,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61895" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51287" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
