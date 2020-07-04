@@ -1,5 +1,18 @@
 import React from 'react'
 import Border from '../BorderTemplate/Border'
+import * as firebase from 'firebase'
+
+var firebaseConfig = {
+    apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
+    authDomain: "pruebafirebase-44f30.firebaseapp.com",
+    databaseURL: "https://pruebafirebase-44f30.firebaseio.com",
+    projectId: "pruebafirebase-44f30",
+    storageBucket: "pruebafirebase-44f30.appspot.com",
+    messagingSenderId: "846026419673",
+    appId: "1:846026419673:web:c51e352b34394338d83dc8",
+    measurementId: "G-W90PWGXKTN"
+};
+// Initialize Firebase
 
 /*
 Script barra busqueda
@@ -24,12 +37,35 @@ Script barra busqueda
               }
             </script>
 */
+firebase.initializeApp(firebaseConfig);
 
+
+
+
+class Appp extends React.Component {
+    constructor() {
+        super()
+        this.state = { name: 'hey' }
+    }
+    componentDidMount() {
+        const nameRef = firebase.database().ref().child('Anonimos').child('wx3czBh22dMQUTNDwD9l').endAt('Nombre')
+        nameRef.on('value', snapshot => {
+            this.setState({
+                name: snapshot.val()
+            })
+        })
+    }
+
+    render() {
+        return <h1>{this.state.name}</h1>
+    }
+}
 
 
 const Citas = () => (
     <div>
         <div className="container-fluid">
+
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                     <a className="link-color" href="dashboard-main.html">Dashboard</a>
@@ -42,10 +78,14 @@ const Citas = () => (
           <button className="btn-xs	"><i className="fa fa-caret-square-o-right"></i></button>
                     <button className="btn-xs	"><i className="fa fa-caret-square-o-left"></i></button>
                 </div>
+                <Appp></Appp>
+
                 <div className="card-body">
                     <div className="table-responsive">
                         <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
                             cellSpacing="0">
+
+
                             <thead>
                                 <tr>
                                     <th>Teléfono</th>
