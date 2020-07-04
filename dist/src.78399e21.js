@@ -92598,148 +92598,142 @@ Script barra busqueda
 
 firebase.initializeApp(firebaseConfig);
 
-var Appp = /*#__PURE__*/function (_React$Component) {
-  _inherits(Appp, _React$Component);
+var Citas = /*#__PURE__*/function (_React$Component) {
+  _inherits(Citas, _React$Component);
 
-  var _super = _createSuper(Appp);
+  var _super = _createSuper(Citas);
 
-  function Appp() {
+  function Citas() {
     var _this;
 
-    _classCallCheck(this, Appp);
+    _classCallCheck(this, Citas);
 
     _this = _super.call(this);
     _this.state = {
-      name: 'hey'
+      horarioentrada: '',
+      horariosalida: '',
+      precio: '',
+      servicio: ''
     };
     return _this;
   }
 
-  _createClass(Appp, [{
+  _createClass(Citas, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
-      var nameRef = firebase.database().ref().child('Anonimos').child('wx3czBh22dMQUTNDwD9l').endAt('Nombre');
-      nameRef.on('value', function (snapshot) {
+      ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
+      var nameRef = firebase.firestore().collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').doc('1xCDFWiDx3jUdKo8R3AG');
+      nameRef.onSnapshot(function (doc) {
         _this2.setState({
-          name: snapshot.val()
+          horarioentrada: doc.data().CheckIn,
+          horariosalida: doc.data().CheckOut,
+          precio: doc.data().Precio,
+          servicio: doc.data().Servicio
         });
+
+        console.log(doc.data().Negocio);
       });
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("h1", null, this.state.name);
+      return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "container-fluid"
+      }, /*#__PURE__*/_react.default.createElement("ol", {
+        className: "breadcrumb"
+      }, /*#__PURE__*/_react.default.createElement("li", {
+        className: "breadcrumb-item"
+      }, /*#__PURE__*/_react.default.createElement("a", {
+        className: "link-color",
+        href: "dashboard-main.html"
+      }, "Dashboard")), /*#__PURE__*/_react.default.createElement("li", {
+        className: "breadcrumb-item active"
+      }, "Citas")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "card mb-3 col-lg-12"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "card-header"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        className: "fa fa-table"
+      }), " Citas 25/06/2020", /*#__PURE__*/_react.default.createElement("button", {
+        className: "btn-xs\t"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        className: "fa fa-caret-square-o-right"
+      })), /*#__PURE__*/_react.default.createElement("button", {
+        className: "btn-xs\t"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        className: "fa fa-caret-square-o-left"
+      }))), /*#__PURE__*/_react.default.createElement("h1", null, this.state.name), /*#__PURE__*/_react.default.createElement("div", {
+        className: "card-body"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "table-responsive"
+      }, /*#__PURE__*/_react.default.createElement("table", {
+        className: "table table-bordered TreeTable",
+        id: "TreeTable",
+        width: "100%",
+        cellSpacing: "0"
+      }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", null, "Horario entrada"), /*#__PURE__*/_react.default.createElement("th", null, "Horario salida"), /*#__PURE__*/_react.default.createElement("th", null, "Precio"), /*#__PURE__*/_react.default.createElement("th", null, "Servicio"))), /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", {
+        className: "clickable-row",
+        "data-href": "url://"
+      }, /*#__PURE__*/_react.default.createElement("td", null, this.state.horarioentrada), /*#__PURE__*/_react.default.createElement("td", null, this.state.horariosalida), /*#__PURE__*/_react.default.createElement("td", null, this.state.servicio), /*#__PURE__*/_react.default.createElement("td", null, this.state.precio)))), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("div", {
+        id: "out"
+      }))))), /*#__PURE__*/_react.default.createElement("footer", {
+        className: "sticky-footer"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "container"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "text-center"
+      }, /*#__PURE__*/_react.default.createElement("small", null, "Copyright \xA9 Res\xE9rvalo 2020")))), /*#__PURE__*/_react.default.createElement("a", {
+        className: "scroll-to-top rounded",
+        href: "#page-top"
+      }, /*#__PURE__*/_react.default.createElement("i", {
+        className: "fa fa-angle-up"
+      })), /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal fade",
+        id: "exampleModal",
+        tabIndex: "-1",
+        role: "dialog",
+        "aria-labelledby": "exampleModalLabel",
+        "aria-hidden": "true"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal-dialog",
+        role: "document"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal-content"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal-header"
+      }, /*#__PURE__*/_react.default.createElement("h5", {
+        className: "modal-title",
+        id: "exampleModalLabel"
+      }, "\xBFYa te vas?"), /*#__PURE__*/_react.default.createElement("button", {
+        className: "close",
+        type: "button",
+        "data-dismiss": "modal",
+        "aria-label": "Close"
+      }, /*#__PURE__*/_react.default.createElement("span", {
+        "aria-hidden": "true"
+      }, "\xD7"))), /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal-body"
+      }, "\xBFEst\xE1s seguro de querer cerrar sesi\xF3n?"), /*#__PURE__*/_react.default.createElement("div", {
+        className: "modal-footer"
+      }, /*#__PURE__*/_react.default.createElement("button", {
+        className: "btn btn-secondary",
+        type: "button",
+        "data-dismiss": "modal"
+      }, "Cancelar"), /*#__PURE__*/_react.default.createElement("a", {
+        className: "btn btn-primary",
+        style: {
+          backgroundColor: "E6495A",
+          borderColor: "E6495A"
+        },
+        href: "login.html"
+      }, "S\xED"))))));
     }
   }]);
 
-  return Appp;
+  return Citas;
 }(_react.default.Component);
-
-var Citas = function Citas() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
-    className: "container-fluid"
-  }, /*#__PURE__*/_react.default.createElement("ol", {
-    className: "breadcrumb"
-  }, /*#__PURE__*/_react.default.createElement("li", {
-    className: "breadcrumb-item"
-  }, /*#__PURE__*/_react.default.createElement("a", {
-    className: "link-color",
-    href: "dashboard-main.html"
-  }, "Dashboard")), /*#__PURE__*/_react.default.createElement("li", {
-    className: "breadcrumb-item active"
-  }, "Citas")), /*#__PURE__*/_react.default.createElement("div", {
-    className: "card mb-3 col-lg-12"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "card-header"
-  }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "fa fa-table"
-  }), " Citas 25/06/2020", /*#__PURE__*/_react.default.createElement("button", {
-    className: "btn-xs\t"
-  }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "fa fa-caret-square-o-right"
-  })), /*#__PURE__*/_react.default.createElement("button", {
-    className: "btn-xs\t"
-  }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "fa fa-caret-square-o-left"
-  }))), /*#__PURE__*/_react.default.createElement(Appp, null), /*#__PURE__*/_react.default.createElement("div", {
-    className: "card-body"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "table-responsive"
-  }, /*#__PURE__*/_react.default.createElement("table", {
-    className: "table table-bordered TreeTable",
-    id: "TreeTable",
-    width: "100%",
-    cellSpacing: "0"
-  }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", null, "Tel\xE9fono"), /*#__PURE__*/_react.default.createElement("th", null, "D\xEDa"), /*#__PURE__*/_react.default.createElement("th", null, "Hora entrada"), /*#__PURE__*/_react.default.createElement("th", null, "Hora salida"), /*#__PURE__*/_react.default.createElement("th", null, "Precio"), /*#__PURE__*/_react.default.createElement("th", null, "Servicio"))), /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", {
-    className: "clickable-row"
-  }, /*#__PURE__*/_react.default.createElement("td", null, "654654654"), /*#__PURE__*/_react.default.createElement("td", null, "2011/04/25"), /*#__PURE__*/_react.default.createElement("td", null, "12:30"), /*#__PURE__*/_react.default.createElement("td", null, "13:30"), /*#__PURE__*/_react.default.createElement("td", null, "15\u20AC"), /*#__PURE__*/_react.default.createElement("td", null, "Corte de pelo")), /*#__PURE__*/_react.default.createElement("tr", {
-    className: "clickable-row",
-    "data-href": "#"
-  }, /*#__PURE__*/_react.default.createElement("td", null, "324142132"), /*#__PURE__*/_react.default.createElement("td", null, "2011/07/25"), /*#__PURE__*/_react.default.createElement("td", null, "14:00"), /*#__PURE__*/_react.default.createElement("td", null, "15:30"), /*#__PURE__*/_react.default.createElement("td", null, "7\u20AC"), /*#__PURE__*/_react.default.createElement("td", null, "Barba")), /*#__PURE__*/_react.default.createElement("tr", {
-    className: "clickable-row",
-    "data-href": "url://"
-  }, /*#__PURE__*/_react.default.createElement("td", null, "543524254"), /*#__PURE__*/_react.default.createElement("td", null, "2009/01/12"), /*#__PURE__*/_react.default.createElement("td", null, "13:30"), /*#__PURE__*/_react.default.createElement("td", null, "13:50"), /*#__PURE__*/_react.default.createElement("td", null, "10\u20AC"), /*#__PURE__*/_react.default.createElement("td", null, "Mechas")), /*#__PURE__*/_react.default.createElement("tr", {
-    className: "clickable-row",
-    "data-href": "url://"
-  }, /*#__PURE__*/_react.default.createElement("td", null, "657634579"), /*#__PURE__*/_react.default.createElement("td", null, "2012/03/29"), /*#__PURE__*/_react.default.createElement("td", null, "16:30"), /*#__PURE__*/_react.default.createElement("td", null, "17:00"), /*#__PURE__*/_react.default.createElement("td", null, "12\u20AC"), /*#__PURE__*/_react.default.createElement("td", null, "U\xF1as")), /*#__PURE__*/_react.default.createElement("tr", {
-    className: "clickable-row",
-    "data-href": "url://"
-  }, /*#__PURE__*/_react.default.createElement("td", null, "839201832"), /*#__PURE__*/_react.default.createElement("td", null, "2008/11/28"), /*#__PURE__*/_react.default.createElement("td", null, "18:30"), /*#__PURE__*/_react.default.createElement("td", null, "18:45"), /*#__PURE__*/_react.default.createElement("td", null, "13\u20AC"), /*#__PURE__*/_react.default.createElement("td", null, "Corte de pelo")))), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("div", {
-    id: "out"
-  }))))), /*#__PURE__*/_react.default.createElement("footer", {
-    className: "sticky-footer"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "container"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "text-center"
-  }, /*#__PURE__*/_react.default.createElement("small", null, "Copyright \xA9 Res\xE9rvalo 2020")))), /*#__PURE__*/_react.default.createElement("a", {
-    className: "scroll-to-top rounded",
-    href: "#page-top"
-  }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "fa fa-angle-up"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal fade",
-    id: "exampleModal",
-    tabIndex: "-1",
-    role: "dialog",
-    "aria-labelledby": "exampleModalLabel",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal-dialog",
-    role: "document"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal-content"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal-header"
-  }, /*#__PURE__*/_react.default.createElement("h5", {
-    className: "modal-title",
-    id: "exampleModalLabel"
-  }, "\xBFYa te vas?"), /*#__PURE__*/_react.default.createElement("button", {
-    className: "close",
-    type: "button",
-    "data-dismiss": "modal",
-    "aria-label": "Close"
-  }, /*#__PURE__*/_react.default.createElement("span", {
-    "aria-hidden": "true"
-  }, "\xD7"))), /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal-body"
-  }, "\xBFEst\xE1s seguro de querer cerrar sesi\xF3n?"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "modal-footer"
-  }, /*#__PURE__*/_react.default.createElement("button", {
-    className: "btn btn-secondary",
-    type: "button",
-    "data-dismiss": "modal"
-  }, "Cancelar"), /*#__PURE__*/_react.default.createElement("a", {
-    className: "btn btn-primary",
-    style: {
-      backgroundColor: "E6495A",
-      borderColor: "E6495A"
-    },
-    href: "login.html"
-  }, "S\xED"))))));
-};
 
 var _default = Citas;
 exports.default = _default;
