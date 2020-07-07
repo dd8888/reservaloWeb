@@ -139,21 +139,6 @@ const Border = () => (
                     </a>
                 </li>
             </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
