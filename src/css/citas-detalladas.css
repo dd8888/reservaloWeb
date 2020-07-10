@@ -788,3 +788,11 @@ div.rotate span:nth-child(3) {
 .hide {
   visibility: hidden;
 }
+
+.ndisplay {
+  display: none;
+}
+
+.display {
+  display: block;
+}

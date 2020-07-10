@@ -115116,6 +115116,10 @@ var _citasDetalladas2 = _interopRequireDefault(require("../DashboardCitasDetalla
 
 var _reactRouterDom = require("react-router-dom");
 
+var _setHours = _interopRequireDefault(require("date-fns/setHours"));
+
+var _setMinutes = _interopRequireDefault(require("date-fns/setMinutes"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
@@ -115162,36 +115166,105 @@ var useFirebase = function useFirebase() {
 };
 
 var Citas = function Citas() {
-  var history = (0, _reactRouterDom.useHistory)();
-
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
-      citas = _useState2[0],
-      setCitas = _useState2[1];
+      horarios = _useState2[0],
+      setHorarios = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(new Date()),
+  var _useState3 = (0, _react.useState)((0, _setHours.default)((0, _setMinutes.default)(new Date(), 30), 16)),
       _useState4 = _slicedToArray(_useState3, 2),
-      startDate = _useState4[0],
-      setStartDate = _useState4[1];
+      citaDate = _useState4[0],
+      setCitaDate = _useState4[1];
 
   var _useState5 = (0, _react.useState)([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      ids = _useState6[0],
-      setIDs = _useState6[1];
+      disp = _useState6[0],
+      setDisp = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(),
+      _useState8 = _slicedToArray(_useState7, 2),
+      necesitaPrecio = _useState8[0],
+      setPrecio = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(),
+      _useState10 = _slicedToArray(_useState9, 2),
+      empleadoSelect = _useState10[0],
+      setEmpleadoSelect = _useState10[1];
+
+  var _useState11 = (0, _react.useState)([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      empleados = _useState12[0],
+      setEmpleados = _useState12[1];
+
+  var history = (0, _reactRouterDom.useHistory)();
+
+  var _useState13 = (0, _react.useState)([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      citas = _useState14[0],
+      setCitas = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(new Date()),
+      _useState16 = _slicedToArray(_useState15, 2),
+      startDate = _useState16[0],
+      setStartDate = _useState16[1];
+
+  var _useState17 = (0, _react.useState)([]),
+      _useState18 = _slicedToArray(_useState17, 2),
+      ids = _useState18[0],
+      setIDs = _useState18[1];
 
   var varid = 0;
 
   var textInput = _react.default.createRef();
 
-  var _useState7 = (0, _react.useState)([]),
-      _useState8 = _slicedToArray(_useState7, 2),
-      users = _useState8[0],
-      setUsers = _useState8[1];
+  var _useState19 = (0, _react.useState)([]),
+      _useState20 = _slicedToArray(_useState19, 2),
+      users = _useState20[0],
+      setUsers = _useState20[1];
 
-  var _useState9 = (0, _react.useState)(""),
-      _useState10 = _slicedToArray(_useState9, 2),
-      title = _useState10[0],
-      setTitle = _useState10[1];
+  var _useState21 = (0, _react.useState)(""),
+      _useState22 = _slicedToArray(_useState21, 2),
+      title = _useState22[0],
+      setTitle = _useState22[1];
+
+  var _useState23 = (0, _react.useState)([]),
+      _useState24 = _slicedToArray(_useState23, 2),
+      servicios = _useState24[0],
+      setServicios = _useState24[1]; //Para sacar los servicios
+
+
+  (0, _react.useEffect)(function () {
+    database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('servicios').get().then(function (response) {
+      var fetchedServicios = [];
+      response.forEach(function (document) {
+        var fetchedServicio = _objectSpread({
+          id: document.id
+        }, document.data());
+
+        fetchedServicios.push(fetchedServicio);
+      });
+      setServicios(fetchedServicios);
+    });
+  }, []
+  /*judas*/
+  ); //Para sacar los empleados
+
+  (0, _react.useEffect)(function () {
+    database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').get().then(function (response) {
+      var fetchedEmpleados = [];
+      response.forEach(function (document) {
+        var fetchedEmpleado = _objectSpread({
+          id: document.id
+        }, document.data());
+
+        fetchedEmpleados.push(fetchedEmpleado);
+      });
+      setEmpleados(fetchedEmpleados);
+    });
+  }, []
+  /*judas*/
+  ); //Para sacar los horarios del empleado seleccionado
+  //Para sacar si el usuario existe
 
   var fetchRequest = function fetchRequest() {
     database.collection('UsuariosDev').where('Telefono', '==', textInput.current.value).get().then(function (response) {
@@ -115202,7 +115275,6 @@ var Citas = function Citas() {
         }, document.data());
 
         fetchedUsers.push(fetchedUser);
-        console.log(fetchedUser);
       });
       setUsers(fetchedUsers);
 
@@ -115212,10 +115284,65 @@ var Citas = function Citas() {
         setTitle('❌');
       }
     });
-  };
-  /*judas*/
-  ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
+  }; ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
 
+
+  var pepe = function pepe(e) {
+    return setPrecio(e.target.value);
+  };
+
+  var selEmpleado = function selEmpleado(e) {
+    return disp.length = 0, setEmpleadoSelect(e.target.value), database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').doc(e.target.value).collection('horarios').get().then(function (response) {
+      var fetchedHorarios = [];
+      var fetchedIDs = [];
+      response.forEach(function (document) {
+        var fetchedHorario = _objectSpread({
+          id: document.id
+        }, document.data());
+
+        var fetchedID = document.id;
+        fetchedIDs.push(fetchedID);
+        fetchedHorarios.push(fetchedHorario);
+      });
+      setIDs(fetchedIDs);
+      setHorarios(fetchedHorarios);
+      fetchedHorarios.map(function (h) {
+        return h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDay() ? h.disponibilidad.map(function (dispon) {
+          return disp.push((0, _setHours.default)((0, _setMinutes.default)(new Date(), dispon.split(':')[1]), dispon.split(':')[0]));
+        }) : console.log('adios');
+      });
+    });
+  };
+
+  function Prueba() {
+    return necesitaPrecio === 'Coloración' || necesitaPrecio === 'Mechas' || necesitaPrecio === 'Reflejos' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "first_name"
+    }, "Precio"), /*#__PURE__*/_react.default.createElement("input", {
+      type: "number",
+      className: "form-control",
+      id: "precio",
+      placeholder: "Precio",
+      required: true,
+      autoComplete: "on"
+    }), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "first_name"
+    }, "Duracion"), /*#__PURE__*/_react.default.createElement("input", {
+      type: "number",
+      className: "form-control",
+      id: "duracion",
+      placeholder: "20",
+      required: true,
+      autoComplete: "on"
+    }), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    }, " (en minutos) "))) : /*#__PURE__*/_react.default.createElement("div", null);
+  }
   /*history.push({
       pathname: "/citasDetalladas",
       search: "?date=" + startDate.toISOString().split('T')[0] + "&id=" + i,
@@ -115297,84 +115424,76 @@ var Citas = function Citas() {
       marginLeft: '2%'
     },
     className: "help-block"
-  }, title)), title === '✔️' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "first_name"
-  }, "Nombre"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "text",
-    className: "form-control",
-    id: "first_name",
-    placeholder: "pepe",
-    required: true,
-    autoFocus: true,
-    autoComplete: "on"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "last_name"
-  }, "Apellido"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "text",
-    className: "form-control",
-    id: "last_name",
-    placeholder: "holita",
-    required: true,
-    autoFocus: true,
-    autoComplete: "on"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "email_address"
-  }, "Email Address"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "email",
-    className: "form-control",
-    id: "email_addr",
-    placeholder: "Email address",
-    required: true
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "email_address_confirm"
-  }, "Please re-confirm your email address."), /*#__PURE__*/_react.default.createElement("input", {
-    type: "email",
-    className: "form-control",
-    id: "email_address_confirm",
-    placeholder: "Confirm email address",
-    required: true,
-    autoComplete: "off"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "dob"
-  }, "Date of Birth"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "date",
-    className: "form-control",
-    id: "dob"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "age"
-  }, "Age"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "number",
-    className: "form-control",
-    id: "age",
-    placeholder: "Age",
-    min: "1",
-    max: "110",
-    required: true
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("button", {
+  }, title)), title === '✔️' ? /*#__PURE__*/_react.default.createElement("div", null, users.map(function (user) {
+    return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "first_name"
+    }, "Nombre"), /*#__PURE__*/_react.default.createElement("input", {
+      readOnly: true,
+      type: "text",
+      value: user.Nombre,
+      className: "form-control",
+      id: "first_name",
+      placeholder: "pepe",
+      required: true,
+      autoComplete: "on"
+    }), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "last_name"
+    }, "Apellidos"), /*#__PURE__*/_react.default.createElement("input", {
+      readOnly: true,
+      type: "text",
+      value: user.Apellidos,
+      className: "form-control",
+      id: "last_name",
+      placeholder: "holita",
+      required: true,
+      autoComplete: "on"
+    }), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "sel1"
+    }, "Servicio:"), /*#__PURE__*/_react.default.createElement("select", {
+      className: "form-control",
+      onChange: pepe
+    }, servicios.map(function (servicio) {
+      return /*#__PURE__*/_react.default.createElement("option", null, servicio.nombre);
+    })), /*#__PURE__*/_react.default.createElement(Prueba, null), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "sel1"
+    }, "Empleados disponibles:"), /*#__PURE__*/_react.default.createElement("select", {
+      className: "form-control",
+      onChange: selEmpleado
+    }, /*#__PURE__*/_react.default.createElement("option", null, " - Seleccione un empleado - "), empleados.map(function (empleado) {
+      return /*#__PURE__*/_react.default.createElement("option", null, empleado.Nombre);
+    })), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "email_address_confirm"
+    }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
+      showTimeSelect: true,
+      selected: citaDate,
+      timeIntervals: 10,
+      onChange: function onChange(date) {
+        return setCitaDate(date);
+      },
+      dateFormat: "yyyy-M-dd h:mm aa",
+      includeTimes: disp
+    }), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })));
+  }), /*#__PURE__*/_react.default.createElement("button", {
     className: "btn btn-lg btn-primary btn-block",
     type: "submit"
   }, "Make appointment")) : title === '❌' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
@@ -115387,71 +115506,32 @@ var Citas = function Citas() {
     id: "first_name",
     placeholder: "Nombre",
     required: true,
-    autoFocus: true,
     autoComplete: "on"
   }), /*#__PURE__*/_react.default.createElement("span", {
     className: "help-block"
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "last_name"
-  }, "Apellido"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "text",
+    htmlFor: "sel1"
+  }, "Servicio:"), /*#__PURE__*/_react.default.createElement("select", {
     className: "form-control",
-    id: "last_name",
-    placeholder: "Last Name",
-    required: true,
-    autoFocus: true,
-    autoComplete: "on"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "email_address"
-  }, "Email Address"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "email",
-    className: "form-control",
-    id: "email_addr",
-    placeholder: "Email address",
-    required: true
-  }), /*#__PURE__*/_react.default.createElement("span", {
+    onChange: pepe
+  }, servicios.map(function (servicio) {
+    return /*#__PURE__*/_react.default.createElement("option", null, servicio.nombre);
+  })), /*#__PURE__*/_react.default.createElement(Prueba, null), /*#__PURE__*/_react.default.createElement("span", {
     className: "help-block"
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "email_address_confirm"
-  }, "Please re-confirm your email address."), /*#__PURE__*/_react.default.createElement("input", {
-    type: "email",
-    className: "form-control",
-    id: "email_address_confirm",
-    placeholder: "Confirm email address",
-    required: true,
-    autoComplete: "off"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "dob"
-  }, "Date of Birth"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "date",
-    className: "form-control",
-    id: "dob"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "help-block"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "form-group"
-  }, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "age"
-  }, "Age"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "number",
-    className: "form-control",
-    id: "age",
-    placeholder: "Age",
-    min: "1",
-    max: "110",
-    required: true
+  }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
+    showTimeSelect: true,
+    selected: citaDate,
+    onChange: function onChange(date) {
+      return setCitaDate(date);
+    },
+    dateFormat: "d-M-yyyy h:mm aa",
+    includeTimes: disp
   }), /*#__PURE__*/_react.default.createElement("span", {
     className: "help-block"
   })), /*#__PURE__*/_react.default.createElement("button", {
@@ -115472,7 +115552,7 @@ var Citas = function Citas() {
 
 var _default = Citas;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","firebase":"../node_modules/firebase/dist/index.cjs.js","react-datepicker":"../node_modules/react-datepicker/dist/react-datepicker.min.js","../../../node_modules/react-datepicker/dist/react-datepicker.min.css":"../node_modules/react-datepicker/dist/react-datepicker.min.css","bootstrap/dist/css/bootstrap.min.css":"../node_modules/bootstrap/dist/css/bootstrap.min.css","../../css/citas-detalladas.css":"css/citas-detalladas.css","../DashboardCitasDetalladas/citasDetalladas":"App/DashboardCitasDetalladas/citasDetalladas.jsx","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"App/CitasCrear.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","firebase":"../node_modules/firebase/dist/index.cjs.js","react-datepicker":"../node_modules/react-datepicker/dist/react-datepicker.min.js","../../../node_modules/react-datepicker/dist/react-datepicker.min.css":"../node_modules/react-datepicker/dist/react-datepicker.min.css","bootstrap/dist/css/bootstrap.min.css":"../node_modules/bootstrap/dist/css/bootstrap.min.css","../../css/citas-detalladas.css":"css/citas-detalladas.css","../DashboardCitasDetalladas/citasDetalladas":"App/DashboardCitasDetalladas/citasDetalladas.jsx","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","date-fns/setHours":"../node_modules/date-fns/esm/setHours/index.js","date-fns/setMinutes":"../node_modules/date-fns/esm/setMinutes/index.js"}],"App/CitasCrear.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -115617,7 +115697,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58073" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60453" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

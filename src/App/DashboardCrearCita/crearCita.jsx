@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/citas-detalladas.css';
 import CitasDetalladas from '../DashboardCitasDetalladas/citasDetalladas'
 import { useHistory } from 'react-router-dom';
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 
 import {
     BrowserRouter as Router,
@@ -40,7 +42,14 @@ const useFirebase = () => {
     return users;
 }
 const Citas = () => {
-
+    const [horarios, setHorarios] = useState([]);
+    const [citaDate, setCitaDate] = useState(
+        setHours(setMinutes(new Date(), 30), 16)
+    );
+    const [disp, setDisp] = useState([])
+    const [necesitaPrecio, setPrecio] = useState();
+    const [empleadoSelect, setEmpleadoSelect] = useState();
+    const [empleados, setEmpleados] = useState([]);
     const history = useHistory();
     const [citas, setCitas] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
@@ -49,7 +58,50 @@ const Citas = () => {
     let textInput = React.createRef();
     const [users, setUsers] = useState([]);
     const [title, setTitle] = useState("");
+    const [servicios, setServicios] = useState([]);
+    //Para sacar los servicios
+    useEffect(() => {
+        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('servicios').get()
+            .then(response => {
+                const fetchedServicios = [];
 
+                response.forEach(document => {
+                    const fetchedServicio = {
+                        id: document.id,
+                        ...document.data()
+                    };
+
+                    fetchedServicios.push(fetchedServicio);
+                });
+                setServicios(fetchedServicios);
+
+            })
+
+    }, []/*judas*/)
+
+    //Para sacar los empleados
+    useEffect(() => {
+        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').get()
+            .then(response => {
+                const fetchedEmpleados = [];
+                response.forEach(document => {
+                    const fetchedEmpleado = {
+                        id: document.id,
+                        ...document.data()
+                    };
+                    fetchedEmpleados.push(fetchedEmpleado);
+                });
+                setEmpleados(fetchedEmpleados);
+            })
+
+    }, []/*judas*/)
+
+    //Para sacar los horarios del empleado seleccionado
+
+
+
+
+    //Para sacar si el usuario existe
     const fetchRequest = () => {
         database.collection('UsuariosDev').where('Telefono', '==', textInput.current.value).get()
             .then(response => {
@@ -60,7 +112,6 @@ const Citas = () => {
                         ...document.data()
                     };
                     fetchedUsers.push(fetchedUser);
-                    console.log(fetchedUser)
                 });
                 setUsers(fetchedUsers);
                 if (fetchedUsers.length !== 0) {
@@ -69,11 +120,65 @@ const Citas = () => {
                     setTitle('❌')
                 }
             })
-    }/*judas*/
+    }
     ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
 
+    const pepe = (e) => (
+        setPrecio(e.target.value)
+    )
+    const selEmpleado = (e) => (
+        disp.length = 0,
+        setEmpleadoSelect(e.target.value),
+        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').doc(e.target.value).collection('horarios').get()
+            .then(response => {
+                const fetchedHorarios = [];
+                const fetchedIDs = [];
+                response.forEach(document => {
+                    const fetchedHorario = {
+                        id: document.id,
+                        ...document.data()
+                    };
+                    const fetchedID = document.id;
 
+                    fetchedIDs.push(fetchedID);
+                    fetchedHorarios.push(fetchedHorario);
+                });
+                setIDs(fetchedIDs)
+                setHorarios(fetchedHorarios);
 
+                fetchedHorarios.map(h => (
+                    h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDay()
+                        ?
+                        h.disponibilidad.map(dispon => (
+                            disp.push(setHours(setMinutes(new Date(), dispon.split(':')[1]), dispon.split(':')[0]))
+                        ))
+                        :
+                        console.log('adios')
+                ))
+            })
+
+    )
+    function Prueba() {
+        return (
+            necesitaPrecio === 'Coloración' || necesitaPrecio === 'Mechas' || necesitaPrecio === 'Reflejos'
+                ?
+                <div>
+                    <div className="form-group">
+                        <label htmlFor="first_name">Precio</label>
+                        <input type="number" className="form-control" id="precio" placeholder="Precio" required autoComplete="on"></input>
+                        <span className="help-block"></span>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="first_name">Duracion</label>
+                        <input type="number" className="form-control" id="duracion" placeholder="20" required autoComplete="on"></input>
+                        <span className="help-block"> (en minutos) </span>
+                    </div>
+                </div>
+                :
+                <div
+                ></div>
+        )
+    }
     /*history.push({
         pathname: "/citasDetalladas",
         search: "?date=" + startDate.toISOString().split('T')[0] + "&id=" + i,
@@ -92,7 +197,6 @@ const Citas = () => {
     */
     return <div>
         <div className="container-fluid">
-
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                     <a className="link-color" href="dashboard-main.html">Dashboard</a>
@@ -121,78 +225,90 @@ const Citas = () => {
 
                     {title === '✔️' ?
                         <div>
-                            <div className="form-group">
-                                <label htmlFor="first_name">Nombre</label>
-                                <input type="text" className="form-control" id="first_name" placeholder="pepe" required autoFocus autoComplete="on"></input>
-                                <span className="help-block"></span>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="last_name">Apellido</label>
-                                <input type="text" className="form-control" id="last_name" placeholder="holita" required autoFocus autoComplete="on"></input>
-                                <span className="help-block"></span>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email_address">Email Address</label>
-                                <input type="email" className="form-control" id="email_addr" placeholder="Email address" required></input>
+                            {users.map((user) => (
+                                <div>
+                                    <div className="form-group">
+                                        <label htmlFor="first_name">Nombre</label>
+                                        <input readOnly type="text" value={user.Nombre} className="form-control" id="first_name" placeholder="pepe" required autoComplete="on"></input>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="last_name">Apellidos</label>
+                                        <input readOnly type="text" value={user.Apellidos} className="form-control" id="last_name" placeholder="holita" required autoComplete="on"></input>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="sel1">Servicio:</label>
+                                        <select className="form-control" onChange={pepe}>
+                                            {servicios.map((servicio) =>
+                                                <option>{servicio.nombre}</option>
+                                            )}
 
-                                <span className="help-block"></span>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email_address_confirm">Please re-confirm your email address.</label>
-                                <input type="email" className="form-control" id="email_address_confirm" placeholder="Confirm email address" required autoComplete="off"></input>
+                                        </select>
+                                        <Prueba></Prueba>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="sel1">Empleados disponibles:</label>
 
-                                <span className="help-block"></span>
-                            </div>
+                                        <select className="form-control" onChange={selEmpleado}>
+                                            <option> - Seleccione un empleado - </option>
 
-                            <div className="form-group">
-                                <label htmlFor="dob">Date of Birth</label>
-                                <input type="date" className="form-control" id="dob"></input>
+                                            {empleados.map((empleado) =>
+                                                <option>{empleado.Nombre}</option>
+                                            )}
 
-                                <span className="help-block"></span>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="age">Age</label>
-                                <input type="number" className="form-control" id="age" placeholder="Age" min="1" max="110" required></input>
-                                <span className="help-block"></span>
-                            </div>
+                                        </select>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                        <br></br>
+                                        <DatePicker
+                                            showTimeSelect
+                                            selected={citaDate}
+                                            timeIntervals={10}
+                                            onChange={date => setCitaDate(date)}
+                                            dateFormat="yyyy-M-dd h:mm aa"
+                                            includeTimes={disp}
+
+                                        />
+                                        <span className="help-block"></span>
+                                    </div>
+                                </div>
+                            ))}
                             <button className="btn btn-lg btn-primary btn-block" type="submit">Make appointment</button>
                         </div>
                         : title === '❌' ?
                             <div>
                                 <div className="form-group">
                                     <label htmlFor="first_name">Nombre</label>
-                                    <input type="text" className="form-control" id="first_name" placeholder="Nombre" required autoFocus autoComplete="on"></input>
+                                    <input type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="last_name">Apellido</label>
-                                    <input type="text" className="form-control" id="last_name" placeholder="Last Name" required autoFocus autoComplete="on"></input>
+                                    <label htmlFor="sel1">Servicio:</label>
+                                    <select className="form-control" onChange={pepe}>
+                                        {servicios.map((servicio) =>
+                                            <option>{servicio.nombre}</option>
+                                        )}
+                                    </select>
+                                    <Prueba></Prueba>
                                     <span className="help-block"></span>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="email_address">Email Address</label>
-                                    <input type="email" className="form-control" id="email_addr" placeholder="Email address" required></input>
+                                    <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                    <br></br>
+                                    <DatePicker
+                                        showTimeSelect
+                                        selected={citaDate}
+                                        onChange={date => setCitaDate(date)}
+                                        dateFormat="d-M-yyyy h:mm aa"
+                                        includeTimes={disp}
+                                    />
+                                    <span className="help-block"></span>
+                                </div>
 
-                                    <span className="help-block"></span>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="email_address_confirm">Please re-confirm your email address.</label>
-                                    <input type="email" className="form-control" id="email_address_confirm" placeholder="Confirm email address" required autoComplete="off"></input>
-
-                                    <span className="help-block"></span>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="dob">Date of Birth</label>
-                                    <input type="date" className="form-control" id="dob"></input>
-
-                                    <span className="help-block"></span>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="age">Age</label>
-                                    <input type="number" className="form-control" id="age" placeholder="Age" min="1" max="110" required></input>
-                                    <span className="help-block"></span>
-                                </div>
                                 <button className="btn btn-lg btn-primary btn-block" type="submit">Make appointment</button>
                             </div>
                             :
@@ -200,7 +316,6 @@ const Citas = () => {
                                 <div className="form-group">
                                     <input type="text" className="form-control hide" id="first_name" placeholder="hidden" required autoFocus autoComplete="on"></input>
                                 </div>
-
                             </div>
                     }
                 </form>
