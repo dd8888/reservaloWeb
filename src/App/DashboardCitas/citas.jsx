@@ -29,8 +29,11 @@ var firebaseConfig = {
 // Initialize Firebase
 
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.firestore();
+
 
 
 const Citas = () => {
@@ -65,8 +68,20 @@ const Citas = () => {
     const history = useHistory();
 
     const handleClick = (i) => {
-        console.log(i)
-        history.push("/citasDetalladas/" + ids[i]);
+        history.push({
+            pathname: "/citasDetalladas",
+            search: "?date=" + startDate.toISOString().split('T')[0] + "&id=" + i,
+            state: {
+                date: startDate.toISOString().split('T')[0],
+                id: i,
+            }
+        });
+    }
+    const handleClickCrear = () => {
+        history.push({
+            pathname: "/crearCita",
+
+        });
     }
 
     return <div>
@@ -83,7 +98,7 @@ const Citas = () => {
 
                     <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
 
-
+                    <button onClick={() => handleClickCrear()} style={{ backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
 
                 </div>
 

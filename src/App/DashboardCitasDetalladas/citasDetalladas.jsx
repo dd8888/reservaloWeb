@@ -1,10 +1,35 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from "react-router-dom";
+import * as firebase from 'firebase'
+import Moment from 'react-moment';
+
+
+var firebaseConfig = {
+    apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
+    authDomain: "pruebafirebase-44f30.firebaseapp.com",
+    databaseURL: "https://pruebafirebase-44f30.firebaseio.com",
+    projectId: "pruebafirebase-44f30",
+    storageBucket: "pruebafirebase-44f30.appspot.com",
+    messagingSenderId: "846026419673",
+    appId: "1:846026419673:web:c51e352b34394338d83dc8",
+    measurementId: "G-W90PWGXKTN"
+};
+// Initialize Firebase
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const database = firebase.firestore();
 
 const CitasDetalladas = (id) => {
-    console.log(id)
-    ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
-    /*useEffect(() => {
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
+    const location = useLocation();
+    const [citas, setCitas] = useState([]);
+    const cita = citas[location.state.id]
+    const [users, setUsers] = useState([])
+
+
+    useEffect(() => {
+        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', location.state.date).get()
             .then(response => {
                 const fetchedCitas = [];
                 response.forEach(document => {
@@ -13,15 +38,87 @@ const CitasDetalladas = (id) => {
                         ...document.data()
                     };
                     fetchedCitas.push(fetchedCita);
-                    //console.log(fetchedCita.CheckIn)
                 });
                 setCitas(fetchedCitas);
+
+            })
+        database.collection('UsuariosDev').get()
+            .then(response => {
+                const fetchedUsers = [];
+                response.forEach(document => {
+                    const fetchedUser = {
+                        id: document.id,
+                        ...document.data()
+                    };
+                    fetchedUsers.push(fetchedUser);
+                });
+                setUsers(fetchedUsers);
             })
 
 
+    }, [location]);
 
-    }, [startDate]/*judas*///)
 
+    function isEmpty(obj) {
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return true;
+    }
+    function horaEntrada() {
+        if (!isEmpty(cita)) {
+            return cita.CheckIn.split(" ")[1].split(".")[0];
+        }
+    }
+    function servicio() {
+        if (!isEmpty(cita)) {
+            return cita.Servicio;
+        }
+    }
+    function horaSalida() {
+        if (!isEmpty(cita)) {
+            return cita.CheckOut.split(" ")[1].split(".")[0];
+        }
+    }
+    function info() {
+        if (!isEmpty(cita)) {
+            return cita.extraInformation;
+        }
+    }
+    function userGetNombre() {
+        let nombre = "null";
+        if (!isEmpty(cita)) {
+            users.map((us) => {
+                if (us.id == cita.idUsuario)
+                    nombre = us.Nombre
+            });
+        }
+        return nombre;
+    }
+    function userGetTelefono() {
+        let telefono = "null";
+        if (!isEmpty(cita)) {
+            users.map((us) => {
+                if (us.id == cita.idUsuario)
+                    telefono = us.Telefono
+            });
+        }
+        return telefono;
+    }
+    function duracion() {
+        if (!isEmpty(cita)) {
+            //const date = new Date(cita.CheckOut);
+            const horasIn = cita.CheckIn.split(" ")[1].split(".")[0].split(":")[0];
+            const minutosIn = cita.CheckIn.split(" ")[1].split(".")[0].split(":")[1];
+            return <div>
+                <Moment subtract={{ hours: horasIn, minutes: minutosIn }} format='HH:mm'>{cita.CheckOut}</Moment>
+            </div>
+
+        }
+
+    }
 
     return <div>
         <div className="container-fluid">
@@ -33,7 +130,7 @@ const CitasDetalladas = (id) => {
             </ol>
             <div className="card mb-3 col-lg-12">
                 <div className="card-header">
-                    <i className="fa fa-table"></i> Cita ID
+                    <i className="fa fa-table"></i> Cita {location.state.date}
                 </div>
                 <div className="wrap" data-pos="0">
                     <div className="headbar">
@@ -44,11 +141,11 @@ const CitasDetalladas = (id) => {
                         <div className="filter"></div>
                         <div className="title">
                             <div className="fromPlace">
-                                10:30
+                                {horaEntrada()}
                             </div>
                             <span className="separator"><i className="fa fa-location-arrow"></i></span>
                             <div className="toPlace">
-                                11:00
+                                {horaSalida()}
                             </div>
                         </div>
                         <div className="map"></div>
@@ -63,7 +160,7 @@ const CitasDetalladas = (id) => {
                                         <span className="close"><i className="fa fa-mobile-phone"></i></span>
                                         <div>
                                             <h6>Teléfono</h6>
-                                            <span className="airport-name" data-role="from">674576761</span>
+                                            <span className="airport-name" data-role="from">{userGetTelefono()}</span>
                                         </div>
                                     </div>
 
@@ -74,7 +171,7 @@ const CitasDetalladas = (id) => {
                                         <span className="close"><i className="fa fa-user"></i></span>
                                         <div>
                                             <h6>Nombre</h6>
-                                            <span className="airport-name" data-role="to">Juanjo</span>
+                                            <span className="airport-name" data-role="to">{userGetNombre()}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +181,7 @@ const CitasDetalladas = (id) => {
                                         <span className="close"><i className="fa fa-tag"></i></span>
                                         <div>
                                             <h6>Servicio</h6>
-                                            <span className="airport-name" data-role="to">Corte de pelo</span>
+                                            <span className="airport-name" data-role="to">{servicio()}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -94,7 +191,7 @@ const CitasDetalladas = (id) => {
                                         <span className="close"><i className="fa fa-clock-o"></i></span>
                                         <div>
                                             <h6>Duración</h6>
-                                            <span className="airport-name" data-role="to">30 minutos</span>
+                                            <span className="airport-name" data-role="to">{duracion()}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +201,7 @@ const CitasDetalladas = (id) => {
                                         <span className="close"><i className="fa fa-id-card "></i></span>
                                         <div>
                                             <h6>Profesional</h6>
-                                            <span className="airport-name" data-role="to">Manolo</span>
+                                            <span className="airport-name" data-role="to">{info()}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -117,8 +214,7 @@ const CitasDetalladas = (id) => {
                           cita</button>
                                                 </div>
                                                 <div className="col-md-offset-3 col-md-6 text-center">
-                                                    <button style={{ backgroundColor: 'E6495A', marginTop: '1%' }} className="btn btn-default">Lo
-                          otro</button>
+                                                    <button style={{ backgroundColor: '#E6495A', marginTop: '1%' }} className="btn btn-default">Lo otro</button>
                                                 </div>
                                             </div>
                                         </div>

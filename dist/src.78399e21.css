@@ -793,6 +793,10 @@ div.rotate span:nth-child(3) {
 .clickable-row {
   cursor: pointer;
 }
+
+.hide {
+  visibility: hidden;
+}
 html {
   position  : relative;
   min-height: 100%;

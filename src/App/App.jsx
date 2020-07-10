@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CitasPage from './CitasPage';
 import CitaDetallada from './CitasDetalladas';
+import CrearCitasPage from './CitasCrear'
 
 
 import {
@@ -21,6 +22,9 @@ function App() {
                     </Route>
                     <Route path="/citasDetalladas" exact>
                         <CitaDetallada />
+                    </Route>
+                    <Route path="/crearCita" exact>
+                        <CrearCitasPage />
                     </Route>
                 </Switch>
             </Router>
