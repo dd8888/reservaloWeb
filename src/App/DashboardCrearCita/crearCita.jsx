@@ -30,7 +30,9 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 
-
+/*
+LA HORA PONERLA EN UN COMBOBOX NO USANDO LA LIBRERIA
+*/
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -43,9 +45,7 @@ const useFirebase = () => {
 }
 const Citas = () => {
     const [horarios, setHorarios] = useState([]);
-    const [citaDate, setCitaDate] = useState(
-        setHours(setMinutes(new Date(), 30), 16)
-    );
+    const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
     const [necesitaPrecio, setPrecio] = useState();
     const [empleadoSelect, setEmpleadoSelect] = useState();
@@ -59,6 +59,33 @@ const Citas = () => {
     const [users, setUsers] = useState([]);
     const [title, setTitle] = useState("");
     const [servicios, setServicios] = useState([]);
+
+    function CheckDates() {
+        disp.length = 0;
+        horarios.map(h => (
+            console.log(empleadoSelect),
+            h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate()
+                ?
+                h.disponibilidad.map(dispon => (
+                    disp.push(dispon.split(':')[0] + ':' + dispon.split(':')[1]
+                    )))
+                :
+                console.log('adios')
+        ))
+
+        return (
+            <select className="form-control col-2" style={{ marginLeft: '2%' }}  >
+                {disp.length > 0 ?
+                    disp.map((dis) =>
+                        <option>{dis}</option>
+
+                    )
+                    : <option> - No disponible - </option>
+                }
+            </select>
+        )
+    }
+
     //Para sacar los servicios
     useEffect(() => {
         database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('servicios').get()
@@ -122,7 +149,6 @@ const Citas = () => {
             })
     }
     ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
-
     const pepe = (e) => (
         setPrecio(e.target.value)
     )
@@ -145,16 +171,6 @@ const Citas = () => {
                 });
                 setIDs(fetchedIDs)
                 setHorarios(fetchedHorarios);
-
-                fetchedHorarios.map(h => (
-                    h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDay()
-                        ?
-                        h.disponibilidad.map(dispon => (
-                            disp.push(setHours(setMinutes(new Date(), dispon.split(':')[1]), dispon.split(':')[0]))
-                        ))
-                        :
-                        console.log('adios')
-                ))
             })
 
     )
@@ -205,8 +221,7 @@ const Citas = () => {
             </ol>
             <div className="card mb-3 col-lg-12">
                 <div className="card-header">
-
-                    <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                    <i className="fa fa-table"></i> Citas
                 </div>
 
                 <form className="form-group">
@@ -261,23 +276,20 @@ const Citas = () => {
                                         </select>
                                         <span className="help-block"></span>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                    <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                    <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
                                         <br></br>
                                         <DatePicker
-                                            showTimeSelect
                                             selected={citaDate}
-                                            timeIntervals={10}
                                             onChange={date => setCitaDate(date)}
-                                            dateFormat="yyyy-M-dd h:mm aa"
-                                            includeTimes={disp}
-
+                                            dateFormat="yyyy-MM-dd"
                                         />
+                                        <CheckDates></CheckDates>
                                         <span className="help-block"></span>
                                     </div>
                                 </div>
                             ))}
-                            <button className="btn btn-lg btn-primary btn-block" type="submit">Make appointment</button>
+                            <button className="btn btn-lg btn-primary btn-block" type="submit">Pedir cita</button>
                         </div>
                         : title === '❌' ?
                             <div>
@@ -296,20 +308,33 @@ const Citas = () => {
                                     <Prueba></Prueba>
                                     <span className="help-block"></span>
                                 </div>
+
                                 <div className="form-group">
-                                    <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                    <label htmlFor="sel1">Empleados disponibles:</label>
+
+                                    <select className="form-control" onChange={selEmpleado}>
+                                        <option> - Seleccione un empleado - </option>
+
+                                        {empleados.map((empleado) =>
+                                            <option>{empleado.Nombre}</option>
+                                        )}
+
+                                    </select>
+                                    <span className="help-block"></span>
+                                </div>
+                                <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
                                     <br></br>
                                     <DatePicker
-                                        showTimeSelect
                                         selected={citaDate}
                                         onChange={date => setCitaDate(date)}
-                                        dateFormat="d-M-yyyy h:mm aa"
-                                        includeTimes={disp}
+                                        dateFormat="yyyy-MM-dd"
                                     />
+                                    <CheckDates></CheckDates>
                                     <span className="help-block"></span>
                                 </div>
 
-                                <button className="btn btn-lg btn-primary btn-block" type="submit">Make appointment</button>
+                                <button className="btn btn-lg btn-primary btn-block" type="submit">Pedir cita</button>
                             </div>
                             :
                             <div>

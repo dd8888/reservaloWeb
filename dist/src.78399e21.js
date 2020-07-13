@@ -115155,6 +115155,10 @@ var firebaseConfig = {
   measurementId: "G-W90PWGXKTN"
 }; // Initialize Firebase
 
+/*
+LA HORA PONERLA EN UN COMBOBOX NO USANDO LA LIBRERIA
+*/
+
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
@@ -115171,7 +115175,7 @@ var Citas = function Citas() {
       horarios = _useState2[0],
       setHorarios = _useState2[1];
 
-  var _useState3 = (0, _react.useState)((0, _setHours.default)((0, _setMinutes.default)(new Date(), 30), 16)),
+  var _useState3 = (0, _react.useState)(new Date()),
       _useState4 = _slicedToArray(_useState3, 2),
       citaDate = _useState4[0],
       setCitaDate = _useState4[1];
@@ -115230,7 +115234,24 @@ var Citas = function Citas() {
   var _useState23 = (0, _react.useState)([]),
       _useState24 = _slicedToArray(_useState23, 2),
       servicios = _useState24[0],
-      setServicios = _useState24[1]; //Para sacar los servicios
+      setServicios = _useState24[1];
+
+  function CheckDates() {
+    disp.length = 0;
+    horarios.map(function (h) {
+      return console.log(empleadoSelect), h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate() ? h.disponibilidad.map(function (dispon) {
+        return disp.push(dispon.split(':')[0] + ':' + dispon.split(':')[1]);
+      }) : console.log('adios');
+    });
+    return /*#__PURE__*/_react.default.createElement("select", {
+      className: "form-control col-2",
+      style: {
+        marginLeft: '2%'
+      }
+    }, disp.length > 0 ? disp.map(function (dis) {
+      return /*#__PURE__*/_react.default.createElement("option", null, dis);
+    }) : /*#__PURE__*/_react.default.createElement("option", null, " - No disponible - "));
+  } //Para sacar los servicios
 
 
   (0, _react.useEffect)(function () {
@@ -115306,11 +115327,6 @@ var Citas = function Citas() {
       });
       setIDs(fetchedIDs);
       setHorarios(fetchedHorarios);
-      fetchedHorarios.map(function (h) {
-        return h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDay() ? h.disponibilidad.map(function (dispon) {
-          return disp.push((0, _setHours.default)((0, _setMinutes.default)(new Date(), dispon.split(':')[1]), dispon.split(':')[0]));
-        }) : console.log('adios');
-      });
     });
   };
 
@@ -115378,12 +115394,7 @@ var Citas = function Citas() {
     className: "card-header"
   }, /*#__PURE__*/_react.default.createElement("i", {
     className: "fa fa-table"
-  }), "Citas ", /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
-    selected: startDate,
-    onChange: function onChange(date) {
-      return setStartDate(date);
-    }
-  })), /*#__PURE__*/_react.default.createElement("form", {
+  }), " Citas"), /*#__PURE__*/_react.default.createElement("form", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("h2", null, "Crear nueva cita"), /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "phone_number"
@@ -115477,26 +115488,27 @@ var Citas = function Citas() {
       return /*#__PURE__*/_react.default.createElement("option", null, empleado.Nombre);
     })), /*#__PURE__*/_react.default.createElement("span", {
       className: "help-block"
-    })), /*#__PURE__*/_react.default.createElement("div", {
-      className: "form-group"
-    }, /*#__PURE__*/_react.default.createElement("label", {
+    })), /*#__PURE__*/_react.default.createElement("label", {
       htmlFor: "email_address_confirm"
-    }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
-      showTimeSelect: true,
+    }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group",
+      style: {
+        display: 'flex',
+        alignItems: 'center'
+      }
+    }, /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
       selected: citaDate,
-      timeIntervals: 10,
       onChange: function onChange(date) {
         return setCitaDate(date);
       },
-      dateFormat: "yyyy-M-dd h:mm aa",
-      includeTimes: disp
-    }), /*#__PURE__*/_react.default.createElement("span", {
+      dateFormat: "yyyy-MM-dd"
+    }), /*#__PURE__*/_react.default.createElement(CheckDates, null), /*#__PURE__*/_react.default.createElement("span", {
       className: "help-block"
     })));
   }), /*#__PURE__*/_react.default.createElement("button", {
     className: "btn btn-lg btn-primary btn-block",
     type: "submit"
-  }, "Make appointment")) : title === '❌' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+  }, "Pedir cita")) : title === '❌' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "first_name"
@@ -115523,21 +115535,34 @@ var Citas = function Citas() {
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "sel1"
+  }, "Empleados disponibles:"), /*#__PURE__*/_react.default.createElement("select", {
+    className: "form-control",
+    onChange: selEmpleado
+  }, /*#__PURE__*/_react.default.createElement("option", null, " - Seleccione un empleado - "), empleados.map(function (empleado) {
+    return /*#__PURE__*/_react.default.createElement("option", null, empleado.Nombre);
+  })), /*#__PURE__*/_react.default.createElement("span", {
+    className: "help-block"
+  })), /*#__PURE__*/_react.default.createElement("label", {
     htmlFor: "email_address_confirm"
-  }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
-    showTimeSelect: true,
+  }, "Fecha y hora"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "form-group",
+    style: {
+      display: 'flex',
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement(_reactDatepicker.default, {
     selected: citaDate,
     onChange: function onChange(date) {
       return setCitaDate(date);
     },
-    dateFormat: "d-M-yyyy h:mm aa",
-    includeTimes: disp
-  }), /*#__PURE__*/_react.default.createElement("span", {
+    dateFormat: "yyyy-MM-dd"
+  }), /*#__PURE__*/_react.default.createElement(CheckDates, null), /*#__PURE__*/_react.default.createElement("span", {
     className: "help-block"
   })), /*#__PURE__*/_react.default.createElement("button", {
     className: "btn btn-lg btn-primary btn-block",
     type: "submit"
-  }, "Make appointment")) : /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+  }, "Pedir cita")) : /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("input", {
     type: "text",
@@ -115697,7 +115722,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60453" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56275" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
