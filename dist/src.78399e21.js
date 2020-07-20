@@ -115165,10 +115165,6 @@ if (!firebase.apps.length) {
 
 var database = firebase.firestore();
 
-var useFirebase = function useFirebase() {
-  return users;
-};
-
 var Citas = function Citas() {
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -115187,7 +115183,7 @@ var Citas = function Citas() {
 
   var _useState7 = (0, _react.useState)(),
       _useState8 = _slicedToArray(_useState7, 2),
-      necesitaPrecio = _useState8[0],
+      servicioSeleccionado = _useState8[0],
       setPrecio = _useState8[1];
 
   var _useState9 = (0, _react.useState)(),
@@ -115200,57 +115196,101 @@ var Citas = function Citas() {
       empleados = _useState12[0],
       setEmpleados = _useState12[1];
 
+  var _useState13 = (0, _react.useState)(),
+      _useState14 = _slicedToArray(_useState13, 2),
+      horaSelec = _useState14[0],
+      setHoraSelec = _useState14[1];
+
   var history = (0, _reactRouterDom.useHistory)();
 
-  var _useState13 = (0, _react.useState)([]),
-      _useState14 = _slicedToArray(_useState13, 2),
-      citas = _useState14[0],
-      setCitas = _useState14[1];
-
-  var _useState15 = (0, _react.useState)(new Date()),
+  var _useState15 = (0, _react.useState)([]),
       _useState16 = _slicedToArray(_useState15, 2),
-      startDate = _useState16[0],
-      setStartDate = _useState16[1];
+      citas = _useState16[0],
+      setCitas = _useState16[1];
 
-  var _useState17 = (0, _react.useState)([]),
+  var _useState17 = (0, _react.useState)(new Date()),
       _useState18 = _slicedToArray(_useState17, 2),
-      ids = _useState18[0],
-      setIDs = _useState18[1];
+      startDate = _useState18[0],
+      setStartDate = _useState18[1];
+
+  var _useState19 = (0, _react.useState)([]),
+      _useState20 = _slicedToArray(_useState19, 2),
+      ids = _useState20[0],
+      setIDs = _useState20[1];
 
   var varid = 0;
 
   var textInput = _react.default.createRef();
 
-  var _useState19 = (0, _react.useState)([]),
-      _useState20 = _slicedToArray(_useState19, 2),
-      users = _useState20[0],
-      setUsers = _useState20[1];
+  var duracionInput = _react.default.createRef();
 
-  var _useState21 = (0, _react.useState)(""),
+  var precioInput = _react.default.createRef();
+
+  var dur;
+  var pre;
+
+  var _useState21 = (0, _react.useState)([]),
       _useState22 = _slicedToArray(_useState21, 2),
-      title = _useState22[0],
-      setTitle = _useState22[1];
+      users = _useState22[0],
+      setUsers = _useState22[1];
 
-  var _useState23 = (0, _react.useState)([]),
+  var _useState23 = (0, _react.useState)(""),
       _useState24 = _slicedToArray(_useState23, 2),
-      servicios = _useState24[0],
-      setServicios = _useState24[1];
+      title = _useState24[0],
+      setTitle = _useState24[1];
+
+  var _useState25 = (0, _react.useState)([]),
+      _useState26 = _slicedToArray(_useState25, 2),
+      servicios = _useState26[0],
+      setServicios = _useState26[1]; //Para formatear la fecha
+
+
+  function formattedDate() {
+    var d = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+    return [d.getFullYear(), d.getMonth() + 1, d.getDate()].map(function (n) {
+      return n < 10 ? "0".concat(n) : "".concat(n);
+    }).join('-');
+  } //Para formatear la hora
+
+
+  function formattedTime(d) {
+    if (d.split(':')[0] < 10) {
+      return '0' + d + ':00.000';
+    } else {
+      return d;
+    }
+  } //Para añadir minutos a fecha de entrada
+  //Citas error máximo 90 minutos
+
+
+  function addMinutes(date, minutes) {
+    var minu = parseInt(minutes);
+    var ndate = date.split(' ')[0];
+    var time = date.split(' ')[1];
+    var hora = parseInt(time.split(':')[0]);
+    var min = parseInt(time.split(':')[1]);
+    var totalMin = 0;
+
+    if (min + minu >= 60) {
+      hora = hora + 1;
+      totalMin = min + minutes - 60;
+    } else {
+      totalMin = min + minutes;
+    }
+
+    return ndate + ' ' + hora + ':' + totalMin + ':00.000';
+  }
 
   function CheckDates() {
     disp.length = 0;
     horarios.map(function (h) {
-      return console.log(empleadoSelect), h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate() ? h.disponibilidad.map(function (dispon) {
+      return h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate() ? h.disponibilidad.map(function (dispon) {
         return disp.push(dispon.split(':')[0] + ':' + dispon.split(':')[1]);
-      }) : console.log('adios');
+      }) : null;
     });
-    return /*#__PURE__*/_react.default.createElement("select", {
-      className: "form-control col-2",
-      style: {
-        marginLeft: '2%'
-      }
-    }, disp.length > 0 ? disp.map(function (dis) {
+    return disp.length > 0 ? disp.map(function (dis) {
       return /*#__PURE__*/_react.default.createElement("option", null, dis);
-    }) : /*#__PURE__*/_react.default.createElement("option", null, " - No disponible - "));
+    }) : /*#__PURE__*/_react.default.createElement("option", null, " - No disponible - ");
   } //Para sacar los servicios
 
 
@@ -115284,8 +115324,58 @@ var Citas = function Citas() {
     });
   }, []
   /*judas*/
-  ); //Para sacar los horarios del empleado seleccionado
-  //Para sacar si el usuario existe
+  );
+
+  var query = function query() {
+    if (servicioSeleccionado !== 'Coloración' && servicioSeleccionado !== 'Mechas' && servicioSeleccionado !== 'Reflejos') {
+      servicios.forEach(function (servicio) {
+        if (servicio.nombre === servicioSeleccionado) {
+          dur = servicio.duracion;
+          pre = servicio.precio;
+        }
+      });
+    } else {
+      dur = duracionInput.current.value;
+      pre = precioInput.current.value;
+    }
+
+    var idUser;
+    var nombreUser;
+    var apellidoUser;
+    users.map(function (user) {
+      return idUser = user.id, nombreUser = user.Nombre, apellidoUser = user.Apellidos;
+    });
+    var fechaFinal = formattedTime(addMinutes(formattedDate(citaDate) + ' ' + formattedTime(horaSelec), parseInt(dur)));
+    console.log(fechaFinal);
+
+    if (fechaFinal.split(' ')[1].split(':')[1] < 10) {
+      fechaFinal = fechaFinal.split(' ')[0] + ' ' + fechaFinal.split(' ')[1].split(':')[0] + ':' + '0' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2];
+    }
+
+    if (textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
+      database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').add({
+        CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
+        CheckOut: fechaFinal,
+        Dirección: 'Avenida Los Majuelos 54',
+        Negocio: 'PRIVILEGE SALONES',
+        Precio: pre,
+        Servicio: servicioSeleccionado,
+        extraInformation: empleadoSelect,
+        idUsuario: idUser
+      });
+      /*console.log(textInput.current.value)
+      console.log(idUser)
+      console.log(dur)
+      console.log(pre)
+      console.log(servicioSeleccionado)
+      console.log(empleadoSelect)
+       console.log(formattedDate(citaDate))
+      console.log(formattedTime(horaSelec))*/
+
+      console.log(fechaFinal);
+    }
+  }; //Para sacar si el usuario existe
+
 
   var fetchRequest = function fetchRequest() {
     database.collection('UsuariosDev').where('Telefono', '==', textInput.current.value).get().then(function (response) {
@@ -115305,11 +115395,14 @@ var Citas = function Citas() {
         setTitle('❌');
       }
     });
-  }; ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
-
+  };
 
   var pepe = function pepe(e) {
     return setPrecio(e.target.value);
+  };
+
+  var selecHora = function selecHora(e) {
+    return setHoraSelec(e.target.value);
   };
 
   var selEmpleado = function selEmpleado(e) {
@@ -115330,12 +115423,13 @@ var Citas = function Citas() {
     });
   };
 
-  function Prueba() {
-    return necesitaPrecio === 'Coloración' || necesitaPrecio === 'Mechas' || necesitaPrecio === 'Reflejos' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+  function ComprobarServicio() {
+    return servicioSeleccionado === 'Coloración' || servicioSeleccionado === 'Mechas' || servicioSeleccionado === 'Reflejos' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
       className: "form-group"
     }, /*#__PURE__*/_react.default.createElement("label", {
       htmlFor: "first_name"
     }, "Precio"), /*#__PURE__*/_react.default.createElement("input", {
+      ref: precioInput,
       type: "number",
       className: "form-control",
       id: "precio",
@@ -115349,6 +115443,7 @@ var Citas = function Citas() {
     }, /*#__PURE__*/_react.default.createElement("label", {
       htmlFor: "first_name"
     }, "Duracion"), /*#__PURE__*/_react.default.createElement("input", {
+      ref: duracionInput,
       type: "number",
       className: "form-control",
       id: "duracion",
@@ -115470,21 +115565,13 @@ var Citas = function Citas() {
       className: "form-group"
     }, /*#__PURE__*/_react.default.createElement("label", {
       htmlFor: "sel1"
-    }, "Servicio:"), /*#__PURE__*/_react.default.createElement("select", {
-      className: "form-control",
-      onChange: pepe
-    }, servicios.map(function (servicio) {
-      return /*#__PURE__*/_react.default.createElement("option", null, servicio.nombre);
-    })), /*#__PURE__*/_react.default.createElement(Prueba, null), /*#__PURE__*/_react.default.createElement("span", {
-      className: "help-block"
-    })), /*#__PURE__*/_react.default.createElement("div", {
-      className: "form-group"
-    }, /*#__PURE__*/_react.default.createElement("label", {
-      htmlFor: "sel1"
     }, "Empleados disponibles:"), /*#__PURE__*/_react.default.createElement("select", {
       className: "form-control",
-      onChange: selEmpleado
-    }, /*#__PURE__*/_react.default.createElement("option", null, " - Seleccione un empleado - "), empleados.map(function (empleado) {
+      onChange: selEmpleado,
+      required: true
+    }, /*#__PURE__*/_react.default.createElement("option", {
+      value: ""
+    }, "Seleccione un empleado."), empleados.map(function (empleado) {
       return /*#__PURE__*/_react.default.createElement("option", null, empleado.Nombre);
     })), /*#__PURE__*/_react.default.createElement("span", {
       className: "help-block"
@@ -115502,12 +115589,37 @@ var Citas = function Citas() {
         return setCitaDate(date);
       },
       dateFormat: "yyyy-MM-dd"
-    }), /*#__PURE__*/_react.default.createElement(CheckDates, null), /*#__PURE__*/_react.default.createElement("span", {
+    }), /*#__PURE__*/_react.default.createElement("select", {
+      className: "form-control col-2",
+      style: {
+        marginLeft: '2%'
+      },
+      onChange: selecHora,
+      value: horaSelec,
+      required: true
+    }, /*#__PURE__*/_react.default.createElement("option", {
+      value: ""
+    }, "Seleccione una hora"), /*#__PURE__*/_react.default.createElement(CheckDates, null)), /*#__PURE__*/_react.default.createElement("span", {
+      className: "help-block"
+    })), /*#__PURE__*/_react.default.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/_react.default.createElement("label", {
+      htmlFor: "sel1"
+    }, "Servicio:"), /*#__PURE__*/_react.default.createElement("select", {
+      className: "form-control",
+      onChange: pepe,
+      required: true
+    }, /*#__PURE__*/_react.default.createElement("option", {
+      value: ""
+    }, "Seleccione un servicio"), servicios.map(function (servicio) {
+      return /*#__PURE__*/_react.default.createElement("option", null, servicio.nombre);
+    })), /*#__PURE__*/_react.default.createElement(ComprobarServicio, null), /*#__PURE__*/_react.default.createElement("span", {
       className: "help-block"
     })));
   }), /*#__PURE__*/_react.default.createElement("button", {
     className: "btn btn-lg btn-primary btn-block",
-    type: "submit"
+    type: "button",
+    onClick: query
   }, "Pedir cita")) : title === '❌' ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/_react.default.createElement("label", {
@@ -115530,7 +115642,7 @@ var Citas = function Citas() {
     onChange: pepe
   }, servicios.map(function (servicio) {
     return /*#__PURE__*/_react.default.createElement("option", null, servicio.nombre);
-  })), /*#__PURE__*/_react.default.createElement(Prueba, null), /*#__PURE__*/_react.default.createElement("span", {
+  })), /*#__PURE__*/_react.default.createElement(ComprobarServicio, null), /*#__PURE__*/_react.default.createElement("span", {
     className: "help-block"
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "form-group"
@@ -115722,7 +115834,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56275" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51118" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

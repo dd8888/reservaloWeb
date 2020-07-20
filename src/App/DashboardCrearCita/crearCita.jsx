@@ -38,53 +38,87 @@ if (!firebase.apps.length) {
 }
 const database = firebase.firestore();
 
-
-const useFirebase = () => {
-
-    return users;
-}
 const Citas = () => {
     const [horarios, setHorarios] = useState([]);
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
-    const [necesitaPrecio, setPrecio] = useState();
+    const [servicioSeleccionado, setPrecio] = useState();
     const [empleadoSelect, setEmpleadoSelect] = useState();
     const [empleados, setEmpleados] = useState([]);
+    const [horaSelec, setHoraSelec] = useState();
     const history = useHistory();
     const [citas, setCitas] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [ids, setIDs] = useState([]);
     let varid = 0;
     let textInput = React.createRef();
+    let duracionInput = React.createRef();
+    let precioInput = React.createRef();
+
+
+    let dur;
+    let pre;
+
     const [users, setUsers] = useState([]);
     const [title, setTitle] = useState("");
     const [servicios, setServicios] = useState([]);
 
+    //Para formatear la fecha
+    function formattedDate(d = new Date) {
+        return [d.getFullYear(), d.getMonth() + 1, d.getDate()]
+            .map(n => n < 10 ? `0${n}` : `${n}`).join('-');
+    }
+    //Para formatear la hora
+    function formattedTime(d) {
+        if (d.split(':')[0] < 10) {
+            return '0' + d + ':00.000'
+        } else {
+            return d
+        }
+    }
+
+    //Para añadir minutos a fecha de entrada
+    //Citas error máximo 90 minutos
+    function addMinutes(date, minutes) {
+        let minu = parseInt(minutes);
+        let ndate = date.split(' ')[0];
+        let time = date.split(' ')[1];
+        let hora = parseInt(time.split(':')[0]);
+        let min = parseInt(time.split(':')[1]);
+        let totalMin = 0;
+
+        if (min + minu >= 60) {
+            hora = hora + 1;
+            totalMin = (min + minutes) - 60;
+        } else {
+            totalMin = min + minutes;
+        }
+        return ndate + ' ' + hora + ':' + totalMin + ':00.000';
+    }
+
+
     function CheckDates() {
         disp.length = 0;
         horarios.map(h => (
-            console.log(empleadoSelect),
             h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate()
                 ?
                 h.disponibilidad.map(dispon => (
                     disp.push(dispon.split(':')[0] + ':' + dispon.split(':')[1]
                     )))
                 :
-                console.log('adios')
+                null
         ))
 
-        return (
-            <select className="form-control col-2" style={{ marginLeft: '2%' }}  >
-                {disp.length > 0 ?
-                    disp.map((dis) =>
-                        <option>{dis}</option>
+        return (disp.length > 0 ?
+            disp.map((dis) =>
+                <option>{dis}</option>
 
-                    )
-                    : <option> - No disponible - </option>
-                }
-            </select>
+            )
+            : <option> - No disponible - </option>
+
         )
     }
+
 
     //Para sacar los servicios
     useEffect(() => {
@@ -123,9 +157,63 @@ const Citas = () => {
 
     }, []/*judas*/)
 
-    //Para sacar los horarios del empleado seleccionado
+
+    const query = () => {
+        if (servicioSeleccionado !== 'Coloración' && servicioSeleccionado !== 'Mechas' && servicioSeleccionado !== 'Reflejos') {
+            servicios.forEach(servicio => {
+                if (servicio.nombre === servicioSeleccionado) {
+                    dur = servicio.duracion
+                    pre = servicio.precio
+                }
+            })
+        } else {
+            dur = duracionInput.current.value;
+            pre = precioInput.current.value
+        }
+        let idUser;
+        let nombreUser;
+        let apellidoUser;
+
+        users.map((user) => (
+            idUser = user.id,
+            nombreUser = user.Nombre,
+            apellidoUser = user.Apellidos
+        ))
+
+        let fechaFinal = formattedTime(addMinutes((formattedDate(citaDate) + ' ' + formattedTime(horaSelec)), parseInt(dur)));
+        console.log(fechaFinal)
+        if (fechaFinal.split(' ')[1].split(':')[1] < 10) {
+            fechaFinal = fechaFinal.split(' ')[0] + ' ' + fechaFinal.split(' ')[1].split(':')[0] + ':' + '0' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
+        }
+
+        if (textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
+            database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').add({
+                CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
+                CheckOut: fechaFinal,
+                Dirección: 'Avenida Los Majuelos 54',
+                Negocio: 'PRIVILEGE SALONES',
+                Precio: pre,
+                Servicio: servicioSeleccionado,
+                extraInformation: empleadoSelect,
+                idUsuario: idUser
+            })
+            /*console.log(textInput.current.value)
+            console.log(idUser)
+            console.log(dur)
+            console.log(pre)
+            console.log(servicioSeleccionado)
+            console.log(empleadoSelect)
+
+            console.log(formattedDate(citaDate))
+            console.log(formattedTime(horaSelec))*/
 
 
+            console.log(fechaFinal)
+        }
+
+
+
+    }
 
 
     //Para sacar si el usuario existe
@@ -148,9 +236,11 @@ const Citas = () => {
                 }
             })
     }
-    ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
     const pepe = (e) => (
         setPrecio(e.target.value)
+    )
+    const selecHora = (e) => (
+        setHoraSelec(e.target.value)
     )
     const selEmpleado = (e) => (
         disp.length = 0,
@@ -174,19 +264,19 @@ const Citas = () => {
             })
 
     )
-    function Prueba() {
+    function ComprobarServicio() {
         return (
-            necesitaPrecio === 'Coloración' || necesitaPrecio === 'Mechas' || necesitaPrecio === 'Reflejos'
+            servicioSeleccionado === 'Coloración' || servicioSeleccionado === 'Mechas' || servicioSeleccionado === 'Reflejos'
                 ?
                 <div>
                     <div className="form-group">
                         <label htmlFor="first_name">Precio</label>
-                        <input type="number" className="form-control" id="precio" placeholder="Precio" required autoComplete="on"></input>
+                        <input ref={precioInput} type="number" className="form-control" id="precio" placeholder="Precio" required autoComplete="on"></input>
                         <span className="help-block"></span>
                     </div>
                     <div className="form-group">
                         <label htmlFor="first_name">Duracion</label>
-                        <input type="number" className="form-control" id="duracion" placeholder="20" required autoComplete="on"></input>
+                        <input ref={duracionInput} type="number" className="form-control" id="duracion" placeholder="20" required autoComplete="on"></input>
                         <span className="help-block"> (en minutos) </span>
                     </div>
                 </div>
@@ -253,21 +343,10 @@ const Citas = () => {
                                         <span className="help-block"></span>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="sel1">Servicio:</label>
-                                        <select className="form-control" onChange={pepe}>
-                                            {servicios.map((servicio) =>
-                                                <option>{servicio.nombre}</option>
-                                            )}
-
-                                        </select>
-                                        <Prueba></Prueba>
-                                        <span className="help-block"></span>
-                                    </div>
-                                    <div className="form-group">
                                         <label htmlFor="sel1">Empleados disponibles:</label>
 
-                                        <select className="form-control" onChange={selEmpleado}>
-                                            <option> - Seleccione un empleado - </option>
+                                        <select className="form-control" onChange={selEmpleado} required>
+                                            <option value="">Seleccione un empleado.</option>
 
                                             {empleados.map((empleado) =>
                                                 <option>{empleado.Nombre}</option>
@@ -284,12 +363,27 @@ const Citas = () => {
                                             onChange={date => setCitaDate(date)}
                                             dateFormat="yyyy-MM-dd"
                                         />
-                                        <CheckDates></CheckDates>
+                                        <select className="form-control col-2" style={{ marginLeft: '2%' }} onChange={selecHora} value={horaSelec} required>
+                                            <option value="">Seleccione una hora</option>
+                                            <CheckDates></CheckDates>
+                                        </select>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="sel1">Servicio:</label>
+                                        <select className="form-control" onChange={pepe} required>
+                                            <option value="">Seleccione un servicio</option>
+                                            {servicios.map((servicio) =>
+                                                <option>{servicio.nombre}</option>
+                                            )}
+
+                                        </select>
+                                        <ComprobarServicio></ComprobarServicio>
                                         <span className="help-block"></span>
                                     </div>
                                 </div>
                             ))}
-                            <button className="btn btn-lg btn-primary btn-block" type="submit">Pedir cita</button>
+                            <button className="btn btn-lg btn-primary btn-block" type='button' onClick={query}>Pedir cita</button>
                         </div>
                         : title === '❌' ?
                             <div>
@@ -305,7 +399,7 @@ const Citas = () => {
                                             <option>{servicio.nombre}</option>
                                         )}
                                     </select>
-                                    <Prueba></Prueba>
+                                    <ComprobarServicio></ComprobarServicio>
                                     <span className="help-block"></span>
                                 </div>
 
@@ -333,8 +427,7 @@ const Citas = () => {
                                     <CheckDates></CheckDates>
                                     <span className="help-block"></span>
                                 </div>
-
-                                <button className="btn btn-lg btn-primary btn-block" type="submit">Pedir cita</button>
+                                <button className="btn btn-lg btn-primary btn-block" type="submit" >Pedir cita</button>
                             </div>
                             :
                             <div>
