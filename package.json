@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/dd8888/reservaloWeb#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
     "bootstrap": "^4.5.0",
     "firebase": "^7.15.5",
     "husky": "^4.2.5",

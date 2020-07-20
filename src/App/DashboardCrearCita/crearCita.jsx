@@ -28,6 +28,8 @@ var firebaseConfig = {
     appId: "1:846026419673:web:c51e352b34394338d83dc8",
     measurementId: "G-W90PWGXKTN"
 };
+
+
 // Initialize Firebase
 
 /*
@@ -39,6 +41,7 @@ if (!firebase.apps.length) {
 const database = firebase.firestore();
 
 const Citas = () => {
+
     const [horarios, setHorarios] = useState([]);
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
@@ -189,13 +192,13 @@ const Citas = () => {
         if (textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
             database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').add({
                 CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
-                CheckOut: fechaFinal,
+                CheckOut: fechaFinal.toString(),
                 Dirección: 'Avenida Los Majuelos 54',
                 Negocio: 'PRIVILEGE SALONES',
-                Precio: pre,
-                Servicio: servicioSeleccionado,
-                extraInformation: empleadoSelect,
-                idUsuario: idUser
+                Precio: pre.toString(),
+                Servicio: servicioSeleccionado.toString(),
+                extraInformation: empleadoSelect.toString(),
+                idUsuario: idUser.toString(),
             })
             /*console.log(textInput.current.value)
             console.log(idUser)
