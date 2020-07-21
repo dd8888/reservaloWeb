@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
 import * as firebase from 'firebase'
 import Moment from 'react-moment';
-
+import '../../css/dashboard-init.css'
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",

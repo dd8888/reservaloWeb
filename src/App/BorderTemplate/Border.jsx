@@ -1,18 +1,14 @@
 import React from 'react'
 import '../../css/dashboard-init.css'
-import '../../css/bootstrap.min.css'
 import PropTypes from 'prop-types'
-import { toggle } from '../../js/dashboard-toggle-leftbar'
+import * as firebase from 'firebase'
+import { withRouter, Redirect } from 'react-router'
 
 
-class Foo extends React.Component {
+/*class Foo extends React.Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        //toggle();
     }
     render() {
         return <ul className="navbar-nav sidenav-toggler">
@@ -23,9 +19,32 @@ class Foo extends React.Component {
             </li>
         </ul>;
     }
+}*/
+
+var firebaseConfig = {
+    apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
+    authDomain: "pruebafirebase-44f30.firebaseapp.com",
+    databaseURL: "https://pruebafirebase-44f30.firebaseio.com",
+    projectId: "pruebafirebase-44f30",
+    storageBucket: "pruebafirebase-44f30.appspot.com",
+    messagingSenderId: "846026419673",
+    appId: "1:846026419673:web:c51e352b34394338d83dc8",
+    measurementId: "G-W90PWGXKTN"
+};
+// Initialize Firebase
+
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
 
 const logo = require('../../Resources/main-icon.png');
+
+const signOutUser = () => firebase.auth().signOut().then(function () {
+
+}).catch(function (error) {
+    alert(error)
+});
 
 const Border = () => (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
@@ -240,7 +259,7 @@ const Border = () => (
                     </form>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link" data-toggle="modal" data-target="#exampleModal">
+                    <a onClick={signOutUser} className="nav-link" data-toggle="modal" data-target="#exampleModal">
                         <i className="fa fa-fw fa-sign-out"></i>Cerrar sesión</a>
                 </li>
             </ul>

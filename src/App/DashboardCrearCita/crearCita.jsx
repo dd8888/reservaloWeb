@@ -2,21 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import * as firebase from 'firebase'
 import DatePicker from 'react-datepicker'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../../css/bootstrap.min.css';
 import '../../css/citas-detalladas.css';
-import CitasDetalladas from '../DashboardCitasDetalladas/citasDetalladas'
 import { useHistory } from 'react-router-dom';
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
-
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect
-} from "react-router-dom";
-
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",

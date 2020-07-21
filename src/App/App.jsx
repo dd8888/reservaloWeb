@@ -15,24 +15,25 @@ import {
 
 function App() {
     return (
-        <div>
-            <AuthProvider>
-                <Router>
+        <AuthProvider>
+            <Router>
+                <div>
                     <Route path="/citas" exact>
                         <CitasPage />
                     </Route>
                     <Route path="/citasDetalladas" exact>
                         <CitaDetallada />
                     </Route>
-                    <Route path="/crearCita" exact>
+                    <PrivateRoute path="/crearCita" exact>
                         <CrearCitasPage />
-                    </Route>
-                    <PrivateRoute path="/index" exact>
+                    </PrivateRoute>
+                    <PrivateRoute path="/index" exact >
                         <Index />
                     </PrivateRoute>
-                </Router>
-            </AuthProvider>
-        </div>
+                </div>
+            </Router>
+
+        </AuthProvider>
     );
 }
 

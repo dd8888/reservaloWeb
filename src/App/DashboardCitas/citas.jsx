@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import * as firebase from 'firebase'
 import DatePicker from 'react-datepicker'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../css/citas-detalladas.css';
-import CitasDetalladas from '../DashboardCitasDetalladas/citasDetalladas'
+import '../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router'
+import { AuthContext } from '../Auth';
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect
-} from "react-router-dom";
 
 
 var firebaseConfig = {
@@ -42,6 +35,10 @@ const Citas = () => {
     const [ids, setIDs] = useState([]);
     let varid = 0;
 
+    const { currentUser } = useContext(AuthContext);
+    const history = useHistory();
+
+
     ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
     useEffect(() => {
         database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
@@ -65,7 +62,6 @@ const Citas = () => {
 
     }, [startDate]/*judas*/)
 
-    const history = useHistory();
 
     const handleClick = (i) => {
         history.push({
@@ -83,52 +79,49 @@ const Citas = () => {
 
         });
     }
-
+    if (!currentUser) {
+        return <Redirect to="/index" />;
+    }
     return <div>
-        <div className="container-fluid">
+        <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+                <a className="link-color" href="dashboard-main.html">Dashboard</a>
+            </li>
+            <li className="breadcrumb-item active">Citas</li>
+        </ol>
+        <div className="card mb-3 col-lg-12">
+            <div className="card-header">
+                <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                <button onClick={() => handleClickCrear()} style={{ backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
 
-            <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                    <a className="link-color" href="dashboard-main.html">Dashboard</a>
-                </li>
-                <li className="breadcrumb-item active">Citas</li>
-            </ol>
-            <div className="card mb-3 col-lg-12">
-                <div className="card-header">
+            </div>
 
-                    <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-
-                    <button onClick={() => handleClickCrear()} style={{ backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
-
-                </div>
-
-                <div className="card-body">
-                    <div className="table-responsive">
-                        <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
-                            cellSpacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Horario entrada</th>
-                                    <th>Horario salida</th>
-                                    <th>Precio</th>
-                                    <th>Servicio</th>
+            <div className="card-body">
+                <div className="table-responsive">
+                    <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
+                        cellSpacing="0">
+                        <thead>
+                            <tr>
+                                <th>Horario entrada</th>
+                                <th>Horario salida</th>
+                                <th>Precio</th>
+                                <th>Servicio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {citas.map((cita, i) => (
+                                <tr className='clickable-row' key={i} onClick={() => handleClick(i)} >
+                                    <td>{cita.CheckIn}</td>
+                                    <td>{cita.CheckOut}</td>
+                                    <td>{cita.Precio}</td>
+                                    <td>{cita.Servicio}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {citas.map((cita, i) => (
-                                    <tr className='clickable-row' key={i} onClick={() => handleClick(i)} >
-                                        <td>{cita.CheckIn}</td>
-                                        <td>{cita.CheckOut}</td>
-                                        <td>{cita.Precio}</td>
-                                        <td>{cita.Servicio}</td>
-                                    </tr>
-                                ))}
+                            ))}
 
-                            </tbody>
-                        </table>
-                        <br></br>
-                        <div id="out"></div>
-                    </div>
+                        </tbody>
+                    </table>
+                    <br></br>
+                    <div id="out"></div>
                 </div>
             </div>
         </div>
