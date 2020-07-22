@@ -41,27 +41,33 @@ const Citas = () => {
 
     ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
     useEffect(() => {
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
-            .then(response => {
-                const fetchedCitas = [];
-                const fetchedIDs = [];
-                response.forEach(document => {
-                    const fetchedCita = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    const fetchedID = document.id;
+        const unsuscribe = database.collection('NegociosDev').onSnapshot(function () {
+            database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
+                .then(response => {
+                    const fetchedCitas = [];
+                    const fetchedIDs = [];
+                    response.forEach(document => {
+                        const fetchedCita = {
+                            id: document.id,
+                            ...document.data()
+                        };
+                        const fetchedID = document.id;
 
-                    fetchedIDs.push(fetchedID);
+                        fetchedIDs.push(fetchedID);
 
-                    fetchedCitas.push(fetchedCita);
-                });
-                setCitas(fetchedCitas);
-                setIDs(fetchedIDs)
-            })
+                        fetchedCitas.push(fetchedCita);
+                    });
+                    setCitas(fetchedCitas);
+                    setIDs(fetchedIDs)
+
+
+                })
+            return () => unsuscribe();
+        });
+
+
 
     }, [startDate]/*judas*/)
-
 
     const handleClick = (i) => {
         history.push({
@@ -79,6 +85,7 @@ const Citas = () => {
 
         });
     }
+
     if (!currentUser) {
         return <Redirect to="/index" />;
     }
@@ -155,6 +162,7 @@ const Citas = () => {
             </div>
         </div>
     </div >
+
 };
 
 export default Citas;

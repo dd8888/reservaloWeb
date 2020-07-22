@@ -5,7 +5,7 @@ import CrearCitasPage from './CitasCrear'
 import Index from './Indice'
 import { AuthProvider } from './Auth'
 import PrivateRoute from './PrivateRoute';
-
+import Routes from './Routes';
 import {
     BrowserRouter as Router,
     Switch,
@@ -17,22 +17,8 @@ function App() {
     return (
         <AuthProvider>
             <Router>
-                <div>
-                    <Route path="/citas" exact>
-                        <CitasPage />
-                    </Route>
-                    <Route path="/citasDetalladas" exact>
-                        <CitaDetallada />
-                    </Route>
-                    <PrivateRoute path="/crearCita" exact>
-                        <CrearCitasPage />
-                    </PrivateRoute>
-                    <PrivateRoute path="/index" exact >
-                        <Index />
-                    </PrivateRoute>
-                </div>
+                <Routes />
             </Router>
-
         </AuthProvider>
     );
 }
