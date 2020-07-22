@@ -35,7 +35,6 @@ const Citas = () => {
     const [ids, setIDs] = useState([]);
     let varid = 0;
 
-    const { currentUser } = useContext(AuthContext);
     const history = useHistory();
 
 
@@ -86,9 +85,6 @@ const Citas = () => {
         });
     }
 
-    if (!currentUser) {
-        return <Redirect to="/index" />;
-    }
     return <div>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">

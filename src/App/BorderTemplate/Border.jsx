@@ -2,7 +2,10 @@ import React from 'react'
 import '../../css/dashboard-init.css'
 import PropTypes from 'prop-types'
 import * as firebase from 'firebase'
-import { withRouter, Redirect } from 'react-router'
+import { withRouter, Redirect, Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
+import { confirmAlert } from 'react-confirm-alert'
+
 
 
 /*class Foo extends React.Component {
@@ -40,12 +43,18 @@ if (!firebase.apps.length) {
 
 const logo = require('../../Resources/main-icon.png');
 
-const signOutUser = () => firebase.auth().signOut().then(function () {
+const signOutUser = () => {
+    const r = window.confirm("Do you really want to Sign Out?"); if (r == true) {
 
-}).catch(function (error) {
-    alert(error)
-});
+        firebase.auth().signOut().then(function () {
 
+        }).catch(function (error) {
+            alert(error)
+        });
+    }
+
+
+}
 const Border = () => (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
         <a className="navbar-brand" href="#">
@@ -65,10 +74,13 @@ const Border = () => (
                     </a>
                 </li>
                 <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
-                    <a className="nav-link" href="dashboard-citas.html">
-                        <i className="fa fa-fw fa-table active"></i>
-                        <span className="nav-link-text active">Citas del día</span>
-                    </a>
+                    <NavLink to="/citas" activeStyle={{
+                        color: '#E6495A'
+                    }} className="nav-link">
+                        <i className="fa fa-fw fa-link"></i>
+                        <span className="nav-link-text">Buscar citas</span>
+
+                    </NavLink>
                 </li>
                 <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
                     <a className="nav-link" href="generar-factura.html">
@@ -145,12 +157,17 @@ const Border = () => (
                         </li>
                     </ul>
                 </li>
+
                 <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                    <a className="nav-link" href="#">
+                    <NavLink to="/crearCita" activeStyle={{
+                        color: '#E6495A'
+                    }} className="nav-link">
                         <i className="fa fa-fw fa-link"></i>
-                        <span className="nav-link-text">Link</span>
-                    </a>
+                        <span className="nav-link-text">Nueva cita</span>
+
+                    </NavLink>
                 </li>
+
                 <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
                     <a className="nav-link" href="perfil-usuario.html">
                         <i className="fa fa-circle"></i>
