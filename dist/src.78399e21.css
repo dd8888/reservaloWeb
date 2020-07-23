@@ -537,6 +537,8 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
   }
 }
 
+
+
 .card-login {
   max-width: 25rem;
 }
@@ -568,9 +570,12 @@ footer.sticky-footer {
 }
 
 .body__login {
-  background : #E6495A;
-  font-family: 'Roboto', sans-serif;
-  min-height : 100vh;
+  background-image   : url('/wave-2.af50d061.svg');
+  background-repeat  : no-repeat;
+  background-position: bottom;
+  background-color   : #E6495A;
+  font-family        : 'Roboto', sans-serif;
+  min-height         : 100vh;
 
 }
 
@@ -679,9 +684,9 @@ footer.sticky-footer {
 
 
 .btn-opciones:hover {
-  background-color: #E6495A;
+  background-color: #1A2226;
   border-color    : #E6495A;
-  color           : white;
+  color           : #E6495A;
   right           : 0px;
 }
 
@@ -720,8 +725,8 @@ footer.sticky-footer {
 
 .btn-opciones {
   margin-bottom   : 3%;
-  color           : hsl(354, 76%, 59%);
-  background-color: white;
+  color           : #1A2226;
+  background-color: #E6495A;
   border-radius   : 0px;
   font-weight     : bold;
   letter-spacing  : 1px;
