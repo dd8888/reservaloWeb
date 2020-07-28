@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import * as firebase from 'firebase'
 import Moment from 'react-moment';
 import '../../css/dashboard-init.css'
+import CheckUserLoggedIn from '../Restrict'
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -22,14 +23,14 @@ if (!firebase.apps.length) {
 const database = firebase.firestore();
 
 const CitasDetalladas = (id) => {
+    CheckUserLoggedIn();
     const location = useLocation();
     const [citas, setCitas] = useState([]);
     const cita = citas[location.state.id]
     const [users, setUsers] = useState([])
 
-
     useEffect(() => {
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', location.state.date).get()
+        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').get()
             .then(response => {
                 const fetchedCitas = [];
                 response.forEach(document => {
@@ -37,10 +38,11 @@ const CitasDetalladas = (id) => {
                         id: document.id,
                         ...document.data()
                     };
-                    fetchedCitas.push(fetchedCita);
+                    if (fetchedCita.CheckIn.split(' ')[0] === location.state.date) {
+                        fetchedCitas.push(fetchedCita);
+                    }
                 });
                 setCitas(fetchedCitas);
-
             })
         database.collection('UsuariosDev').get()
             .then(response => {

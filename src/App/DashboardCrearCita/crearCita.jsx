@@ -5,6 +5,7 @@ import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../css/bootstrap.min.css';
 import '../../css/citas-detalladas.css';
 import { useHistory } from 'react-router-dom';
+import CheckUserLoggedIn from '../Restrict'
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -29,7 +30,7 @@ if (!firebase.apps.length) {
 const database = firebase.firestore();
 
 const Citas = () => {
-
+    CheckUserLoggedIn();
     const [horarios, setHorarios] = useState([]);
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])

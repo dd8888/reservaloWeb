@@ -6,7 +6,7 @@ import '../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
 import { withRouter, Redirect } from 'react-router'
 import { AuthContext } from '../Auth';
-
+import CheckUserLoggedIn from '../Restrict'
 
 
 var firebaseConfig = {
@@ -28,8 +28,40 @@ if (!firebase.apps.length) {
 const database = firebase.firestore();
 
 
-
 const Citas = () => {
+    //Comprobar usuario ----
+    var BreakException = {};
+    const { currentUser } = useContext(AuthContext);
+    const [empleados, setEmpleados] = useState([]);
+    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
+    useEffect(() => {
+        database.collection('EmpleadosDev').get()
+            .then(response => {
+                const fetchedEmpleados = [];
+                const emails = [];
+                response.forEach(document => {
+                    const fetchedEmpleado = {
+                        id: document.id,
+                        ...document.data()
+                    };
+                    fetchedEmpleados.push(fetchedEmpleado);
+                    fetchedEmpleados.forEach(element => {
+                        emails.push(element.Email)
+                    });
+                    if (!emails.includes(currentUser.email)) {
+                        alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
+                        firebase.auth().signOut();
+                        throw BreakException;
+                    } else {
+                        setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
+                    }
+                });
+                setEmpleados(fetchedEmpleados);
+            })
+
+    }, []/*judas*/)
+    //----Termina comprobar usuario
+
     const [citas, setCitas] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [ids, setIDs] = useState([]);
@@ -37,11 +69,10 @@ const Citas = () => {
 
     const history = useHistory();
 
-
-    ///NegociosDev/Peluquerías/Negocios/PR01/citas/1xCDFWiDx3jUdKo8R3AG
     useEffect(() => {
-        const unsuscribe = database.collection('NegociosDev').onSnapshot(function () {
-            database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
+        //database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.split('/')[3]).collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
+        if (empleadoSeleccionado !== undefined) {
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('citas').get()
                 .then(response => {
                     const fetchedCitas = [];
                     const fetchedIDs = [];
@@ -53,31 +84,32 @@ const Citas = () => {
                         const fetchedID = document.id;
 
                         fetchedIDs.push(fetchedID);
-
-                        fetchedCitas.push(fetchedCita);
+                        if (fetchedCita.CheckIn.split(' ')[0] === startDate.toISOString().split('T')[0]) {
+                            fetchedCitas.push(fetchedCita);
+                        }
                     });
                     setCitas(fetchedCitas);
                     setIDs(fetchedIDs)
 
-
                 })
-            return () => unsuscribe();
-        });
-
-
+        }
 
     }, [startDate]/*judas*/)
 
     const handleClick = (i) => {
-        history.push({
-            pathname: "/citasDetalladas",
-            search: "?date=" + startDate.toISOString().split('T')[0] + "&id=" + i,
-            state: {
-                date: startDate.toISOString().split('T')[0],
-                id: i,
-            }
-        });
+        if (empleadoSeleccionado !== undefined) {
+            history.push({
+                pathname: "/citaDetallada",
+                state: {
+                    empleadoref: empleadoSeleccionado.RefNegocio.path,
+                    citaid: ids[i],
+                    date: startDate.toISOString().split('T')[0],
+                    id: i,
+                }
+            });
+        }
     }
+
     const handleClickCrear = () => {
         history.push({
             pathname: "/crearCita",

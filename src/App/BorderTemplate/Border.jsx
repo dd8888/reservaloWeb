@@ -7,23 +7,6 @@ import { NavLink } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 
-
-/*class Foo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-    render() {
-        return <ul className="navbar-nav sidenav-toggler">
-            <li className="nav-item">
-                <a onClick={() => this.handleClick()} className="nav-link text-center" id="sidenavToggler">
-                    <i className="fa fa-fw fa-angle-left"></i>
-                </a>
-            </li>
-        </ul>;
-    }
-}*/
-
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
     authDomain: "pruebafirebase-44f30.firebaseapp.com",
@@ -35,20 +18,11 @@ var firebaseConfig = {
     measurementId: "G-W90PWGXKTN"
 };
 // Initialize Firebase
-
-
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
 const logo = require('../../Resources/main-icon.png');
-
-const deleteFile = () => {
-    console.log('pepe')
-}
-
-
-
 const Border = () => {
     const [isOpen, setOpen] = useState(false);
     const signOutUser = () => {
@@ -57,6 +31,7 @@ const Border = () => {
             alert(error)
         });
     }
+
     return (<div>
         <SweetAlert
             warning
