@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../css/bootstrap.min.css';
 import '../../css/citas-detalladas.css';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import CheckUserLoggedIn from '../Restrict'
 
 var firebaseConfig = {
@@ -21,9 +21,7 @@ var firebaseConfig = {
 
 // Initialize Firebase
 
-/*
-LA HORA PONERLA EN UN COMBOBOX NO USANDO LA LIBRERIA
-*/
+
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -31,6 +29,7 @@ const database = firebase.firestore();
 
 const Citas = () => {
     CheckUserLoggedIn();
+    const location = useLocation();
     const [horarios, setHorarios] = useState([]);
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
@@ -114,7 +113,7 @@ const Citas = () => {
 
     //Para sacar los servicios
     useEffect(() => {
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('servicios').get()
+        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('servicios').get()
             .then(response => {
                 const fetchedServicios = [];
 
@@ -134,7 +133,7 @@ const Citas = () => {
 
     //Para sacar los empleados
     useEffect(() => {
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').get()
+        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').get()
             .then(response => {
                 const fetchedEmpleados = [];
                 response.forEach(document => {
@@ -179,7 +178,7 @@ const Citas = () => {
         }
 
         if (textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
-            database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('citas').add({
+            database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').add({
                 CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
                 CheckOut: fechaFinal.toString(),
                 Dirección: 'Avenida Los Majuelos 54',
@@ -237,7 +236,7 @@ const Citas = () => {
     const selEmpleado = (e) => (
         disp.length = 0,
         setEmpleadoSelect(e.target.value),
-        database.collection('NegociosDev').doc('Peluquerías').collection('Negocios').doc('PR01').collection('empleados').doc(e.target.value).collection('horarios').get()
+        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').doc(e.target.value).collection('horarios').get()
             .then(response => {
                 const fetchedHorarios = [];
                 const fetchedIDs = [];

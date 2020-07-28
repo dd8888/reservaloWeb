@@ -4,9 +4,18 @@ import DatePicker from 'react-datepicker'
 import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
-import { withRouter, Redirect } from 'react-router'
 import { AuthContext } from '../Auth';
-import CheckUserLoggedIn from '../Restrict'
+
+
+import Pdf from "react-to-pdf";
+const ref = React.createRef();
+const options = {
+    orientation: 'landscape',
+    unit: 'px',
+    format: [1080, 720]
+};
+
+
 
 
 var firebaseConfig = {
@@ -113,11 +122,13 @@ const Citas = () => {
     const handleClickCrear = () => {
         history.push({
             pathname: "/crearCita",
-
+            state: {
+                empleadoref: empleadoSeleccionado.RefNegocio.path
+            }
         });
     }
 
-    return <div>
+    return <div className="App">
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="dashboard-main.html">Dashboard</a>
@@ -127,11 +138,13 @@ const Citas = () => {
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
                 <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-                <button onClick={() => handleClickCrear()} style={{ backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
-
+                <button onClick={() => handleClickCrear()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '4%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
+                <Pdf targetRef={ref} filename="code-example.pdf" options={options}>
+                    {({ toPdf }) => <button onClick={toPdf} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Exportar citas</button>}
+                </Pdf>
             </div>
 
-            <div className="card-body">
+            <div className="card-body" ref={ref}>
                 <div className="table-responsive">
                     <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
                         cellSpacing="0">
