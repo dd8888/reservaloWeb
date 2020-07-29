@@ -45,7 +45,12 @@ const CitasPDF = () => {
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     const [users, setUsers] = useState([])
     const location = useLocation();
-
+    const [logo, setLogo] = useState();
+    useEffect(() => {
+        firebase.storage().ref().child('PR01/Gallery/0.jpeg').getDownloadURL().then(function (result) {
+            setLogo(result)
+        })
+    }, [])
     useEffect(() => {
         database.collection('EmpleadosDev').get()
             .then(response => {
@@ -90,7 +95,6 @@ const CitasPDF = () => {
             if (obj.hasOwnProperty(prop))
                 return false;
         }
-
         return true;
     }
 
@@ -147,6 +151,7 @@ const CitasPDF = () => {
                     <h3 style={{
                         color: '#E6495A',
                     }}>Citas del día </h3> <h3>{location.state.dia}</h3>
+
                 </div>
                 <br></br>
                 <div className="table-responsive">
@@ -178,6 +183,7 @@ const CitasPDF = () => {
 
                         </tbody>
                     </table>
+                    <img style={{ float: 'right' }} src={logo} width='150' height='150'></img>
                     <br></br>
                     <div id="out"></div>
                 </div>

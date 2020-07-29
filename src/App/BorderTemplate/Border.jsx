@@ -6,7 +6,18 @@ import { withRouter, Redirect, Link } from 'react-router'
 import { NavLink } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert';
 
+//Buscar citas que no se puede poner porque necesita saber el empleado y solo se puede enviar desde la página de citas
+/*
+                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                        <NavLink to="/crearCita" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-fw fa-link"></i>
+                            <span className="nav-link-text">Nueva cita</span>
 
+                        </NavLink>
+                    </li>
+*/
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
     authDomain: "pruebafirebase-44f30.firebaseapp.com",
@@ -153,15 +164,7 @@ const Border = () => {
                         </ul>
                     </li>
 
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <NavLink to="/crearCita" activeStyle={{
-                            color: '#E6495A'
-                        }} className="nav-link">
-                            <i className="fa fa-fw fa-link"></i>
-                            <span className="nav-link-text">Nueva cita</span>
 
-                        </NavLink>
-                    </li>
 
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
                         <a className="nav-link" href="perfil-usuario.html">

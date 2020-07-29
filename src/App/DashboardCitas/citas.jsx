@@ -9,11 +9,7 @@ import { AuthContext } from '../Auth';
 
 import Pdf from "react-to-pdf";
 const ref = React.createRef();
-const options = {
-    orientation: 'landscape',
-    unit: 'px',
-    format: [1080, 720]
-};
+
 
 
 
@@ -145,9 +141,9 @@ const Citas = () => {
         </ol>
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
-                <i className="fa fa-table"></i>Citas <DatePicker
+                <i className="fa fa-table"></i> Citas del día <DatePicker
                     selected={startDate} onChange={date => setStartDate(date)} />
-                <button onClick={() => handleClickCrear()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '4%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
+                <button onClick={() => handleClickCrear()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
                 <button onClick={() => handleClickToPDF()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Exportar citas</button>
 
             </div>
