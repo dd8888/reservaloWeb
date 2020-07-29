@@ -102,8 +102,7 @@ const Citas = () => {
 
                 })
         }
-
-    }, [startDate]/*judas*/)
+    }, [startDate, empleadoSeleccionado]/*judas*/)
 
     const handleClick = (i) => {
         if (empleadoSeleccionado !== undefined) {
@@ -127,6 +126,15 @@ const Citas = () => {
             }
         });
     }
+    const handleClickToPDF = () => {
+        history.push({
+            pathname: "/exportarPDF",
+            state: {
+                date: citas,
+                dia: startDate.toISOString().split('T')[0]
+            }
+        })
+    }
 
     return <div className="App">
         <ol className="breadcrumb">
@@ -137,11 +145,11 @@ const Citas = () => {
         </ol>
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
-                <i className="fa fa-table"></i>Citas <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                <i className="fa fa-table"></i>Citas <DatePicker
+                    selected={startDate} onChange={date => setStartDate(date)} />
                 <button onClick={() => handleClickCrear()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '4%', marginTop: '-0.3%' }} className="btn btn-default">Nueva cita</button>
-                <Pdf targetRef={ref} filename="code-example.pdf" options={options}>
-                    {({ toPdf }) => <button onClick={toPdf} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Exportar citas</button>}
-                </Pdf>
+                <button onClick={() => handleClickToPDF()} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Exportar citas</button>
+
             </div>
 
             <div className="card-body" ref={ref}>
