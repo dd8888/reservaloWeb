@@ -6,6 +6,9 @@ import '../../css/bootstrap.min.css';
 import '../../css/citas-detalladas.css';
 import { useHistory, useLocation } from 'react-router-dom';
 import CheckUserLoggedIn from '../Restrict'
+import SweetAlert from 'react-bootstrap-sweetalert';
+
+
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -43,6 +46,8 @@ const Citas = () => {
     const [ids, setIDs] = useState([]);
     let varid = 0;
     let textInput = React.createRef();
+    let nombreUser = React.createRef();
+    const [tel, setTel] = useState();
     let duracionInput = React.createRef();
     let precioInput = React.createRef();
 
@@ -63,13 +68,15 @@ const Citas = () => {
     function formattedTime(d) {
         if (d.split(':')[0] < 10) {
             return '0' + d + ':00.000'
+        } else if (d.split(':')[0] == 10) {
+            return d + ':00.000'
         } else {
-            return d
+            return d + ':00.000'
         }
     }
 
     //Para añadir minutos a fecha de entrada
-    //Citas error máximo 90 minutos
+    //Citas error máximo 60 minutos
     function addMinutes(date, minutes) {
         let minu = parseInt(minutes);
         let ndate = date.split(' ')[0];
@@ -84,7 +91,7 @@ const Citas = () => {
         } else {
             totalMin = min + minutes;
         }
-        return ndate + ' ' + hora + ':' + totalMin + ':00.000';
+        return ndate + ' ' + hora + ':' + totalMin;
     }
 
 
@@ -116,7 +123,6 @@ const Citas = () => {
         database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('servicios').get()
             .then(response => {
                 const fetchedServicios = [];
-
                 response.forEach(document => {
                     const fetchedServicio = {
                         id: document.id,
@@ -148,6 +154,9 @@ const Citas = () => {
 
     }, []/*judas*/)
 
+    useEffect(() => {
+        setTel(textInput.current.value)
+    }, [textInput])
 
     const query = () => {
         if (servicioSeleccionado !== 'Coloración' && servicioSeleccionado !== 'Mechas' && servicioSeleccionado !== 'Reflejos') {
@@ -172,10 +181,14 @@ const Citas = () => {
         ))
 
         let fechaFinal = formattedTime(addMinutes((formattedDate(citaDate) + ' ' + formattedTime(horaSelec)), parseInt(dur)));
-        console.log(fechaFinal)
         if (fechaFinal.split(' ')[1].split(':')[1] < 10) {
             fechaFinal = fechaFinal.split(' ')[0] + ' ' + fechaFinal.split(' ')[1].split(':')[0] + ':' + '0' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
         }
+        if (fechaFinal.split(' ')[1].split(':')[0] < 10) {
+            fechaFinal = fechaFinal.split(' ')[0] + ' ' + '0' + fechaFinal.split(' ')[1].split(':')[0] + ':' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
+        }
+
+
 
         if (textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
             database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').add({
@@ -187,23 +200,81 @@ const Citas = () => {
                 Servicio: servicioSeleccionado.toString(),
                 extraInformation: empleadoSelect.toString(),
                 idUsuario: idUser.toString(),
+            }).then(function (docRef) {
+                database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').doc(empleadoSelect).update({
+                    citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/Peluquerías/Negocios/PR01/citas/' + docRef.id))
+                })
+
+                database.collection('UsuariosDev').where('Telefono', '==', tel).get()
+                    .then(querySnapshot => {
+                        const docRefer = querySnapshot.docs[0].ref;
+                        return docRefer.update({
+                            citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/Peluquerías/Negocios/PR01/citas/' + docRef.id))
+                        })
+                    })
+
             })
-            /*console.log(textInput.current.value)
-            console.log(idUser)
-            console.log(dur)
-            console.log(pre)
-            console.log(servicioSeleccionado)
-            console.log(empleadoSelect)
+            setOpen(true);
 
-            console.log(formattedDate(citaDate))
-            console.log(formattedTime(horaSelec))*/
-
-
-            console.log(fechaFinal)
         }
 
 
 
+    }
+
+    const queryAnon = () => {
+        if (servicioSeleccionado !== 'Coloración' && servicioSeleccionado !== 'Mechas' && servicioSeleccionado !== 'Reflejos') {
+            servicios.forEach(servicio => {
+                if (servicio.nombre === servicioSeleccionado) {
+                    dur = servicio.duracion
+                    pre = servicio.precio
+                }
+            })
+        } else {
+            dur = duracionInput.current.value;
+            pre = precioInput.current.value
+        }
+        let idUser;
+        let apellidoUser;
+
+
+
+
+        let fechaFinal = formattedTime(addMinutes((formattedDate(citaDate) + ' ' + formattedTime(horaSelec)), parseInt(dur)));
+        if (fechaFinal.split(' ')[1].split(':')[1] < 10) {
+            fechaFinal = fechaFinal.split(' ')[0] + ' ' + fechaFinal.split(' ')[1].split(':')[0] + ':' + '0' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
+        }
+        if (fechaFinal.split(' ')[1].split(':')[0] < 10) {
+            fechaFinal = fechaFinal.split(' ')[0] + ' ' + '0' + fechaFinal.split(' ')[1].split(':')[0] + ':' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
+        }
+
+
+
+        if (nombreUser.current.value != null && textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
+            database.collection('AnonimosDev').add({
+                Nombre: nombreUser.current.value,
+                Telefono: textInput.current.value
+            }).then(function (docRef1) {
+                database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').add({
+                    CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
+                    CheckOut: fechaFinal.toString(),
+                    Dirección: 'Avenida Los Majuelos 54',
+                    Negocio: 'PRIVILEGE SALONES',
+                    Precio: pre.toString(),
+                    Servicio: servicioSeleccionado.toString(),
+                    extraInformation: empleadoSelect.toString(),
+                    idUsuario: docRef1.id,
+                }).then(function (docRef) {
+                    database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').doc(empleadoSelect).update({
+                        citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/Peluquerías/Negocios/PR01/citas/' + docRef.id))
+                    })
+
+                })
+            })
+
+            setOpen(true);
+
+        }
     }
 
 
@@ -276,23 +347,21 @@ const Citas = () => {
                 ></div>
         )
     }
-    /*history.push({
-        pathname: "/citasDetalladas",
-        search: "?date=" + startDate.toISOString().split('T')[0] + "&id=" + i,
-        state: {
-            date: startDate.toISOString().split('T')[0],
-            id: i,
-        }
-    });*/
+    const [isOpen, setOpen] = useState(false);
 
-    //hora 
-    //recap
-    /*
-    busco telefono usuarios
-    si existe; inserta los datos de usuario, guarda en citas de usuario, citas y citas de peluqueria
-    si NO existe; los tiene que rellenar, creo anonimo con numero y nombre, y pongo cita en peluquero y peluqueria
-    */
     return <div>
+        <SweetAlert
+            success
+            title="¡Cita creada con éxito!"
+            show={isOpen} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                history.push({
+                    pathname: "/citas",
+                }); setOpen(false);
+            }}
+        >
+            Pulsa "Ok" para ver todas las citas
+      </SweetAlert>
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
@@ -378,47 +447,53 @@ const Citas = () => {
                         </div>
                         : title === '❌' ?
                             <div>
-                                <div className="form-group">
-                                    <label htmlFor="first_name">Nombre</label>
-                                    <input type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
-                                    <span className="help-block"></span>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="sel1">Servicio:</label>
-                                    <select className="form-control" onChange={pepe}>
-                                        {servicios.map((servicio) =>
-                                            <option>{servicio.nombre}</option>
-                                        )}
-                                    </select>
-                                    <ComprobarServicio></ComprobarServicio>
-                                    <span className="help-block"></span>
-                                </div>
+                                <div>
+                                    <div className="form-group">
+                                        <label htmlFor="first_name">Nombre</label>
+                                        <input ref={nombreUser} type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="sel1">Empleados disponibles:</label>
 
-                                <div className="form-group">
-                                    <label htmlFor="sel1">Empleados disponibles:</label>
+                                        <select className="form-control" onChange={selEmpleado} required>
+                                            <option value="">Seleccione un empleado.</option>
 
-                                    <select className="form-control" onChange={selEmpleado}>
-                                        <option> - Seleccione un empleado - </option>
+                                            {empleados.map((empleado) =>
+                                                <option>{empleado.Nombre}</option>
+                                            )}
 
-                                        {empleados.map((empleado) =>
-                                            <option>{empleado.Nombre}</option>
-                                        )}
+                                        </select>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <label htmlFor="email_address_confirm">Fecha y hora</label>
+                                    <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <br></br>
+                                        <DatePicker
+                                            selected={citaDate}
+                                            onChange={date => setCitaDate(date)}
+                                            dateFormat="yyyy-MM-dd"
+                                        />
+                                        <select className="form-control col-2" style={{ marginLeft: '2%' }} onChange={selecHora} value={horaSelec} required>
+                                            <option value="">Seleccione una hora</option>
+                                            <CheckDates></CheckDates>
+                                        </select>
+                                        <span className="help-block"></span>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="sel1">Servicio:</label>
+                                        <select className="form-control" onChange={pepe} required>
+                                            <option value="">Seleccione un servicio</option>
+                                            {servicios.map((servicio) =>
+                                                <option>{servicio.nombre}</option>
+                                            )}
 
-                                    </select>
-                                    <span className="help-block"></span>
+                                        </select>
+                                        <ComprobarServicio></ComprobarServicio>
+                                        <span className="help-block"></span>
+                                    </div>
                                 </div>
-                                <label htmlFor="email_address_confirm">Fecha y hora</label>
-                                <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
-                                    <br></br>
-                                    <DatePicker
-                                        selected={citaDate}
-                                        onChange={date => setCitaDate(date)}
-                                        dateFormat="yyyy-MM-dd"
-                                    />
-                                    <CheckDates></CheckDates>
-                                    <span className="help-block"></span>
-                                </div>
-                                <button className="btn btn-lg btn-primary btn-block" type="submit" >Pedir cita</button>
+                                <button className="btn btn-lg btn-primary btn-block" type='button' onClick={queryAnon}>Pedir cita</button>
                             </div>
                             :
                             <div>
