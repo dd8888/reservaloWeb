@@ -167,11 +167,15 @@ const Border = () => {
 
 
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <a className="nav-link" href="perfil-usuario.html">
-                            <i className="fa fa-circle"></i>
-                            <span className="nav-link-text">Perfil</span>
-                        </a>
+                        <NavLink to="/perfil" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-fw fa-circle"></i>
+                            <span className="nav-link-text"> Perfil</span>
+
+                        </NavLink>
                     </li>
+
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item dropdown">

@@ -45,12 +45,7 @@ const CitasPDF = () => {
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     const [users, setUsers] = useState([])
     const location = useLocation();
-    const [logo, setLogo] = useState();
-    useEffect(() => {
-        firebase.storage().ref().child('PR01/Gallery/0.jpeg').getDownloadURL().then(function (result) {
-            setLogo(result)
-        })
-    }, [])
+
     useEffect(() => {
         database.collection('EmpleadosDev').get()
             .then(response => {

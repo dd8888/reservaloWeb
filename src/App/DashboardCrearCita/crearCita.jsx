@@ -21,9 +21,7 @@ var firebaseConfig = {
     measurementId: "G-W90PWGXKTN"
 };
 
-
 // Initialize Firebase
-
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -271,9 +269,7 @@ const Citas = () => {
 
                 })
             })
-
             setOpen(true);
-
         }
     }
 
