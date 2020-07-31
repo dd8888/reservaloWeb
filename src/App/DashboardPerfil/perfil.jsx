@@ -12,8 +12,8 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tabs'
 import Sonnet from 'react-bootstrap/Tabs'
 import { AuthContext } from '../Auth';
-
-
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 
 
@@ -76,24 +76,19 @@ const MainPerfil = () => {
             const fetchedImagenes = [];
 
             firebase.storage().ref().child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery').listAll().then(function (result) {
-                result.items.forEach(function (itemRef) {
-                    itemRef.getDownloadURL().then(function (link) {
-                        const fetchedImagen = link
-
-                        fetchedImagenes.push(fetchedImagen)
-
-                    })
-                });
-                setImagenes(fetchedImagenes)
+                const promises = result.items.map((itemRef) => itemRef.getDownloadURL());
+                Promise.all(promises).then((urls) =>
+                    setImagenes(urls)
+                );
             })
 
-            /*
+
             firebase.storage().ref().child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/0.jpeg').getDownloadURL().then(function (result) {
                 setLogo(result)
             })
             firebase.storage().ref().child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/1.jpeg').getDownloadURL().then(function (result) {
                 setBackImage(result)
-            })*/
+            })
         }
 
     }, [empleadoSeleccionado])
@@ -119,11 +114,11 @@ const MainPerfil = () => {
                                         }} />
                                         <div className="card perfil-foto">
                                             <img className="card-img-top"
-                                                src={imagenes[1]}
+                                                src={backImage}
                                             ></img>
                                             <div className="card-body text-center">
                                                 <img className="avatar rounded-circle"
-                                                    src={imagenes[0]}
+                                                    src={logo}
                                                 ></img>
                                                 <h4 className="card-title">Bienvenido</h4>
                                                 <h6 className="card-subtitle mb-2 text-muted">{currentUser.email}</h6>
@@ -135,7 +130,7 @@ const MainPerfil = () => {
                             <Sonnet />
                         </Tab>
 
-                        <Tab eventKey="contact" title="Contact">
+                        <Tab eventKey="contact" title="Galería">
                             <div id="gallery" className="tab-pane active">
                                 <div className="row">
                                     <div className="col-lg-12">
@@ -143,49 +138,15 @@ const MainPerfil = () => {
                                             <div className="card-body">
                                                 <div className="row">
                                                     <div className="col-sm-12 my-auto">
-                                                        <div id="carouselExampleIndicators" className="carousel slide"
-                                                            data-interval="false">
-                                                            <ol className="carousel-indicators">
-                                                                <li data-target="#carouselExampleIndicators"
-                                                                    data-slide-to="0" className="active"></li>
-                                                                <li data-target="#carouselExampleIndicators"
-                                                                    data-slide-to="1"></li>
-                                                                <li data-target="#carouselExampleIndicators"
-                                                                    data-slide-to="2"></li>
-                                                            </ol>
-                                                            <div className="carousel-inner">
-
-                                                                <div className="carousel-item active">
-                                                                    <img className="carousel-image"
-                                                                        src="https://picsum.photos/1000/600" />
+                                                        <Carousel showThumbs={false} useKeyboardArrows autoPlay={true} interval={4000}>
+                                                            {imagenes.map(imagen => {
+                                                                return <div>
+                                                                    <img height={500} src={imagen} />
                                                                 </div>
-                                                                <div className="carousel-item">
-                                                                    <img className="carousel-image"
-                                                                        src="https://picsum.photos/1000/601" />
+                                                            })}
 
-                                                                </div>
-                                                                <div className="carousel-item">
-                                                                    <img className="carousel-image"
-                                                                        src="https://picsum.photos/1000/602" />
 
-                                                                </div>
-                                                            </div>
-
-                                                            <a className="carousel-control-prev"
-                                                                href="#carouselExampleIndicators" role="button"
-                                                                data-slide="prev">
-                                                                <span className="carousel-control-prev-icon"
-                                                                    aria-hidden="true"></span>
-                                                                <span className="sr-only">Previous</span>
-                                                            </a>
-                                                            <a className="carousel-control-next"
-                                                                href="#carouselExampleIndicators" role="button"
-                                                                data-slide="next">
-                                                                <span className="carousel-control-next-icon"
-                                                                    aria-hidden="true"></span>
-                                                                <span className="sr-only">Next</span>
-                                                            </a>
-                                                        </div>
+                                                        </Carousel>
                                                     </div>
 
                                                 </div>
@@ -197,8 +158,10 @@ const MainPerfil = () => {
                                     <div className="row">
                                         <div className="col-sm-2 imgUp">
                                             <div className="imagePreview"></div>
-                                            <label className="btn btn-primary btn-upload">Upload
-                                                </label>
+                                            <label className="btn btn-primary btn-upload">Upload<input type="file"
+                                                className="uploadFile img"
+                                                style={{ width: '0px', height: '0px', overflow: 'hidden' }}></input>
+                                            </label>
                                         </div>
                                         <i className="fa fa-plus imgAdd"></i>
                                     </div>
