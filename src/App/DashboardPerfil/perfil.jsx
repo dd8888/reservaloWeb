@@ -18,6 +18,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 
 
+
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
     authDomain: "pruebafirebase-44f30.firebaseapp.com",
@@ -37,8 +38,12 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const database = firebase.firestore();
+const storageRef = firebase.storage().ref();
+
 
 const MainPerfil = () => {
+    const [imagenesPreview, setImagenesPreview] = useState();
+    const [imagenesPreviewLink, setImagenesPreviewLink] = useState();
 
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     useEffect(() => {
@@ -93,7 +98,33 @@ const MainPerfil = () => {
 
     }, [empleadoSeleccionado])
 
+    const cambioPreview = (e) => {
+        setImagenesPreviewLink(e.target.files[0])
+        setImagenesPreview(URL.createObjectURL(e.target.files[0]))
+    }
+
+    const subirImagen = () => {
+        const refImagen = storageRef.child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/' + imagenes.length + '.' + imagenesPreviewLink.name.split('.')[imagenesPreviewLink.name.split('.').length - 1])
+        refImagen.put(imagenesPreviewLink).then(function (snapshot) {
+            setOpen(true)
+        })
+
+    }
+    const [isOpen, setOpen] = useState(false);
+    const history = useHistory();
+
     return <div>
+        <SweetAlert
+            success
+            title="¡Imagen subida con éxito!"
+            show={isOpen} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                window.location.reload();
+                setOpen(false);
+            }}
+        >
+            Pulsa "Ok" volver al inicio
+      </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="#">Dashboard</a>
@@ -157,13 +188,16 @@ const MainPerfil = () => {
                                 <div className="container">
                                     <div className="row">
                                         <div className="col-sm-2 imgUp">
-                                            <div className="imagePreview"></div>
-                                            <label className="btn btn-primary btn-upload">Upload<input type="file"
+                                            <img className="imagePreview" src={imagenesPreview == undefined ? 'https://icon-library.net/images/add-image-icon/add-image-icon-14.jpg' : imagenesPreview}></img>
+                                            <label className="btn btn-primary btn-upload">Seleccionar imagen<input type="file"
                                                 className="uploadFile img"
-                                                style={{ width: '0px', height: '0px', overflow: 'hidden' }}></input>
+                                                style={{ width: '0px', height: '0px', overflow: 'hidden' }} onChange={(e) => cambioPreview(e)}></input>
                                             </label>
+                                            {imagenesPreview !== undefined ? <button className="btn btn-primary btn-upload" style={{ width: '100%' }} onClick={subirImagen}>Subir</button>
+                                                :
+                                                <span></span>
+                                            }
                                         </div>
-                                        <i className="fa fa-plus imgAdd"></i>
                                     </div>
                                 </div>
                             </div>
