@@ -176,6 +176,16 @@ const Border = () => {
                         </NavLink>
                     </li>
 
+                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                        <NavLink to="/horarios" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-calendar-check-o"></i>
+                            <span className="nav-link-text"> Horarios</span>
+
+                        </NavLink>
+                    </li>
+
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item dropdown">

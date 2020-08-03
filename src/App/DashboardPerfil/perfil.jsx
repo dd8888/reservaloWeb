@@ -44,6 +44,7 @@ const storageRef = firebase.storage().ref();
 const MainPerfil = () => {
     const [imagenesPreview, setImagenesPreview] = useState();
     const [imagenesPreviewLink, setImagenesPreviewLink] = useState();
+    const [imagenSeleccionada, setImagenSeleccionada] = useState();
 
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     useEffect(() => {
@@ -76,10 +77,10 @@ const MainPerfil = () => {
     const [logo, setLogo] = useState();
     const [backImage, setBackImage] = useState();
     const [imagenes, setImagenes] = useState([]);
+    const [update, setUpdate] = useState();
     useEffect(() => {
         if (empleadoSeleccionado != undefined) {
             const fetchedImagenes = [];
-
             firebase.storage().ref().child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery').listAll().then(function (result) {
                 const promises = result.items.map((itemRef) => itemRef.getDownloadURL());
                 Promise.all(promises).then((urls) =>
@@ -96,7 +97,7 @@ const MainPerfil = () => {
             })
         }
 
-    }, [empleadoSeleccionado])
+    }, [empleadoSeleccionado, update])
 
     const cambioPreview = (e) => {
         setImagenesPreviewLink(e.target.files[0])
@@ -110,7 +111,26 @@ const MainPerfil = () => {
         })
 
     }
+
+    const borrarImagen = () => {
+        if (imagenSeleccionada == undefined) {
+            setImagenSeleccionada(0)
+        }
+        const refImagenBorrar = storageRef.child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/' + imagenes[imagenSeleccionada].split(RegExp('%2..*%2F(.*?)\?alt'))[1].replace('?', ''))
+        refImagenBorrar.delete().then(function () {
+            if (update == undefined) {
+                setUpdate(1)
+            } else {
+                setUpdate(update + 1)
+            }
+            setOpenBorrar(false);
+
+        }).catch(function (error) {
+            console.log(error)
+        });;
+    }
     const [isOpen, setOpen] = useState(false);
+    const [isOpenBorrar, setOpenBorrar] = useState(false)
     const history = useHistory();
 
     return <div>
@@ -119,12 +139,31 @@ const MainPerfil = () => {
             title="¡Imagen subida con éxito!"
             show={isOpen} //Notice how we bind the show property to our component state
             onConfirm={() => {
-                window.location.reload();
+                //Para recargar las imágenes cambio esta variable
+                if (update == undefined) {
+                    setUpdate(1)
+                } else {
+                    setUpdate(update + 1)
+                }
                 setOpen(false);
             }}
         >
-            Pulsa "Ok" volver al inicio
-      </SweetAlert>
+        </SweetAlert>
+        <SweetAlert
+            danger
+            title="¿Estás seguro de borrar esta imagen?"
+            showCancel
+            confirmBtnText="Sí, borrar"
+            cancelBtnBsStyle="No"
+            confirmBtnBsStyle="danger"
+            show={isOpenBorrar} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                //Para recargar las imágenes cambio esta variable
+                borrarImagen();
+            }}
+            onCancel={() => setOpenBorrar(false)}
+        >
+        </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="#">Dashboard</a>
@@ -169,15 +208,14 @@ const MainPerfil = () => {
                                             <div className="card-body">
                                                 <div className="row">
                                                     <div className="col-sm-12 my-auto">
-                                                        <Carousel showThumbs={false} useKeyboardArrows autoPlay={true} interval={4000}>
+                                                        <Carousel infiniteLoop={true} showThumbs={false} useKeyboardArrows onChange={(e) => setImagenSeleccionada(e)}>
                                                             {imagenes.map(imagen => {
                                                                 return <div>
                                                                     <img height={500} src={imagen} />
                                                                 </div>
                                                             })}
-
-
                                                         </Carousel>
+                                                        <button onClick={() => setOpenBorrar(true)} className="btn btn-primary" style={{ float: 'right', marginTop: '1%' }}> Borrar</button>
                                                     </div>
 
                                                 </div>
@@ -189,7 +227,7 @@ const MainPerfil = () => {
                                     <div className="row">
                                         <div className="col-sm-2 imgUp">
                                             <img className="imagePreview" src={imagenesPreview == undefined ? 'https://icon-library.net/images/add-image-icon/add-image-icon-14.jpg' : imagenesPreview}></img>
-                                            <label className="btn btn-primary btn-upload">Seleccionar imagen<input type="file"
+                                            <label className="btn btn-primary btn-upload">Seleccionar imagen<input accept="image/*" type="file"
                                                 className="uploadFile img"
                                                 style={{ width: '0px', height: '0px', overflow: 'hidden' }} onChange={(e) => cambioPreview(e)}></input>
                                             </label>

@@ -122,6 +122,7 @@ const Citas = () => {
             }
         });
     }
+
     const handleClickToPDF = () => {
         history.push({
             pathname: "/exportarPDF",

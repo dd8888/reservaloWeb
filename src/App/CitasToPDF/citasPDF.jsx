@@ -178,7 +178,6 @@ const CitasPDF = () => {
 
                         </tbody>
                     </table>
-                    <img style={{ float: 'right' }} src={logo} width='150' height='150'></img>
                     <br></br>
                     <div id="out"></div>
                 </div>

@@ -6,6 +6,7 @@ import CitaDetallada from './CitasDetalladas';
 import CrearCitasPage from './CitasCrear'
 import CitasaPDF from './CitasPDF'
 import Index from './Indice'
+import Horarios from './Horarios'
 import Perfil from './Perfil'
 const Routes = () => {
     const { currentUser } = useContext(AuthContext);
@@ -17,6 +18,7 @@ const Routes = () => {
                 <Route path='/crearCita' component={CrearCitasPage} />
                 <Route path='/exportarPDF' component={CitasaPDF} />
                 <Route path='/perfil' component={Perfil}></Route>
+                <Route path='/horarios' component={Horarios}></Route>
                 <Redirect to='/citas' />
             </Switch>
 
