@@ -9,6 +9,8 @@ import { AuthContext } from '../Auth';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 require('react-big-calendar/lib/css/react-big-calendar.css');
+moment.locale('en-GB')
+
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -80,20 +82,46 @@ const HorariosUser = () => {
     const history = useHistory();
 
 
-    const myEventsList = [
-        {
-            id: 1,
-            title: 'Turno 1',
-            start: new Date(2020, 7, 3, 10),
-            end: new Date(2020, 7, 3, 11),
-        },
-        {
-            id: 2,
-            title: 'Turno 2',
-            start: new Date(2020, 7, 3, 16),
-            end: new Date(2020, 7, 3, 20),
+    const [listaEventos, setListaEventos] = useState([])
+    const [listaEmpleados, setListaEmpleados] = useState([])
+    const [horariosFinal, setHorariosFinal] = useState([])
+    useEffect(() => {
+        if (empleadoSeleccionado != undefined) {
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(empleadoSeleccionado.Nombre).collection('horarios').get()
+                .then(response => {
+                    const fetchedHorarios = [];
+                    response.forEach(document => {
+                        const fetchedHorario = {
+                            id: document.id,
+                            ...document.data()
+                        };
+                        fetchedHorarios.push(fetchedHorario);
+
+                    });
+                    setListaEventos(fetchedHorarios);
+                    console.log(fetchedHorarios)
+                })
         }
-    ]
+    }, [empleadoSeleccionado])
+
+    useEffect(() => {
+        const horariosFin = [];
+
+        listaEventos.forEach(function (element, i) {
+            element.turnos.forEach(function (turno, j) {
+                console.log(turno.Uid.split(' ')[0].split('-')[0], turno.Uid.split(' ')[0].split('-')[1] - 1, turno.Uid.split(' ')[0].split('-')[2], parseInt(turno.Entrada))
+                const simple = {
+                    id: i,
+                    title: 'Turno ' + (j + 1),
+                    start: new Date(turno.Uid.split(' ')[0].split('-')[0], turno.Uid.split(' ')[0].split('-')[1] - 1, turno.Uid.split(' ')[0].split('-')[2], parseInt(turno.Entrada)),
+                    end: new Date(turno.Uid.split(' ')[0].split('-')[0], turno.Uid.split(' ')[0].split('-')[1] - 1, turno.Uid.split(' ')[0].split('-')[2], parseInt(turno.Salida))
+                };
+                horariosFin.push(simple)
+            });
+        });
+        setHorariosFinal(horariosFin)
+
+    }, [listaEventos])
 
     return <div className="App">
         <ol className="breadcrumb">
@@ -109,11 +137,11 @@ const HorariosUser = () => {
 
             <div className="card-body" >
                 <Calendar
-                    views={['month', 'day', 'week']}
-
+                    showMultiDayTimes
+                    views={['month', 'week', 'day']}
                     messages={messages}
                     localizer={localizer}
-                    events={myEventsList}
+                    events={horariosFinal}
                     startAccessor="start"
                     endAccessor="end"
                     style={{

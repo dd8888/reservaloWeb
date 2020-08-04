@@ -5,6 +5,7 @@ import '../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../Auth';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 
 import Pdf from "react-to-pdf";
@@ -133,7 +134,33 @@ const Citas = () => {
         })
     }
 
+    const [isOpenBorrar, setOpenBorrar] = useState(false)
+    const [citaSelec, setCitaSelec] = useState()
+
     return <div className="App">
+        <SweetAlert
+            danger
+            title="¿Estás seguro de borrar esta cita?"
+            showCancel
+            confirmBtnText="Sí, borrar"
+            cancelBtnBsStyle="No"
+            confirmBtnBsStyle="danger"
+            show={isOpenBorrar} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                try {
+                    database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('citas').doc(citaSelec.id).delete();
+                    database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(citaSelec.extraInformation).update({ "citas": firebase.firestore.FieldValue.arrayRemove(database.doc('NegociosDev/' + empleadoSeleccionado.RefNegocio.path.split('/')[1] + '/Negocios/' + empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/citas/' + citaSelec.id)) })
+                    database.collection('UsuariosDev').doc(citaSelec.idUsuario).update({ "citas": firebase.firestore.FieldValue.arrayRemove(database.doc('NegociosDev/' + empleadoSeleccionado.RefNegocio.path.split('/')[1] + '/Negocios/' + empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/citas/' + citaSelec.id)) })
+                } catch (err) {
+                    console.log(err)
+                } finally {
+                    window.location.reload(false);
+                }
+
+            }}
+            onCancel={() => setOpenBorrar(false)}
+        >
+        </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="dashboard-main.html">Dashboard</a>
@@ -159,15 +186,19 @@ const Citas = () => {
                                 <th>Horario salida</th>
                                 <th>Precio</th>
                                 <th>Servicio</th>
+                                <th>Detalles</th>
+                                <th>Borrar</th>
                             </tr>
                         </thead>
                         <tbody>
                             {citas.map((cita, i) => (
-                                <tr className='clickable-row' key={i} onClick={() => handleClick(i)} >
+                                <tr className='clickable-row' key={i} >
                                     <td>{cita.CheckIn}</td>
                                     <td>{cita.CheckOut}</td>
                                     <td>{cita.Precio}</td>
                                     <td>{cita.Servicio}</td>
+                                    <td><button type="button" value="" onClick={() => handleClick(i)} >Detalles</button></td>
+                                    <td><button type="button" value="" onClick={() => { setCitaSelec(cita); setOpenBorrar(true) }} >🗑️</button></td>
                                 </tr>
                             ))}
 

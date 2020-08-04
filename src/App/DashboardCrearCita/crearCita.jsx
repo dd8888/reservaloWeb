@@ -200,14 +200,14 @@ const Citas = () => {
                 idUsuario: idUser.toString(),
             }).then(function (docRef) {
                 database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').doc(empleadoSelect).update({
-                    citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/Peluquerías/Negocios/PR01/citas/' + docRef.id))
+                    citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/' + location.state.empleadoref.split('/')[1] + '/Negocios/' + location.state.empleadoref.split('/')[3] + '/citas/' + docRef.id))
                 })
 
                 database.collection('UsuariosDev').where('Telefono', '==', tel).get()
                     .then(querySnapshot => {
                         const docRefer = querySnapshot.docs[0].ref;
                         return docRefer.update({
-                            citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/Peluquerías/Negocios/PR01/citas/' + docRef.id))
+                            citas: firebase.firestore.FieldValue.arrayUnion(database.doc('NegociosDev/' + location.state.empleadoref.split('/')[1] + '/Negocios/' + location.state.empleadoref.split('/')[3] + '/citas/' + docRef.id))
                         })
                     })
 
