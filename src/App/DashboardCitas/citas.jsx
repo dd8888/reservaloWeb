@@ -197,8 +197,8 @@ const Citas = () => {
                                     <td>{cita.CheckOut}</td>
                                     <td>{cita.Precio}</td>
                                     <td>{cita.Servicio}</td>
-                                    <td><button type="button" value="" onClick={() => handleClick(i)} >Detalles</button></td>
-                                    <td><button type="button" value="" onClick={() => { setCitaSelec(cita); setOpenBorrar(true) }} >🗑️</button></td>
+                                    <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-info" type="button" value="" onClick={() => handleClick(i)} ></button></td>
+                                    <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value="" onClick={() => { setCitaSelec(cita); setOpenBorrar(true) }} ></button></td>
                                 </tr>
                             ))}
 
