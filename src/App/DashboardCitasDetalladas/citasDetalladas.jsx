@@ -4,6 +4,8 @@ import * as firebase from 'firebase'
 import Moment from 'react-moment';
 import '../../css/dashboard-init.css'
 import CheckUserLoggedIn from '../Restrict'
+import { useHistory } from 'react-router-dom';
+
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -28,6 +30,7 @@ const CitasDetalladas = (id) => {
     const [citas, setCitas] = useState([]);
     const cita = citas[location.state.id]
     const [users, setUsers] = useState([])
+    const [anons, setAnons] = useState([])
 
     useEffect(() => {
         database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').get()
@@ -55,6 +58,18 @@ const CitasDetalladas = (id) => {
                     fetchedUsers.push(fetchedUser);
                 });
                 setUsers(fetchedUsers);
+            })
+        database.collection('AnonimosDev').get()
+            .then(response => {
+                const fetchedAnon = [];
+                response.forEach(doc => {
+                    const fetchedAn = {
+                        id: doc.id,
+                        ...doc.data()
+                    };
+                    fetchedAnon.push(fetchedAn);
+                });
+                setAnons(fetchedAnon)
             })
 
 
@@ -93,9 +108,15 @@ const CitasDetalladas = (id) => {
         let nombre = "null";
         if (!isEmpty(cita)) {
             users.map((us) => {
-                if (us.id == cita.idUsuario)
+                if (us.id == cita.idUsuario) {
                     nombre = us.Nombre
+                }
             });
+            anons.map((an) => {
+                if (an.id == cita.idUsuario) {
+                    nombre = an.Nombre
+                }
+            })
         }
         return nombre;
     }
@@ -106,6 +127,11 @@ const CitasDetalladas = (id) => {
                 if (us.id == cita.idUsuario)
                     telefono = us.Telefono
             });
+            anons.map((an) => {
+                if (an.id == cita.idUsuario) {
+                    telefono = an.Telefono
+                }
+            })
         }
         return telefono;
     }
@@ -121,6 +147,25 @@ const CitasDetalladas = (id) => {
         }
 
     }
+    const history = useHistory();
+
+    const handleClickEdit = () => {
+        if (!isEmpty(cita)) {
+
+            history.push({
+                pathname: "/editarCita",
+                state: {
+                    cita_id: cita.id,
+                    cita_idUsuario: cita.idUsuario,
+                    users: Object.create(users),
+                    anons: Object.create(anons),
+                    empleadoref: location.state.empleadoref,
+
+                }
+            });
+        }
+    }
+
 
     return <div>
         <div className="container-fluid">
@@ -212,7 +257,7 @@ const CitasDetalladas = (id) => {
                                         <div className="container">
                                             <div className="row">
                                                 <div className="col-md-offset-3 col-md-6 text-center">
-                                                    <button style={{ backgroundColor: '#E6495A', marginTop: '1%' }} className="btn btn-default">Editar
+                                                    <button style={{ backgroundColor: '#E6495A', marginTop: '1%' }} className="btn btn-default" onClick={handleClickEdit}>Editar
                           cita</button>
                                                 </div>
                                                 <div className="col-md-offset-3 col-md-6 text-center">

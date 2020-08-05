@@ -8,6 +8,7 @@ import CitasaPDF from './CitasPDF'
 import Index from './Indice'
 import Horarios from './Horarios'
 import Perfil from './Perfil'
+import EditarCitas from './EditarCitas'
 const Routes = () => {
     const { currentUser } = useContext(AuthContext);
     if (currentUser) {
@@ -19,6 +20,7 @@ const Routes = () => {
                 <Route path='/exportarPDF' component={CitasaPDF} />
                 <Route path='/perfil' component={Perfil}></Route>
                 <Route path='/horarios' component={Horarios}></Route>
+                <Route path='/editarCita' component={EditarCitas}></Route>
                 <Redirect to='/citas' />
             </Switch>
 

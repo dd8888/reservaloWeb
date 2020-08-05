@@ -154,6 +154,10 @@ const Citas = () => {
 
     useEffect(() => {
         setTel(textInput.current.value)
+        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).get().then(function (doc) {
+            setNombreNegocio(doc.data().NOMBRE);
+            setLocalizacion(doc.data().Ubicacion)
+        })
     }, [textInput])
 
     const query = () => {
@@ -192,8 +196,8 @@ const Citas = () => {
             database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').add({
                 CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
                 CheckOut: fechaFinal.toString(),
-                Dirección: 'Avenida Los Majuelos 54',
-                Negocio: 'PRIVILEGE SALONES',
+                Dirección: localizacionNegocio,
+                Negocio: nombreNegocio,
                 Precio: pre.toString(),
                 Servicio: servicioSeleccionado.toString(),
                 extraInformation: empleadoSelect.toString(),
@@ -219,6 +223,8 @@ const Citas = () => {
 
 
     }
+    const [nombreNegocio, setNombreNegocio] = useState();
+    const [localizacionNegocio, setLocalizacion] = useState();
 
     const queryAnon = () => {
         if (servicioSeleccionado !== 'Coloración' && servicioSeleccionado !== 'Mechas' && servicioSeleccionado !== 'Reflejos') {
@@ -256,8 +262,8 @@ const Citas = () => {
                 database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('citas').add({
                     CheckIn: formattedDate(citaDate) + ' ' + formattedTime(horaSelec),
                     CheckOut: fechaFinal.toString(),
-                    Dirección: 'Avenida Los Majuelos 54',
-                    Negocio: 'PRIVILEGE SALONES',
+                    Dirección: localizacionNegocio,
+                    Negocio: nombreNegocio,
                     Precio: pre.toString(),
                     Servicio: servicioSeleccionado.toString(),
                     extraInformation: empleadoSelect.toString(),

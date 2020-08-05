@@ -143,6 +143,7 @@ const Citas = () => {
             title="¿Estás seguro de borrar esta cita?"
             showCancel
             confirmBtnText="Sí, borrar"
+            cancelBtnText="Mejor no"
             cancelBtnBsStyle="No"
             confirmBtnBsStyle="danger"
             show={isOpenBorrar} //Notice how we bind the show property to our component state
