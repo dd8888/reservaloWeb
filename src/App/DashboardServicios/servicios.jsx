@@ -78,7 +78,6 @@ const Servicios = () => {
     const [updateSer, setUpdateSer] = useState(1);
     useEffect(() => {
         if (empleadoSeleccionado !== undefined) {
-            console.log('holi')
             database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').get()
                 .then(response => {
                     const fetchedServicios = [];
@@ -98,10 +97,28 @@ const Servicios = () => {
     const [isOpenBorrar, setOpenBorrar] = useState(false);
     const [servicioSelec, setServicioSelec] = useState();
     const [crearVisible, setCrearVisible] = useState(false);
+    const [editarVisible, setEditarVisible] = useState(false);
+
+    function camelize(str) {
+        return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+            return index === 0 ? word.toLowerCase() : word.toUpperCase();
+        }).replace(/\s+/g, '');
+    }
 
     const crearServicio = () => {
         if (nombreInput.current.value != null && duracionInput.current.value != null && precioInput.current.value != null) {
-            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').add({
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').doc(camelize(nombreInput.current.value)).set({
+                nombre: nombreInput.current.value,
+                duracion: duracionInput.current.value,
+                precio: precioInput.current.value
+            })
+            setUpdateSer(updateSer + 1)
+        }
+    }
+
+    const editarServicio = () => {
+        if (nombreInput.current.value != null && duracionInput.current.value != null && precioInput.current.value != null) {
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').doc(servicioSelec.id).update({
                 nombre: nombreInput.current.value,
                 duracion: duracionInput.current.value,
                 precio: precioInput.current.value
@@ -127,8 +144,8 @@ const Servicios = () => {
                     console.log(err)
                 } finally {
                     setUpdateSer(updateSer + 1)
-
                     setOpenBorrar(false)
+                    setServicios(servicios.filter(function (el) { return el.id != servicioSelec.id; }));
                 }
 
             }}
@@ -176,6 +193,32 @@ const Servicios = () => {
                     </form>
                     :
                     <div></div>}
+                {editarVisible ?
+                    <form className="form-group">
+                        <h2>Editar servicio</h2>
+                        <div>
+                            <div>
+                                <div className="form-group">
+                                    <label htmlFor="first_name">Nombre</label>
+                                    <input defaultValue={servicioSelec.nombre} ref={nombreInput} type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
+                                    <span className="help-block"></span>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="first_name">Precio</label>
+                                    <input defaultValue={servicioSelec.precio} ref={precioInput} type="text" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
+                                    <span className="help-block"></span>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="first_name">Duración</label>
+                                    <input defaultValue={servicioSelec.duracion} ref={duracionInput} type="text" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
+                                    <span className="help-block"></span>
+                                </div>
+                            </div>
+                            <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar servicio</button>
+                        </div>
+                    </form>
+                    :
+                    <div></div>}
 
                 <div className="table-responsive">
                     <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
@@ -195,7 +238,7 @@ const Servicios = () => {
                                     <td>{servicio.nombre}</td>
                                     <td>{servicio.duracion}</td>
                                     <td>{servicio.precio}</td>
-                                    <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value="" onClick={() => console.log('dwa')} ></button></td>
+                                    <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value="" onClick={() => { setServicioSelec(servicio); setEditarVisible(true) }} ></button></td>
                                     <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value="" onClick={() => { setServicioSelec(servicio); setOpenBorrar(true) }} ></button></td>
                                 </tr>
                             ))}
