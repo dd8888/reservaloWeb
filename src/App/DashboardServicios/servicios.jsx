@@ -95,6 +95,9 @@ const Servicios = () => {
     }, [empleadoSeleccionado, updateSer]/*judas*/)
 
     const [isOpenBorrar, setOpenBorrar] = useState(false);
+    const [isOpenCrear, setOpenCrear] = useState(false);
+    const [isOpenEditar, setOpenEditar] = useState(false);
+
     const [servicioSelec, setServicioSelec] = useState();
     const [crearVisible, setCrearVisible] = useState(false);
     const [editarVisible, setEditarVisible] = useState(false);
@@ -113,6 +116,7 @@ const Servicios = () => {
                 precio: precioInput.current.value
             })
             setUpdateSer(updateSer + 1)
+            setOpenCrear(true)
         }
     }
 
@@ -124,8 +128,11 @@ const Servicios = () => {
                 precio: precioInput.current.value
             })
             setUpdateSer(updateSer + 1)
+            setOpenEditar(true)
         }
     }
+
+
 
     return <div className="App">
         <SweetAlert
@@ -143,7 +150,6 @@ const Servicios = () => {
                 } catch (err) {
                     console.log(err)
                 } finally {
-                    setUpdateSer(updateSer + 1)
                     setOpenBorrar(false)
                     setServicios(servicios.filter(function (el) { return el.id != servicioSelec.id; }));
                 }
@@ -152,6 +158,26 @@ const Servicios = () => {
             onCancel={() => setOpenBorrar(false)}
         >
         </SweetAlert>
+        <SweetAlert
+            success
+            title="¡Servicio editado con éxito!"
+            show={isOpenEditar} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                setOpenEditar(false);
+            }}
+        >
+            Pulsa "Ok" para volver
+      </SweetAlert>
+        <SweetAlert
+            success
+            title="¡Servicio creado con éxito!"
+            show={isOpenCrear} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                setOpenCrear(false);
+            }}
+        >
+            Pulsa "Ok" para volver
+      </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="dashboard-main.html">Dashboard</a>
