@@ -9,6 +9,7 @@ import Index from './Indice'
 import Horarios from './Horarios'
 import Perfil from './Perfil'
 import EditarCitas from './EditarCitas'
+import Services from './Servicios'
 const Routes = () => {
     const { currentUser } = useContext(AuthContext);
     if (currentUser) {
@@ -21,6 +22,7 @@ const Routes = () => {
                 <Route path='/perfil' component={Perfil}></Route>
                 <Route path='/horarios' component={Horarios}></Route>
                 <Route path='/editarCita' component={EditarCitas}></Route>
+                <Route path='/servicios' component={Services}></Route>
                 <Redirect to='/citas' />
             </Switch>
 

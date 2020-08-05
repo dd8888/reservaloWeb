@@ -88,6 +88,14 @@ const Border = () => {
 
                         </NavLink>
                     </li>
+                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                        <NavLink to="/servicios" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-magic"></i>
+                            <span className="nav-link-text"> Servicios</span>
+                        </NavLink>
+                    </li>
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
                         <a className="nav-link" href="generar-factura.html">
                             <i className="fa fa-fw fa-area-chart"></i>
@@ -185,6 +193,7 @@ const Border = () => {
 
                         </NavLink>
                     </li>
+
 
                 </ul>
                 <ul className="navbar-nav ml-auto">
