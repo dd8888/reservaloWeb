@@ -40,6 +40,10 @@ const Servicios = () => {
     const { currentUser } = useContext(AuthContext);
     const [empleados, setEmpleados] = useState([]);
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
+    let nombreInput = React.createRef();
+    let precioInput = React.createRef();
+    let duracionInput = React.createRef();
+
     useEffect(() => {
         database.collection('EmpleadosDev').get()
             .then(response => {
@@ -71,9 +75,10 @@ const Servicios = () => {
     const [servicios, setServicios] = useState([]);
 
     const history = useHistory();
-
+    const [updateSer, setUpdateSer] = useState(1);
     useEffect(() => {
         if (empleadoSeleccionado !== undefined) {
+            console.log('holi')
             database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').get()
                 .then(response => {
                     const fetchedServicios = [];
@@ -88,11 +93,22 @@ const Servicios = () => {
                     setServicios(fetchedServicios);
                 })
         }
-    }, [empleadoSeleccionado]/*judas*/)
+    }, [empleadoSeleccionado, updateSer]/*judas*/)
 
     const [isOpenBorrar, setOpenBorrar] = useState(false);
     const [servicioSelec, setServicioSelec] = useState();
     const [crearVisible, setCrearVisible] = useState(false);
+
+    const crearServicio = () => {
+        if (nombreInput.current.value != null && duracionInput.current.value != null && precioInput.current.value != null) {
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').add({
+                nombre: nombreInput.current.value,
+                duracion: duracionInput.current.value,
+                precio: precioInput.current.value
+            })
+            setUpdateSer(updateSer + 1)
+        }
+    }
 
     return <div className="App">
         <SweetAlert
@@ -109,6 +125,10 @@ const Servicios = () => {
                     database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').doc(servicioSelec.id).delete();
                 } catch (err) {
                     console.log(err)
+                } finally {
+                    setUpdateSer(updateSer + 1)
+
+                    setOpenBorrar(false)
                 }
 
             }}
@@ -137,21 +157,21 @@ const Servicios = () => {
                             <div>
                                 <div className="form-group">
                                     <label htmlFor="first_name">Nombre</label>
-                                    <input type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
+                                    <input ref={nombreInput} type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="first_name">Precio</label>
-                                    <input type="number" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
+                                    <input ref={precioInput} type="text" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="first_name">Duración</label>
-                                    <input type="number" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
+                                    <input ref={duracionInput} type="text" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
                             </div>
-                            <button onClick={() => setCrearVisible(false)} className="btn btn-lg btn-primary btn-block" type='button' >Guardar servicio</button>
+                            <button onClick={() => { crearServicio(); setCrearVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar servicio</button>
                         </div>
                     </form>
                     :
