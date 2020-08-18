@@ -18,6 +18,7 @@ import SweetAlert from 'react-bootstrap-sweetalert';
                         </NavLink>
                     </li>
 */
+
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
     authDomain: "pruebafirebase-44f30.firebaseapp.com",
@@ -28,6 +29,7 @@ var firebaseConfig = {
     appId: "1:846026419673:web:c51e352b34394338d83dc8",
     measurementId: "G-W90PWGXKTN"
 };
+
 // Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);

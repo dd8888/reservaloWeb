@@ -7,7 +7,9 @@ import '../../css/citas-detalladas.css';
 import { useHistory, useLocation } from 'react-router-dom';
 import CheckUserLoggedIn from '../Restrict'
 import SweetAlert from 'react-bootstrap-sweetalert';
+import axios from 'axios'
 
+const cors = require('cors')({ origin: true });
 
 
 var firebaseConfig = {
@@ -106,8 +108,9 @@ const Citas = () => {
         ))
 
         return (disp.length > 0 ?
+
             disp.map((dis) =>
-                <option>{dis}</option>
+                < option > {dis}</option >
 
             )
             : <option> - No disponible - </option>
@@ -306,6 +309,7 @@ const Citas = () => {
     const selecHora = (e) => (
         setHoraSelec(e.target.value)
     )
+    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     const selEmpleado = (e) => (
         disp.length = 0,
         setEmpleadoSelect(e.target.value),
@@ -328,6 +332,36 @@ const Citas = () => {
             })
 
     )
+
+    /*
+    Prueba query axios
+    */
+    useEffect(() => {
+        axios.get('https://us-central1-pruebafirebase-44f30.cloudfunctions.net/getData', {
+            params: {
+                "date": citaDate,
+                "peluquero": empleadoSeleccionado,
+                "duration": dur,
+                "businessUid": location.state.empleadoref.split('/')[3],
+            }
+        }).then(function (response) {
+
+            console.log(response);
+        })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+    }, [citaDate])
+
+
+
+
+
+
     function ComprobarServicio() {
         return (
             servicioSeleccionado === 'Coloración' || servicioSeleccionado === 'Mechas' || servicioSeleccionado === 'Reflejos'
@@ -407,7 +441,7 @@ const Citas = () => {
                                     <div className="form-group">
                                         <label htmlFor="sel1">Empleados disponibles:</label>
 
-                                        <select className="form-control" onChange={selEmpleado} required>
+                                        <select className="form-control" onChange={(e) => { selEmpleado(e); setEmpleadoSeleccionado(e.target.value) }} required>
                                             <option value="">Seleccione un empleado.</option>
 
                                             {empleados.map((empleado) =>

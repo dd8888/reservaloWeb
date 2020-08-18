@@ -85,8 +85,9 @@ const HorariosUser = () => {
     const [listaEventos, setListaEventos] = useState([])
     const [listaEmpleados, setListaEmpleados] = useState([])
     const [horariosFinal, setHorariosFinal] = useState([])
+    const [horarioEmpleado, setHorarioEmpleado] = useState([])
     useEffect(() => {
-        if (empleadoSeleccionado != undefined) {
+        if (empleadoSeleccionado != undefined && empleadoSeleccionado.Permisos == 2) {
             database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(empleadoSeleccionado.Nombre).collection('horarios').get()
                 .then(response => {
                     const fetchedHorarios = [];
@@ -99,17 +100,33 @@ const HorariosUser = () => {
 
                     });
                     setListaEventos(fetchedHorarios);
-                    console.log(fetchedHorarios)
                 })
         }
-    }, [empleadoSeleccionado])
+    }, [empleadoSeleccionado, empleados])
+
+    useEffect(() => {
+        if (empleadoSeleccionado != undefined) {
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(horarioEmpleado).collection('horarios').get()
+                .then(response => {
+                    const fetchedHorarios = [];
+                    response.forEach(document => {
+                        const fetchedHorario = {
+                            id: document.id,
+                            ...document.data()
+                        };
+                        fetchedHorarios.push(fetchedHorario);
+
+                    });
+                    setListaEventos(fetchedHorarios);
+                })
+        }
+    }, [horarioEmpleado])
 
     useEffect(() => {
         const horariosFin = [];
-
+        console.log(listaEventos)
         listaEventos.forEach(function (element, i) {
             element.turnos.forEach(function (turno, j) {
-                console.log(turno.Uid.split(' ')[0].split('-')[0], turno.Uid.split(' ')[0].split('-')[1] - 1, turno.Uid.split(' ')[0].split('-')[2], parseInt(turno.Entrada))
                 const simple = {
                     id: i,
                     title: 'Turno ' + (j + 1),
@@ -134,7 +151,21 @@ const HorariosUser = () => {
             <div className="card-header">
                 <i className="fa fa-table"></i> Horarios
             </div>
+            <div className="form-group" style={{ marginLeft: '2%', marginTop: '2%' }}>
+                <label htmlFor="sel1">Empleados disponibles:</label>
+                {empleadoSeleccionado != undefined && empleadoSeleccionado.Permisos == 1
+                    ?
+                    <select className="form-control" style={{ width: '20%' }} onChange={(e) => setHorarioEmpleado(e.target.value)} required>
+                        <option value="" disabled="disabled">Seleccione un empleado</option>
+                        {empleados.map((empleado) =>
+                            empleado.RefNegocio.path.split('/')[3] === empleadoSeleccionado.RefNegocio.path.split('/')[3] ? <option>{empleado.Nombre}</option> : null
+                        )}
 
+                    </select>
+                    :
+                    <span></span>}
+                <span className="help-block"></span>
+            </div>
             <div className="card-body" >
                 <Calendar
                     showMultiDayTimes

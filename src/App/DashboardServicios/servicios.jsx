@@ -133,7 +133,6 @@ const Servicios = () => {
     }
 
 
-
     return <div className="App">
         <SweetAlert
             danger
@@ -259,7 +258,7 @@ const Servicios = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {servicios.map((servicio, i) => (
+                            {servicios.map((servicio, i) =>
                                 <tr className='clickable-row' key={i} >
                                     <td>{servicio.nombre}</td>
                                     <td>{servicio.duracion}</td>
@@ -267,7 +266,7 @@ const Servicios = () => {
                                     <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value="" onClick={() => { setServicioSelec(servicio); setEditarVisible(true) }} ></button></td>
                                     <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value="" onClick={() => { setServicioSelec(servicio); setOpenBorrar(true) }} ></button></td>
                                 </tr>
-                            ))}
+                            )}
 
                         </tbody>
                     </table>
