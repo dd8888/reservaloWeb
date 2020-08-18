@@ -738,6 +738,15 @@ footer.sticky-footer {
 .btn-pass {
   font-size: 10px !important;
 }
+
+.bordes {
+  background-image   : url('/wave-3.1598faa8.svg');
+  background-repeat  : no-repeat;
+  background-position: bottom;
+  background-color   : white;
+  font-family        : 'Roboto', sans-serif;
+  min-height         : 100vh;
+}
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors

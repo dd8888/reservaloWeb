@@ -104,43 +104,6 @@ const Border = () => {
                             <span className="nav-link-text">Generar factura</span>
                         </a>
                     </li>
-
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-                        <a className="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents"
-                            data-parent="#exampleAccordion">
-                            <i className="fa fa-fw fa-wrench"></i>
-                            <span className="nav-link-text">Components</span>
-                        </a>
-                        <ul className="sidenav-second-level collapse" id="collapseComponents">
-                            <li>
-                                <a href="navbar.html">Navbar</a>
-                            </li>
-                            <li>
-                                <a href="cards.html">Cards</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-                        <a className="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages"
-                            data-parent="#exampleAccordion">
-                            <i className="fa fa-fw fa-file"></i>
-                            <span className="nav-link-text">Example Pages</span>
-                        </a>
-                        <ul className="sidenav-second-level collapse" id="collapseExamplePages">
-                            <li>
-                                <a href="login.html">Login Page</a>
-                            </li>
-                            <li>
-                                <a href="register.html">Registration Page</a>
-                            </li>
-                            <li>
-                                <a href="forgot-password.html">Forgot Password Page</a>
-                            </li>
-                            <li>
-                                <a href="blank.html">Blank Page</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                         <a className="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
                             data-parent="#exampleAccordion">
@@ -192,6 +155,16 @@ const Border = () => {
                         }} className="nav-link">
                             <i className="fa fa-calendar-check-o"></i>
                             <span className="nav-link-text"> Horarios</span>
+
+                        </NavLink>
+                    </li>
+
+                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                        <NavLink to="/fichar" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-qrcode"></i>
+                            <span className="nav-link-text"> Fichar</span>
 
                         </NavLink>
                     </li>

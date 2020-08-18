@@ -10,6 +10,7 @@ import Horarios from './Horarios'
 import Perfil from './Perfil'
 import EditarCitas from './EditarCitas'
 import Services from './Servicios'
+import FicharEmpleado from './Fichar'
 const Routes = () => {
     const { currentUser } = useContext(AuthContext);
     if (currentUser) {
@@ -23,6 +24,8 @@ const Routes = () => {
                 <Route path='/horarios' component={Horarios}></Route>
                 <Route path='/editarCita' component={EditarCitas}></Route>
                 <Route path='/servicios' component={Services}></Route>
+                <Route path='/fichar' component={FicharEmpleado}></Route>
+
                 <Redirect to='/citas' />
             </Switch>
 

@@ -736,3 +736,12 @@ footer.sticky-footer {
 .btn-pass {
   font-size: 10px !important;
 }
+
+.bordes {
+  background-image   : url('../Resources/wave-3.svg');
+  background-repeat  : no-repeat;
+  background-position: bottom;
+  background-color   : white;
+  font-family        : 'Roboto', sans-serif;
+  min-height         : 100vh;
+}
