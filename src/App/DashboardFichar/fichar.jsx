@@ -16,16 +16,7 @@ import { parseNumber } from 'globalize';
 
 
 const cors = require('cors')({ origin: true });
-const Completionist = () => <h2>¡El turno ya ha empezado!</h2>;
-const renderer = ({ days, hours, minutes, seconds, completed }) => {
-    if (completed) {
-        // Render a completed state
-        return <Completionist />;
-    } else {
-        // Render a countdown
-        return <h2 style={{ marginBottom: "5%" }}>Tiempo para que empiece el siguiente turno: {<br></br>}{zeroPad(days, 2)}:{zeroPad(hours, 2)}:{zeroPad(minutes, 2)}:{zeroPad(seconds, 2)}</h2>;
-    }
-};
+
 
 
 var firebaseConfig = {
@@ -47,6 +38,25 @@ if (!firebase.apps.length) {
 const database = firebase.firestore();
 
 const Citas = () => {
+
+    const Completionist = () => <div><h2>¡El turno ya ha empezado!</h2>
+        <br></br>
+        <QRCode value={idDia} />
+    </div>
+
+    const renderer = ({ days, hours, minutes, seconds, completed }) => {
+        if (completed) {
+            // Render a completed state
+            return <Completionist />;
+        } else {
+            // Render a countdown
+            return <h2 style={{ marginBottom: "5%" }}>Tiempo para que empiece el siguiente turno: {<br></br>}{zeroPad(days, 2)}:{zeroPad(hours, 2)}:{zeroPad(minutes, 2)}:{zeroPad(seconds, 2)}</h2>
+
+
+        }
+    };
+
+
     CheckUserLoggedIn();
     const { currentUser } = useContext(AuthContext);
     const [empleados, setEmpleados] = useState([]);
@@ -213,8 +223,7 @@ const Citas = () => {
                                         date={Date.now() + siguienteHoraAMili}
                                         renderer={renderer}
                                     />
-                                    <br></br>
-                                    <QRCode value={idDia} />
+
                                 </div>
                                 :
                                 <span></span>
