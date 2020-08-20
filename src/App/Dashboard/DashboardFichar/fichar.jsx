@@ -111,7 +111,8 @@ const Citas = () => {
                         fetchedHorarios.push(fetchedCita);
                         fetchedHorarios.forEach(element => {
                             element.turnos.forEach(turn => {
-                                const d1 = new Date(2020, 6, 16, 13, 59);
+                                //const d1 = new Date(2020, 6, 16, 13, 59);
+                                const d1 = new Date();
                                 const d2 = new Date(turn.Uid.split(' ')[0]);
 
                                 if (turn.Salida > d1.getHours() + 1) {

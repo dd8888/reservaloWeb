@@ -132,6 +132,7 @@ const Productos = () => {
         }
     }
 
+    const [isEditable, setEditable] = useState(false);
 
     return <div className="App">
         <SweetAlert
@@ -186,7 +187,7 @@ const Productos = () => {
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
 
-                <i className="fa fa-list-alt"></i> Servicios
+                <i className="fa fa-list-alt"></i> Productos
                 <button onClick={() => setCrearVisible(true)} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Registrar nuevo producto</button>
 
             </div>
@@ -204,7 +205,7 @@ const Productos = () => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="first_name">Cantidad</label>
-                                    <input ref={cantidadInput} type="text" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
+                                    <input ref={cantidadInput} type="text" className="form-control" id="first_name" placeholder="Cantidad" required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
                             </div>
@@ -215,7 +216,7 @@ const Productos = () => {
                     <div></div>}
                 {editarVisible ?
                     <form className="form-group">
-                        <h2>Editar producto</h2>
+                        <h2>Editar servicio</h2>
                         <div>
                             <div>
                                 <div className="form-group">
@@ -224,17 +225,13 @@ const Productos = () => {
                                     <span className="help-block"></span>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="first_name">Precio</label>
-                                    <input defaultValue={servicioSelec.precio} ref={precioInput} type="text" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
+                                    <label htmlFor="first_name">Cantidad</label>
+                                    <input defaultValue={servicioSelec.precio} ref={cantidadInput} type="text" className="form-control" id="first_name" placeholder="Cantidad" required autoComplete="on"></input>
                                     <span className="help-block"></span>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="first_name">Duración</label>
-                                    <input defaultValue={servicioSelec.duracion} ref={cantidadInput} type="text" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
-                                    <span className="help-block"></span>
-                                </div>
+
                             </div>
-                            <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar servicio</button>
+                            <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar producto</button>
                         </div>
                     </form>
                     :
@@ -247,13 +244,14 @@ const Productos = () => {
                             <tr>
                                 <th>Nombre</th>
                                 <th>Cantidad</th>
+                                <th>Editar</th>
+                                <th>Borrar</th>
                             </tr>
                         </thead>
                         <tbody>
                             {servicios.map((servicio, i) =>
-                                <tr className='clickable-row' key={i} >
+                                <tr className='clickable-row' key={i} contentEditable={isEditable} style={isEditable ? { backgroundColor: "#1a22260e" } : null}>
                                     <td>{servicio.nombre}</td>
-                                    <td>{servicio.duracion}</td>
                                     <td>{servicio.precio}</td>
                                     <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value="" onClick={() => { setServicioSelec(servicio); setEditarVisible(true) }} ></button></td>
                                     <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value="" onClick={() => { setServicioSelec(servicio); setOpenBorrar(true) }} ></button></td>
