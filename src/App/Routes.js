@@ -27,7 +27,7 @@ const Routes = () => {
                 <Route path='/servicios' component={Services}></Route>
                 <Route path='/fichar' component={FicharEmpleado}></Route>
                 <Route path='/productos' component={Producto}></Route>
-                <Redirect to='/citas' />
+                <Redirect to='/perfil' />
             </Switch>
 
         )

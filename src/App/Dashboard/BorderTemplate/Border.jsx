@@ -75,11 +75,14 @@ const Border = () => {
             </button>
             <div className="collapse navbar-collapse" id="navbarResponsive">
                 <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                        <a className="nav-link" href="dashboard-main.html">
-                            <i className="fa fa-fw fa-dashboard"></i>
-                            <span className="nav-link-text">Inicio</span>
-                        </a>
+                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                        <NavLink to="/perfil" activeStyle={{
+                            color: '#E6495A'
+                        }} className="nav-link">
+                            <i className="fa fa-fw fa-user"></i>
+                            <span className="nav-link-text"> Perfil</span>
+
+                        </NavLink>
                     </li>
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
                         <NavLink to="/citas" activeStyle={{
@@ -146,15 +149,7 @@ const Border = () => {
 
 
 
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <NavLink to="/perfil" activeStyle={{
-                            color: '#E6495A'
-                        }} className="nav-link">
-                            <i className="fa fa-fw fa-circle"></i>
-                            <span className="nav-link-text"> Perfil</span>
 
-                        </NavLink>
-                    </li>
 
                     <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
                         <NavLink to="/horarios" activeStyle={{

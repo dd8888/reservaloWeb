@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback, useContext } from 'react'
 import * as firebase from 'firebase'
 import DatePicker from 'react-datepicker'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
-import '../../../css/bootstrap.min.css';
-import '../../../css/citas-detalladas.css';
+import '../../../css/dashboard-init.css'
 import { useHistory, useLocation } from 'react-router-dom';
 import CheckUserLoggedIn from '../../Restrict'
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { NavLink } from 'react-router-dom'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tabs'
+import Table from 'react-bootstrap/Table'
 import Sonnet from 'react-bootstrap/Tabs'
 import { AuthContext } from '../../Auth';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -45,8 +45,9 @@ const MainPerfil = () => {
     const [imagenesPreview, setImagenesPreview] = useState();
     const [imagenesPreviewLink, setImagenesPreviewLink] = useState();
     const [imagenSeleccionada, setImagenSeleccionada] = useState();
-
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
+    const [empleados, setEmpleados] = useState([]);
+
     useEffect(() => {
         database.collection('EmpleadosDev').get()
             .then(response => {
@@ -69,6 +70,7 @@ const MainPerfil = () => {
                         setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
                     }
                 });
+                setEmpleados(fetchedEmpleados);
             })
 
     }, []/*judas*/)
@@ -235,6 +237,45 @@ const MainPerfil = () => {
                                                 :
                                                 <span></span>
                                             }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <Sonnet />
+                        </Tab>
+                        <Tab eventKey="workers" title="Trabajadores">
+                            <div id="workers" className="tab-pane in">
+                                <div className="card mb-3 col-lg-12">
+                                    <div className="card-body">
+                                        <div className="table-responsive">
+                                            <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
+                                                cellSpacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th>Apellidos</th>
+                                                        <th>Email</th>
+                                                        <th>Teléfono</th>
+                                                        <th>Editar</th>
+                                                        <th>Borrar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {empleados.map((empleado, i) =>
+                                                        empleado.RefNegocio.path.split('/')[3] === empleadoSeleccionado.RefNegocio.path.split('/')[3] ?
+                                                            <tr className='clickable-row' key={i}>
+                                                                <td>{empleado.Nombre}</td>
+                                                                <td>{empleado.Apellidos}</td>
+                                                                <td>{empleado.Email}</td>
+                                                                <td>{empleado.Telefono}</td>
+                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value=""  ></button></td>
+                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value=""  ></button></td>
+                                                            </tr>
+                                                            :
+                                                            <span></span>
+                                                    )}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>

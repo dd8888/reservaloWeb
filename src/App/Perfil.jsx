@@ -2,7 +2,6 @@ import React from 'react'
 import MainPerfil from './Dashboard/DashboardPerfil/perfil'
 import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
-import '../css/perfil-usuario.css'
 
 
 class PerfilPage extends React.Component {
