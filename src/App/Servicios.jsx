@@ -1,6 +1,6 @@
 import React from 'react'
-import Servicios from './DashboardServicios/servicios'
-import Border from './BorderTemplate/Border'
+import Servicios from './Dashboard/DashboardServicios/servicios'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 import '../css/perfil-usuario.css'
 

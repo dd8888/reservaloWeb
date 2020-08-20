@@ -1,6 +1,6 @@
 import React from 'react'
-import Citas from './DashboardCitas/citas'
-import Border from './BorderTemplate/Border'
+import Citas from './Dashboard/DashboardCitas/citas'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 
 

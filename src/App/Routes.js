@@ -10,6 +10,7 @@ import Horarios from './Horarios'
 import Perfil from './Perfil'
 import EditarCitas from './EditarCitas'
 import Services from './Servicios'
+import Producto from './Productos'
 import FicharEmpleado from './Fichar'
 const Routes = () => {
     const { currentUser } = useContext(AuthContext);
@@ -25,7 +26,7 @@ const Routes = () => {
                 <Route path='/editarCita' component={EditarCitas}></Route>
                 <Route path='/servicios' component={Services}></Route>
                 <Route path='/fichar' component={FicharEmpleado}></Route>
-
+                <Route path='/productos' component={Producto}></Route>
                 <Redirect to='/citas' />
             </Switch>
 

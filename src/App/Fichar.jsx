@@ -1,6 +1,6 @@
 import React from 'react'
-import Fichar from './DashboardFichar/fichar'
-import Border from './BorderTemplate/Border'
+import Fichar from './Dashboard/DashboardFichar/fichar'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 
 

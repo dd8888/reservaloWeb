@@ -1,6 +1,6 @@
 import React from 'react'
-import HorariosUser from './DashboardHorarios/horarios'
-import Border from './BorderTemplate/Border'
+import HorariosUser from './Dashboard/DashboardHorarios/horarios'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import MainPerfil from './DashboardPerfil/perfil'
-import Border from './BorderTemplate/Border'
+import MainPerfil from './Dashboard/DashboardPerfil/perfil'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 import '../css/perfil-usuario.css'
 

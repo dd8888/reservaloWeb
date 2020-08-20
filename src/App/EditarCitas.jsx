@@ -1,6 +1,6 @@
 import React from 'react'
-import Editar from './DashboardEditarCita/editar'
-import Border from './BorderTemplate/Border'
+import Editar from './Dashboard/DashboardEditarCita/editar'
+import Border from './Dashboard/BorderTemplate/Border'
 import '../css/dashboard-init.css'
 
 
