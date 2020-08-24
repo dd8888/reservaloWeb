@@ -14,9 +14,15 @@ import Sonnet from 'react-bootstrap/Tabs'
 import { AuthContext } from '../../Auth';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+var passwordHash = require('password-hash');
 
 
 
+var generator = require('generate-password');
+var password = generator.generate({
+    length: 10,
+    numbers: true
+});
 
 
 var firebaseConfig = {
@@ -47,6 +53,29 @@ const MainPerfil = () => {
     const [imagenSeleccionada, setImagenSeleccionada] = useState();
     const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
     const [empleados, setEmpleados] = useState([]);
+    const [updateEmp, setUpdateEmp] = useState(1);
+    var BreakException = {};
+
+    useEffect(() => {
+        database.collection('EmpleadosDev').get()
+            .then(response => {
+                const fetchedEmpleados = [];
+                const emails = [];
+                response.forEach(document => {
+                    const fetchedEmpleado = {
+                        id: document.id,
+                        ...document.data()
+                    };
+                    fetchedEmpleados.push(fetchedEmpleado);
+                    fetchedEmpleados.forEach(element => {
+                        emails.push(element.Email)
+                    });
+                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
+                });
+                setEmpleados(fetchedEmpleados);
+            })
+
+    }, [updateEmp]/*judas*/)
 
     useEffect(() => {
         database.collection('EmpleadosDev').get()
@@ -69,6 +98,8 @@ const MainPerfil = () => {
                     } else {
                         setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
                     }
+
+
                 });
                 setEmpleados(fetchedEmpleados);
             })
@@ -80,6 +111,17 @@ const MainPerfil = () => {
     const [backImage, setBackImage] = useState();
     const [imagenes, setImagenes] = useState([]);
     const [update, setUpdate] = useState();
+
+
+
+    const [isOpenCrear, setOpenCrear] = useState(false);
+    const [isOpenEditar, setOpenEditar] = useState(false);
+
+    const [empleadoSelec, setEmpleadoSelec] = useState();
+    const [crearVisible, setCrearVisible] = useState(false);
+    const [editarVisible, setEditarVisible] = useState(false);
+
+
     useEffect(() => {
         if (empleadoSeleccionado != undefined) {
             const fetchedImagenes = [];
@@ -135,6 +177,48 @@ const MainPerfil = () => {
     const [isOpenBorrar, setOpenBorrar] = useState(false)
     const history = useHistory();
 
+    let nombreInput = React.createRef();
+    let apellidosInput = React.createRef();
+    let emailInput = React.createRef();
+    let telefonoInput = React.createRef();
+
+
+    const editarServicio = () => {
+        if (nombreInput.current.value != null && apellidosInput.current.value != null && emailInput.current.value != null && telefonoInput.current.value != null) {
+            database.collection('EmpleadosDev').doc(empleadoSelec.id).update({
+                Nombre: nombreInput.current.value,
+                Apellidos: apellidosInput.current.value,
+                Email: emailInput.current.value,
+                Telefono: telefonoInput.current.value
+            })
+            setUpdateEmp(updateEmp + 1)
+            setOpenEditar(true)
+        }
+    }
+
+
+    const crearEmpleado = () => {
+        if (nombreInput.current.value != null && apellidosInput.current.value != null && emailInput.current.value != null && telefonoInput.current.value != null) {
+            var hashedPassword = passwordHash.generate(password);
+            database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(nombreInput.current.value).set({
+                Negocio: empleadoSeleccionado.RefNegocio.path.split('/')[3],
+                Nombre: nombreInput.current.value,
+            })
+            database.collection('EmpleadosDev').add({
+                Nombre: nombreInput.current.value,
+                Apellidos: apellidosInput.current.value,
+                Email: emailInput.current.value,
+                Telefono: telefonoInput.current.value,
+                RefNegocio: empleadoSeleccionado.RefNegocio,
+                Contraseña: hashedPassword
+
+            })
+            firebase.auth().createUserWithEmailAndPassword(emailInput.current.value, password)
+            setUpdateEmp(updateEmp + 1)
+            setOpenCrear(true)
+        }
+    }
+
     return <div>
         <SweetAlert
             success
@@ -152,20 +236,51 @@ const MainPerfil = () => {
         >
         </SweetAlert>
         <SweetAlert
+            success
+            title="¡Empleado creado con éxito!"
+            show={isOpenCrear} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                setOpenCrear(false);
+            }}
+
+        >
+            <span>La contraseña es  <h3>{password}</h3>.  Apúntala antes de cerrar esta ventana. Podrás cambiarla en un futuro.
+                Pulsa "Ok" para volver</span>
+        </SweetAlert>
+        <SweetAlert
             danger
-            title="¿Estás seguro de borrar esta imagen?"
+            title="¿Estás seguro de borrar este empleado?"
             showCancel
             confirmBtnText="Sí, borrar"
+            cancelBtnText="Mejor no"
             cancelBtnBsStyle="No"
             confirmBtnBsStyle="danger"
             show={isOpenBorrar} //Notice how we bind the show property to our component state
             onConfirm={() => {
-                //Para recargar las imágenes cambio esta variable
-                borrarImagen();
+                try {
+                    database.collection('EmpleadosDev').doc(empleadoSelec.id).delete()
+                    database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(empleadoSelec.Nombre).delete();
+                    setUpdateEmp(updateEmp + 1)
+                } catch (err) {
+                    console.log(err)
+                } finally {
+                    setOpenBorrar(false)
+                }
+
             }}
             onCancel={() => setOpenBorrar(false)}
         >
         </SweetAlert>
+        <SweetAlert
+            success
+            title="Empleado editado con éxito!"
+            show={isOpenEditar} //Notice how we bind the show property to our component state
+            onConfirm={() => {
+                setOpenEditar(false);
+            }}
+        >
+            Pulsa "Ok" para volver
+      </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
                 <a className="link-color" href="#">Dashboard</a>
@@ -244,12 +359,83 @@ const MainPerfil = () => {
                             <Sonnet />
                         </Tab>
                         <Tab eventKey="workers" title="Trabajadores">
-                            <div id="workers" className="tab-pane in">
-                                <div className="card mb-3 col-lg-12">
-                                    <div className="card-body">
-                                        <div className="table-responsive">
+                            <div id="workers" className="tab-pane active">
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="col-12 col-sm-8 col-md-6 col-lg-4" style={{
+                                            width: '50%',
+                                            margin: '0 auto'
+                                        }} />
+                                        <div className="card perfil-foto" style={{ border: "0px" }}>
+                                            <button onClick={() => setCrearVisible(true)} style={{ float: 'right', backgroundColor: '#E6495A' }} className="btn btn-default">Nuevo empleado</button>
+                                            <img className="card-img-top"
+                                                src={backImage} height="1" style={{ opacity: 0 }}
+                                            ></img>
+                                            {crearVisible ?
+                                                <form className="form-group" style={{ color: "black" }}>
+                                                    <h2>Crear nuevo empleado</h2>
+                                                    <div>
+                                                        <div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Nombre</label>
+                                                                <input ref={nombreInput} type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Apellido</label>
+                                                                <input ref={apellidosInput} type="text" className="form-control" id="first_name" placeholder="Apellido" required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Teléfono</label>
+                                                                <input ref={telefonoInput} type="text" className="form-control" id="first_name" placeholder="Telefono " required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Email</label>
+                                                                <input ref={emailInput} type="text" className="form-control" id="first_name" placeholder="Email " required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                        </div>
+                                                        <button onClick={() => { crearEmpleado(); setCrearVisible(false) }} className="btn btn-lg btn-primary btn-block" style={{ marginBottom: "4%" }} type='button' >Guardar empleado</button>
+                                                    </div>
+                                                </form>
+                                                :
+                                                <div></div>}
+                                            {editarVisible ?
+                                                <form className="form-group" style={{ color: "black" }}>
+                                                    <h2>Editar empleado</h2>
+                                                    <div>
+                                                        <div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Nombre</label>
+                                                                <input readOnly defaultValue={empleadoSelec.Nombre} ref={nombreInput} type="text" className="form-control" id="first_name" placeholder="Nombre" required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Apellidos</label>
+                                                                <input readOnly defaultValue={empleadoSelec.Apellidos} ref={apellidosInput} type="text" className="form-control" id="first_name" placeholder="Precio" required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Email</label>
+                                                                <input defaultValue={empleadoSelec.Email} ref={emailInput} type="text" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="first_name">Teléfono</label>
+                                                                <input defaultValue={empleadoSelec.Telefono} ref={telefonoInput} type="text" className="form-control" id="first_name" placeholder="Duración " required autoComplete="on"></input>
+                                                                <span className="help-block"></span>
+                                                            </div>
+                                                        </div>
+                                                        <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar empleado</button>
+                                                    </div>
+                                                </form>
+                                                :
+                                                <div></div>}
+
                                             <table className="table table-bordered TreeTable" id="TreeTable" width="100%"
-                                                cellSpacing="0">
+                                                cellSpacing="0" style={{ marginTop: "-2.2%" }}>
                                                 <thead>
                                                     <tr>
                                                         <th>Nombre</th>
@@ -265,21 +451,23 @@ const MainPerfil = () => {
                                                         empleado.RefNegocio.path.split('/')[3] === empleadoSeleccionado.RefNegocio.path.split('/')[3] ?
                                                             <tr className='clickable-row' key={i}>
                                                                 <td>{empleado.Nombre}</td>
-                                                                <td>{empleado.Apellidos}</td>
+                                                                <td>Manolo</td>
                                                                 <td>{empleado.Email}</td>
                                                                 <td>{empleado.Telefono}</td>
-                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value=""  ></button></td>
-                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value=""  ></button></td>
+                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setEditarVisible(true) }} className="btn fa fa-edit" type="button" value=""  ></button></td>
+                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setOpenBorrar(true) }} className="btn fa fa-trash" type="button" value=""  ></button></td>
                                                             </tr>
                                                             :
-                                                            <span></span>
+                                                            <tr></tr>
                                                     )}
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
+
                             <Sonnet />
                         </Tab>
                     </Tabs>
@@ -297,3 +485,35 @@ const MainPerfil = () => {
 }
 
 export default MainPerfil;
+
+
+/*
+<table className="table table-bordered TreeTable" id="TreeTable" width="100%"
+                                                            cellSpacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nombre</th>
+                                                                    <th>Apellidos</th>
+                                                                    <th>Email</th>
+                                                                    <th>Teléfono</th>
+                                                                    <th>Editar</th>
+                                                                    <th>Borrar</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {empleados.map((empleado, i) =>
+                                                                    empleado.RefNegocio.path.split('/')[3] === empleadoSeleccionado.RefNegocio.path.split('/')[3] ?
+                                                                        <tr className='clickable-row' key={i}>
+                                                                            <td>{empleado.Nombre}</td>
+                                                                            <td>{empleado.Apellidos}</td>
+                                                                            <td>{empleado.Email}</td>
+                                                                            <td>{empleado.Telefono}</td>
+                                                                            <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-edit" type="button" value=""  ></button></td>
+                                                                            <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} className="btn fa fa-trash" type="button" value=""  ></button></td>
+                                                                        </tr>
+                                                                        :
+                                                                        <span></span>
+                                                                )}
+                                                            </tbody>
+                                                        </table>
+*/

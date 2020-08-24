@@ -745,3 +745,7 @@ footer.sticky-footer {
   font-family        : 'Roboto', sans-serif;
   min-height         : 100vh;
 }
+
+.TreeTable {
+  color: black;
+}
