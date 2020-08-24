@@ -70,9 +70,10 @@ const MainPerfil = () => {
                     fetchedEmpleados.forEach(element => {
                         emails.push(element.Email)
                     });
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
                 });
                 setEmpleados(fetchedEmpleados);
+                setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
+
             })
 
     }, [updateEmp]/*judas*/)
@@ -88,23 +89,18 @@ const MainPerfil = () => {
                         ...document.data()
                     };
                     fetchedEmpleados.push(fetchedEmpleado);
-                    fetchedEmpleados.forEach(element => {
-                        emails.push(element.Email)
-                    });
-                    if (!emails.includes(currentUser.email)) {
-                        alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                        firebase.auth().signOut();
-                        throw BreakException;
-                    } else {
-                        setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                    }
-
 
                 });
                 setEmpleados(fetchedEmpleados);
+
+                fetchedEmpleados.forEach(element => {
+                    emails.push(element.Email)
+                });
+
+                setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
             })
 
-    }, []/*judas*/)
+    }, [])
 
     const { currentUser } = useContext(AuthContext);
     const [logo, setLogo] = useState();
@@ -448,7 +444,7 @@ const MainPerfil = () => {
                                                 </thead>
                                                 <tbody>
                                                     {empleados.map((empleado, i) =>
-                                                        empleado.RefNegocio.path.split('/')[3] === empleadoSeleccionado.RefNegocio.path.split('/')[3] ?
+                                                        empleado.RefNegocio.path.split('/')[3] === 'PR01' ?
                                                             <tr className='clickable-row' key={i}>
                                                                 <td>{empleado.Nombre}</td>
                                                                 <td>Manolo</td>
