@@ -42,6 +42,7 @@
     "react-countdown": "^2.2.1",
     "react-datepicker": "^3.0.0",
     "react-dom": "^16.13.1",
+    "react-favicon": "0.0.18",
     "react-image": "^4.0.3",
     "react-moment": "^0.9.7",
     "react-qr-code": "^1.0.2",

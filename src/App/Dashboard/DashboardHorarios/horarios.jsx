@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import buildEmpleados from '../Assets/horariosBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 import buildFirestore from '../Assets/firebaseBuilder'
 
 
