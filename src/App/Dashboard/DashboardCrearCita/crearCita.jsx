@@ -8,27 +8,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 import CheckUserLoggedIn from '../../Restrict'
 import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from 'axios'
+import buildFirebase from '../Assets/firebaseBuilder'
 
+const database = buildFirebase()
 const cors = require('cors')({ origin: true });
-
-
-var firebaseConfig = {
-    apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
-    authDomain: "pruebafirebase-44f30.firebaseapp.com",
-    databaseURL: "https://pruebafirebase-44f30.firebaseio.com",
-    projectId: "pruebafirebase-44f30",
-    storageBucket: "pruebafirebase-44f30.appspot.com",
-    messagingSenderId: "846026419673",
-    appId: "1:846026419673:web:c51e352b34394338d83dc8",
-    measurementId: "G-W90PWGXKTN"
-};
-
-// Initialize Firebase
-
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.firestore();
 
 const Citas = () => {
     CheckUserLoggedIn();

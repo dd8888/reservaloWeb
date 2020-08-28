@@ -8,21 +8,14 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
+import buildEmpleados from '../Assets/horariosBuilder'
+import buildFirestore from '../Assets/firebaseBuilder'
+
+
+
 require('react-big-calendar/lib/css/react-big-calendar.css');
 moment.locale('en-GB')
 
-
-var firebaseConfig = {
-    apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
-    authDomain: "pruebafirebase-44f30.firebaseapp.com",
-    databaseURL: "https://pruebafirebase-44f30.firebaseio.com",
-    projectId: "pruebafirebase-44f30",
-    storageBucket: "pruebafirebase-44f30.appspot.com",
-    messagingSenderId: "846026419673",
-    appId: "1:846026419673:web:c51e352b34394338d83dc8",
-    measurementId: "G-W90PWGXKTN"
-};
-// Initialize Firebase
 
 const messages = {
     allDay: 'Todo el día',
@@ -39,52 +32,13 @@ const messages = {
     showMore: total => `+ Total (${total})`
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.firestore();
+
+const database = buildFirestore()
 
 const HorariosUser = () => {
     const localizer = momentLocalizer(moment)
-
-    //Comprobar usuario ----
-    var BreakException = {};
-    const { currentUser } = useContext(AuthContext);
-    const [empleados, setEmpleados] = useState([]);
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-
-
-                });
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                if (!emails.includes(currentUser.email)) {
-                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                    firebase.auth().signOut();
-                    throw BreakException;
-                } else {
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                }
-                setEmpleados(fetchedEmpleados);
-            })
-
-    }, []/*judas*/)
-    //----Termina comprobar usuario
-    const history = useHistory();
-
-
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
     const [listaEventos, setListaEventos] = useState([])
     const [listaEmpleados, setListaEmpleados] = useState([])
     const [horariosFinal, setHorariosFinal] = useState([])
