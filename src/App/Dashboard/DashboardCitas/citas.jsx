@@ -140,7 +140,7 @@ const Citas = () => {
     const [isOpenBorrar, setOpenBorrar] = useState(false)
     const [citaSelec, setCitaSelec] = useState()
 
-    return <div className="App">
+    return <div className="App" >
         <SweetAlert
             danger
             title="¿Estás seguro de borrar esta cita?"
@@ -167,7 +167,7 @@ const Citas = () => {
         </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
-                <a className="link-color" href="dashboard-main.html">Dashboard</a>
+                <a className="link-color" href="#">Dashboard</a>
             </li>
             <li className="breadcrumb-item active">Citas</li>
         </ol>

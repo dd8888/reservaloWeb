@@ -749,3 +749,15 @@ footer.sticky-footer {
 .TreeTable {
   color: black;
 }
+
+.App {
+  margin-top: 7%
+}
+
+.tabs-color>a {
+  color: grey;
+}
+
+.tabs-color>a:hover {
+  color: #E6495A;
+}

@@ -751,6 +751,18 @@ footer.sticky-footer {
 .TreeTable {
   color: black;
 }
+
+.App {
+  margin-top: 7%
+}
+
+.tabs-color>a {
+  color: grey;
+}
+
+.tabs-color>a:hover {
+  color: #E6495A;
+}
 /*!
  * Bootstrap v4.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors

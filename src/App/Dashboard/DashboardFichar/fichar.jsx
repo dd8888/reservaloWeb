@@ -72,17 +72,20 @@ const Citas = () => {
                         ...document.data()
                     };
                     fetchedEmpleados.push(fetchedEmpleado);
-                    fetchedEmpleados.forEach(element => {
-                        emails.push(element.Email)
-                    });
-                    if (!emails.includes(currentUser.email)) {
-                        alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                        firebase.auth().signOut();
-                        throw BreakException;
-                    } else {
-                        setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                    }
+
+
                 });
+                fetchedEmpleados.forEach(element => {
+                    emails.push(element.Email)
+                });
+
+                if (!emails.includes(currentUser.email)) {
+                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
+                    firebase.auth().signOut();
+                    throw BreakException;
+                } else {
+                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
+                }
                 setEmpleados(fetchedEmpleados);
             })
 
@@ -201,11 +204,11 @@ const Citas = () => {
         )
     }
 
-    return <div>
+    return <div className="App">
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a className="link-color" href="dashboard-main.html">Dashboard</a>
+                    <a className="link-color" href="#">Dashboard</a>
                 </li>
                 <li className="breadcrumb-item active">Citas</li>
             </ol>

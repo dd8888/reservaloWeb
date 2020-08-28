@@ -34,16 +34,18 @@ const CheckUserLoggedIn = () => {
                         ...document.data()
                     };
                     fetchedEmpleados.push(fetchedEmpleado);
-                    fetchedEmpleados.forEach(element => {
-                        emails.push(element.Email)
-                    });
-                    if (!emails.includes(currentUser.email)) {
-                        alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                        firebase.auth().signOut();
-                        throw BreakException;
-                    }
+
 
                 });
+                fetchedEmpleados.forEach(element => {
+                    emails.push(element.Email)
+                });
+
+                if (!emails.includes(currentUser.email)) {
+                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
+                    firebase.auth().signOut();
+                    throw BreakException;
+                }
                 setEmpleados(fetchedEmpleados);
             })
 

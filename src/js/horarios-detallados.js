@@ -1,10 +1,10 @@
-jQuery(document).ready(function($){
+/**jQuery(document).ready(function($){
 	var transitionEnd = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
 	var transitionsSupported = ( $('.csstransitions').length > 0 );
 	//if browser does not support transitions - use a different event to trigger them
 	if( !transitionsSupported ) transitionEnd = 'noTransition';
-	
-	//should add a loding while the events are organized 
+
+	//should add a loding while the events are organized
 
 	function SchedulePlan( element ) {
 		this.element = element;
@@ -22,8 +22,8 @@ jQuery(document).ready(function($){
 		this.modal = this.element.find('.event-modal');
 		this.modalHeader = this.modal.find('.header');
 		this.modalHeaderBg = this.modal.find('.header-bg');
-		this.modalBody = this.modal.find('.body'); 
-		this.modalBodyBg = this.modal.find('.body-bg'); 
+		this.modalBody = this.modal.find('.body');
+		this.modalBodyBg = this.modal.find('.body-bg');
 		this.modalMaxWidth = 800;
 		this.modalMaxHeight = 480;
 
@@ -94,7 +94,7 @@ jQuery(document).ready(function($){
 
 			var eventTop = self.eventSlotHeight*(start - self.timelineStart)/self.timelineUnitDuration,
 				eventHeight = self.eventSlotHeight*duration/self.timelineUnitDuration;
-			
+
 			$(this).css({
 				top: (eventTop -1) +'px',
 				height: (eventHeight+1)+'px'
@@ -118,7 +118,7 @@ jQuery(document).ready(function($){
 		/*this.modalBody.find('.event-info').load(event.parent().attr('data-content')+'.html .event-info > *', function(data){
 			//once the event content has been loaded
 			self.element.addClass('content-loaded');
-		});*/
+		});
 
 		this.element.addClass('modal-is-open');
 
@@ -146,7 +146,7 @@ jQuery(document).ready(function($){
 
 			var modalTranslateX = parseInt((windowWidth - modalWidth)/2 - eventLeft),
 				modalTranslateY = parseInt((windowHeight - modalHeight)/2 - eventTop);
-			
+
 			var HeaderBgScaleY = modalHeight/eventHeight,
 				BodyBgScaleX = (modalWidth - eventWidth);
 
@@ -181,7 +181,7 @@ jQuery(document).ready(function($){
 				width: eventWidth+'px',
 			});
 			transformElement(self.modalHeaderBg, 'scaleY('+HeaderBgScaleY+')');
-			
+
 			self.modalHeaderBg.one(transitionEnd, function(){
 				//wait for the  end of the modalHeaderBg transformation and show the modal content
 				self.modalHeaderBg.off(transitionEnd);
@@ -228,7 +228,7 @@ jQuery(document).ready(function($){
 				height: eventHeight+'px'
 			});
 			transformElement(self.modal, 'translateX('+modalTranslateX+'px) translateY('+modalTranslateY+'px)');
-			
+
 			//scale down modalBodyBg element
 			transformElement(self.modalBodyBg, 'scaleX(0) scaleY(1)');
 			//scale down modalHeaderBg element
@@ -256,7 +256,7 @@ jQuery(document).ready(function($){
 	}
 
 	SchedulePlan.prototype.mq = function(){
-		//get MQ value ('desktop' or 'mobile') 
+		//get MQ value ('desktop' or 'mobile')
 		var self = this;
 		return window.getComputedStyle(this.element.get(0), '::before').getPropertyValue('content').replace(/["']/g, '');
 	};
@@ -269,8 +269,8 @@ jQuery(document).ready(function($){
 		if( mq == 'mobile' ) {
 			//reset modal style on mobile
 			self.modal.add(self.modalHeader).add(self.modalHeaderBg).add(self.modalBody).add(self.modalBodyBg).attr('style', '');
-			self.modal.removeClass('no-transition');	
-			self.animating = false;	
+			self.modal.removeClass('no-transition');
+			self.animating = false;
 		} else if( mq == 'desktop' && self.element.hasClass('modal-is-open') ) {
 			self.modal.addClass('no-transition');
 			self.element.addClass('animation-completed');
@@ -322,7 +322,7 @@ jQuery(document).ready(function($){
 
 			setTimeout(function(){
 				self.modal.removeClass('no-transition');
-				self.animating = false;	
+				self.animating = false;
 			}, 20);
 		}
 	};
@@ -330,7 +330,7 @@ jQuery(document).ready(function($){
 	var schedules = $('.cd-schedule');
 	var objSchedulesPlan = [],
 		windowResize = false;
-	
+
 	if( schedules.length > 0 ) {
 		schedules.each(function(){
 			//create SchedulePlan objects
@@ -377,4 +377,4 @@ jQuery(document).ready(function($){
 			'transform': value
 		});
 	}
-});
+});*/

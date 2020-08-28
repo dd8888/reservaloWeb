@@ -15,15 +15,11 @@ import { AuthContext } from '../../Auth';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 var passwordHash = require('password-hash');
-
-
-
 var generator = require('generate-password');
 var password = generator.generate({
     length: 10,
     numbers: true
 });
-
 
 var firebaseConfig = {
     apiKey: "AIzaSyC9I5kCCmOyHoORv_x4o9fJXnleDCa22V0",
@@ -215,7 +211,7 @@ const MainPerfil = () => {
         }
     }
 
-    return <div>
+    return <div className="App">
         <SweetAlert
             success
             title="¡Imagen subida con éxito!"
@@ -286,7 +282,7 @@ const MainPerfil = () => {
         <div className="pfl-wrapper">
             <div className="tabbable">
                 <ul className="nav nav-tabs">
-                    <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
+                    <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="tabs-color">
                         <Tab eventKey="home" title="Perfil">
                             <div id="users" className="tab-pane in">
                                 <div className="container">
@@ -323,8 +319,8 @@ const MainPerfil = () => {
                                                     <div className="col-sm-12 my-auto">
                                                         <Carousel infiniteLoop={true} showThumbs={false} useKeyboardArrows onChange={(e) => setImagenSeleccionada(e)}>
                                                             {imagenes.map(imagen => {
-                                                                return <div>
-                                                                    <img height={500} src={imagen} />
+                                                                return <div key={imagen.id}>
+                                                                    <img key={imagen.id} height={500} src={imagen} />
                                                                 </div>
                                                             })}
                                                         </Carousel>
@@ -363,7 +359,7 @@ const MainPerfil = () => {
                                             margin: '0 auto'
                                         }} />
                                         <div className="card perfil-foto" style={{ border: "0px" }}>
-                                            <button onClick={() => setCrearVisible(true)} style={{ float: 'right', backgroundColor: '#E6495A' }} className="btn btn-default">Nuevo empleado</button>
+                                            <button onClick={() => setCrearVisible(true)} style={{ marginBottom: "2%", float: 'right', backgroundColor: '#E6495A' }} className="btn btn-default">Nuevo empleado</button>
                                             <img className="card-img-top"
                                                 src={backImage} height="1" style={{ opacity: 0 }}
                                             ></img>
@@ -424,7 +420,7 @@ const MainPerfil = () => {
                                                                 <span className="help-block"></span>
                                                             </div>
                                                         </div>
-                                                        <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" type='button' >Guardar empleado</button>
+                                                        <button onClick={() => { editarServicio(); setEditarVisible(false) }} className="btn btn-lg btn-primary btn-block" style={{ marginBottom: "4%" }} type='button' >Guardar empleado</button>
                                                     </div>
                                                 </form>
                                                 :
@@ -445,16 +441,16 @@ const MainPerfil = () => {
                                                 <tbody>
                                                     {empleados.map((empleado, i) =>
                                                         empleado.RefNegocio.path.split('/')[3] === 'PR01' ?
-                                                            <tr className='clickable-row' key={i}>
-                                                                <td>{empleado.Nombre}</td>
-                                                                <td>Manolo</td>
-                                                                <td>{empleado.Email}</td>
-                                                                <td>{empleado.Telefono}</td>
-                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setEditarVisible(true) }} className="btn fa fa-edit" type="button" value=""  ></button></td>
-                                                                <td><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setOpenBorrar(true) }} className="btn fa fa-trash" type="button" value=""  ></button></td>
+                                                            <tr className='clickable-row' key={empleado.id}>
+                                                                <td key={empleado.id + "a"}>{empleado.Nombre}</td>
+                                                                <td key={empleado.id + "b"}>Manolo</td>
+                                                                <td key={empleado.id + "c"}>{empleado.Email}</td>
+                                                                <td key={empleado.id + "d"}>{empleado.Telefono}</td>
+                                                                <td key={empleado.id + "e"}><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setEditarVisible(true) }} className="btn fa fa-edit" type="button" value=""  ></button></td>
+                                                                <td key={empleado.id + "f"}><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setOpenBorrar(true) }} className="btn fa fa-trash" type="button" value=""  ></button></td>
                                                             </tr>
                                                             :
-                                                            <tr></tr>
+                                                            <tr key={empleado.id}></tr>
                                                     )}
                                                 </tbody>
                                             </table>

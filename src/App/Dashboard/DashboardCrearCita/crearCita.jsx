@@ -401,7 +401,7 @@ const Citas = () => {
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a className="link-color" href="dashboard-main.html">Dashboard</a>
+                    <a className="link-color" href="#">Dashboard</a>
                 </li>
                 <li className="breadcrumb-item active">Citas</li>
             </ol>

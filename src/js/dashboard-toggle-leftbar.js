@@ -1,4 +1,4 @@
-export function toggle() {
+/**export function toggle() {
   // Configure tooltips for collapsed side navigation
   $('.navbar-sidenav [data-toggle="tooltip"]').tooltip({
     template: '<div class="tooltip navbar-sidenav-tooltip" role="tooltip" style="pointer-events: none;"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
@@ -36,3 +36,4 @@ export function toggle() {
   console.log("hola");
 } (jQuery); // End of use strict
 
+*/
