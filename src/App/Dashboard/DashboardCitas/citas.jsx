@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as firebase from 'firebase'
 import DatePicker from 'react-datepicker'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
@@ -16,16 +15,12 @@ const ref = React.createRef();
 
 const Citas = () => {
     //Comprobar usuario ----
-    var BreakException = {};
-    const { currentUser } = useContext(AuthContext);
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
-    const empleados = buildEmpleados().empleados;
 
 
     const [citas, setCitas] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [ids, setIDs] = useState([]);
-    let varid = 0;
 
     const history = useHistory();
 

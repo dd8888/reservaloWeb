@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { useLocation } from "react-router-dom";
-import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
+import React, { useState, useEffect } from 'react'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
-import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../Auth';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import buildEmpleados from '../Assets/empleadosBuilder'
@@ -41,7 +36,6 @@ const HorariosUser = () => {
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
     const empleados = buildEmpleados().empleados;
     const [listaEventos, setListaEventos] = useState([])
-    const [listaEmpleados, setListaEmpleados] = useState([])
     const [horariosFinal, setHorariosFinal] = useState([])
     const [horarioEmpleado, setHorarioEmpleado] = useState([])
     useEffect(() => {

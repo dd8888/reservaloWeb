@@ -20,16 +20,11 @@ const Editar = () => {
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
     const [servicioSeleccionado, setPrecio] = useState();
-    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
     const empleados = buildEmpleados().empleados;
     const [horaSelec, setHoraSelec] = useState();
     const history = useHistory();
-    const [citas, setCitas] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
     const [ids, setIDs] = useState([]);
-    let varid = 0;
     let textInput = React.createRef();
-    let nombreUser = React.createRef();
     const [tel, setTel] = useState();
     let duracionInput = React.createRef();
     let precioInput = React.createRef();

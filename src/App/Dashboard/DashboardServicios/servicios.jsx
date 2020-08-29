@@ -1,10 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
-import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
+import React, { useState, useEffect } from 'react'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
-import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
@@ -15,17 +11,14 @@ const database = buildFirebase()
 
 
 const Servicios = () => {
-    const { currentUser } = useContext(AuthContext);
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
-    const empleados = buildEmpleados().empleados;
     let nombreInput = React.createRef();
     let precioInput = React.createRef();
     let duracionInput = React.createRef();
 
     const [servicios, setServicios] = useState([]);
-
-    const history = useHistory();
     const [updateSer, setUpdateSer] = useState(1);
+
     useEffect(() => {
         if (empleadoSeleccionado !== undefined) {
             database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('servicios').get()
@@ -47,7 +40,6 @@ const Servicios = () => {
     const [isOpenBorrar, setOpenBorrar] = useState(false);
     const [isOpenCrear, setOpenCrear] = useState(false);
     const [isOpenEditar, setOpenEditar] = useState(false);
-
     const [servicioSelec, setServicioSelec] = useState();
     const [crearVisible, setCrearVisible] = useState(false);
     const [editarVisible, setEditarVisible] = useState(false);
@@ -81,7 +73,6 @@ const Servicios = () => {
             setOpenEditar(true)
         }
     }
-
 
     return <div className="App">
         <SweetAlert
@@ -135,10 +126,8 @@ const Servicios = () => {
         </ol>
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
-
                 <i className="fa fa-table"></i> Servicios
                 <button onClick={() => setCrearVisible(true)} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nuevo servicio</button>
-
             </div>
 
             <div className="card-body">
@@ -225,7 +214,6 @@ const Servicios = () => {
                 </div>
             </div>
         </div>
-
         <Footer></Footer>
     </div >
 

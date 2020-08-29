@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
-import * as firebase from 'firebase'
 import Moment from 'react-moment';
 import '../../../css/dashboard-init.css'
 import CheckUserLoggedIn from '../../Restrict'
@@ -9,7 +8,7 @@ import buildFirebase from '../Assets/firebaseBuilder'
 import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
-const CitasDetalladas = (id) => {
+const CitasDetalladas = () => {
     CheckUserLoggedIn();
     const location = useLocation();
     const [citas, setCitas] = useState([]);

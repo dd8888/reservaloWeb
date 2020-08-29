@@ -1,31 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react'
-import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
+import React, { useState, useEffect } from 'react'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
-import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
 import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
-const ref = React.createRef();
 
 const Productos = () => {
     //Comprobar usuario ----
-    var BreakException = {};
-    const { currentUser } = useContext(AuthContext);
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
-    const empleados = buildEmpleados().empleados;
     let nombreInput = React.createRef();
     let precioInput = React.createRef();
     let cantidadInput = React.createRef();
 
     const [servicios, setServicios] = useState([]);
 
-    const history = useHistory();
     const [updateSer, setUpdateSer] = useState(1);
     useEffect(() => {
         if (empleadoSeleccionado !== undefined) {
@@ -82,9 +73,6 @@ const Productos = () => {
             setOpenEditar(true)
         }
     }
-
-    const [isEditable, setEditable] = useState(false);
-
     return <div className="App">
         <SweetAlert
             danger

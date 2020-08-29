@@ -1,22 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
-import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/bootstrap.min.css';
 import '../../../css/citas-detalladas.css';
-import { useHistory, useLocation } from 'react-router-dom';
-import CheckUserLoggedIn from '../../Restrict'
-import SweetAlert from 'react-bootstrap-sweetalert';
-import axios from 'axios'
 import QRCode from "react-qr-code";
 import { AuthContext } from '../../Auth';
 import Countdown, { zeroPad } from 'react-countdown';
-import { parseNumber } from 'globalize';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
 
 const database = buildFirebase()
-const cors = require('cors')({ origin: true });
 
 const Citas = () => {
 
@@ -37,13 +29,10 @@ const Citas = () => {
         }
     };
 
-    const { currentUser } = useContext(AuthContext);
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
-    const empleados = buildEmpleados().empleados;
 
     const [horarios, setHorarios] = useState([]);
     const [isDisponible, setDisponible] = useState();
-    const [siguienteHora, setSiguienteHora] = useState();
     const [siguienteHoraAMili, setSiguienteHoraAMili] = useState();
     const [idDia, setIdDia] = useState();
 
@@ -94,63 +83,12 @@ const Citas = () => {
 
 
     //Para formatear la fecha
-    function formattedDate(d = new Date) {
-        return [d.getFullYear(), d.getMonth() + 1, d.getDate()]
-            .map(n => n < 10 ? `0${n}` : `${n}`).join('-');
-    }
     //Para formatear la hora
-    function formattedTime(d) {
-        if (d.split(':')[0] < 10) {
-            return '0' + d + ':00.000'
-        } else if (d.split(':')[0] == 10) {
-            return d + ':00.000'
-        } else {
-            return d + ':00.000'
-        }
-    }
 
     //Para añadir minutos a fecha de entrada
     //Citas error máximo 60 minutos
-    function addMinutes(date, minutes) {
-        let minu = parseInt(minutes);
-        let ndate = date.split(' ')[0];
-        let time = date.split(' ')[1];
-        let hora = parseInt(time.split(':')[0]);
-        let min = parseInt(time.split(':')[1]);
-        let totalMin = 0;
-
-        if (min + minu >= 60) {
-            hora = hora + 1;
-            totalMin = (min + minutes) - 60;
-        } else {
-            totalMin = min + minutes;
-        }
-        return ndate + ' ' + hora + ':' + totalMin;
-    }
 
 
-    function CheckDates() {
-        disp.length = 0;
-        horarios.map(h => (
-            h.turnos[0].Uid.split(' ')[0].split('-')[1].replace('0', '') == citaDate.getMonth() + 1 && h.turnos[0].Uid.split(' ')[0].split('-')[2].replace('0', '') == citaDate.getDate()
-                ?
-                h.disponibilidad.map(dispon => (
-                    disp.push(dispon.split(':')[0] + ':' + dispon.split(':')[1]
-                    )))
-                :
-                null
-        ))
-
-        return (disp.length > 0 ?
-
-            disp.map((dis) =>
-                < option > {dis}</option >
-
-            )
-            : <option> - No disponible - </option>
-
-        )
-    }
 
     return <div className="App">
         <div className="container-fluid">

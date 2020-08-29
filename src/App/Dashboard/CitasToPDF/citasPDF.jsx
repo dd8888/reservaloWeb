@@ -1,13 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
-import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
-import { useHistory } from 'react-router-dom';
-import { AuthContext } from '../../Auth';
 import buildFirebase from '../Assets/firebaseBuilder'
-import buildEmpleados from '../Assets/empleadosBuilder'
 import Footer from '../BorderTemplate/Footer'
 import Pdf from "react-to-pdf";
 
@@ -24,10 +19,6 @@ const database = buildFirebase();
 
 const CitasPDF = () => {
     //Comprobar usuario ----
-    var BreakException = {};
-    const { currentUser } = useContext(AuthContext);
-    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
-    const empleados = buildEmpleados().empleados;
     const [users, setUsers] = useState([])
     const location = useLocation();
 
@@ -125,7 +116,7 @@ const CitasPDF = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {location.state.date.map((cita, i) => (
+                            {location.state.date.map((cita) => (
                                 users.map((us, i) => (
                                     <tr className='clickable-row' key={i} >
                                         <td>{cita.CheckIn}</td>

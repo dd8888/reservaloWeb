@@ -13,7 +13,6 @@ import buildEmpleados from '../Assets/empleadosBuilder'
 
 
 const database = buildFirebase()
-const cors = require('cors')({ origin: true });
 
 const Citas = () => {
     CheckUserLoggedIn();
@@ -26,10 +25,7 @@ const Citas = () => {
     const empleados = buildEmpleados().empleados;
     const [horaSelec, setHoraSelec] = useState();
     const history = useHistory();
-    const [citas, setCitas] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
     const [ids, setIDs] = useState([]);
-    let varid = 0;
     let textInput = React.createRef();
     let nombreUser = React.createRef();
     const [tel, setTel] = useState();
@@ -123,23 +119,6 @@ const Citas = () => {
 
     }, []/*judas*/)
 
-    //Para sacar los empleados
-    useEffect(() => {
-        database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).collection('empleados').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-                });
-                setEmpleados(fetchedEmpleados);
-            })
-
-    }, []/*judas*/)
-
     useEffect(() => {
         setTel(textInput.current.value)
         database.collection('NegociosDev').doc(location.state.empleadoref.split('/')[1]).collection('Negocios').doc(location.state.empleadoref.split('/')[3]).get().then(function (doc) {
@@ -226,21 +205,15 @@ const Citas = () => {
             dur = duracionInput.current.value;
             pre = precioInput.current.value
         }
-        let idUser;
-        let apellidoUser;
-
-
-
 
         let fechaFinal = formattedTime(addMinutes((formattedDate(citaDate) + ' ' + formattedTime(horaSelec)), parseInt(dur)));
+
         if (fechaFinal.split(' ')[1].split(':')[1] < 10) {
             fechaFinal = fechaFinal.split(' ')[0] + ' ' + fechaFinal.split(' ')[1].split(':')[0] + ':' + '0' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
         }
         if (fechaFinal.split(' ')[1].split(':')[0] < 10) {
             fechaFinal = fechaFinal.split(' ')[0] + ' ' + '0' + fechaFinal.split(' ')[1].split(':')[0] + ':' + fechaFinal.split(' ')[1].split(':')[1] + ':' + fechaFinal.split(' ')[1].split(':')[2]
         }
-
-
 
         if (nombreUser.current.value != null && textInput.current.value != null && dur != null && pre != null && citaDate != null && horaSelec != null && servicioSeleccionado != null) {
             database.collection('AnonimosDev').add({
@@ -340,11 +313,6 @@ const Citas = () => {
                 // always executed
             });
     }, [citaDate])
-
-
-
-
-
 
     function ComprobarServicio() {
         return (

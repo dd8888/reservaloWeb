@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import * as firebase from 'firebase'
-import DatePicker from 'react-datepicker'
 import '../../../../node_modules/react-datepicker/dist/react-datepicker.min.css';
 import '../../../css/dashboard-init.css'
-import { useHistory, useLocation } from 'react-router-dom';
-import CheckUserLoggedIn from '../../Restrict'
+import { useHistory } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
-import { NavLink } from 'react-router-dom'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tabs'
-import Table from 'react-bootstrap/Table'
 import Sonnet from 'react-bootstrap/Tabs'
 import { AuthContext } from '../../Auth';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
@@ -36,7 +32,6 @@ const MainPerfil = () => {
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
     const empleados = buildEmpleados().empleados;
     const [updateEmp, setUpdateEmp] = useState(1);
-    var BreakException = {};
 
     /* useEffect(() => {
          database.collection('EmpleadosDev').get()
@@ -74,7 +69,6 @@ const MainPerfil = () => {
 
     useEffect(() => {
         if (empleadoSeleccionado != undefined) {
-            const fetchedImagenes = [];
             firebase.storage().ref().child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery').listAll().then(function (result) {
                 const promises = result.items.map((itemRef) => itemRef.getDownloadURL());
                 Promise.all(promises).then((urls) =>
@@ -100,32 +94,14 @@ const MainPerfil = () => {
 
     const subirImagen = () => {
         const refImagen = storageRef.child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/' + imagenes.length + '.' + imagenesPreviewLink.name.split('.')[imagenesPreviewLink.name.split('.').length - 1])
-        refImagen.put(imagenesPreviewLink).then(function (snapshot) {
+        refImagen.put(imagenesPreviewLink).then(function () {
             setOpen(true)
         })
 
     }
 
-    const borrarImagen = () => {
-        if (imagenSeleccionada == undefined) {
-            setImagenSeleccionada(0)
-        }
-        const refImagenBorrar = storageRef.child(empleadoSeleccionado.RefNegocio.path.split('/')[3] + '/Gallery/' + imagenes[imagenSeleccionada].split(RegExp('%2..*%2F(.*?)\?alt'))[1].replace('?', ''))
-        refImagenBorrar.delete().then(function () {
-            if (update == undefined) {
-                setUpdate(1)
-            } else {
-                setUpdate(update + 1)
-            }
-            setOpenBorrar(false);
-
-        }).catch(function (error) {
-            console.log(error)
-        });;
-    }
     const [isOpen, setOpen] = useState(false);
     const [isOpenBorrar, setOpenBorrar] = useState(false)
-    const history = useHistory();
 
     let nombreInput = React.createRef();
     let apellidosInput = React.createRef();
@@ -405,7 +381,7 @@ const MainPerfil = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {empleados.map((empleado, i) =>
+                                                    {empleados.map((empleado) =>
                                                         empleado.RefNegocio.path.split('/')[3] === 'PR01' ?
                                                             <tr className='clickable-row' key={empleado.id}>
                                                                 <td key={empleado.id + "a"}>{empleado.Nombre}</td>
@@ -423,9 +399,7 @@ const MainPerfil = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                             <Sonnet />
                         </Tab>
                     </Tabs>
