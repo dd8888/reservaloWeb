@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
-
+import Footer from '../BorderTemplate/Footer'
 import Pdf from "react-to-pdf";
 
 const ref = React.createRef();
@@ -145,13 +145,7 @@ const CitasPDF = () => {
                 </div>
             </div>
         </div>
-        <footer className="sticky-footer">
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer>
+        <Footer></Footer>
     </div >
 
 };

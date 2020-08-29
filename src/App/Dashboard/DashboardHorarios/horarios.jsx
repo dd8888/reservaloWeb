@@ -10,6 +10,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import buildEmpleados from '../Assets/empleadosBuilder'
 import buildFirestore from '../Assets/firebaseBuilder'
+import Footer from '../BorderTemplate/Footer'
 
 
 
@@ -138,17 +139,7 @@ const HorariosUser = () => {
                 />
             </div>
         </div>
-
-        <footer className="sticky-footer">
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer>
-        <a className="scroll-to-top rounded" href="#page-top">
-            <i className="fa fa-angle-up"></i>
-        </a>
+        <Footer></Footer>
     </div >
 
 };

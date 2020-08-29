@@ -8,6 +8,7 @@ import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
+import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
 
@@ -225,16 +226,7 @@ const Servicios = () => {
             </div>
         </div>
 
-        <footer className="sticky-footer">
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer>
-        <a className="scroll-to-top rounded" href="#page-top">
-            <i className="fa fa-angle-up"></i>
-        </a>
+        <Footer></Footer>
     </div >
 
 };

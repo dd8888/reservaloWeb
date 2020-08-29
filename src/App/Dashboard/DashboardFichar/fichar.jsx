@@ -37,8 +37,6 @@ const Citas = () => {
         }
     };
 
-
-    CheckUserLoggedIn();
     const { currentUser } = useContext(AuthContext);
     const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
     const empleados = buildEmpleados().empleados;

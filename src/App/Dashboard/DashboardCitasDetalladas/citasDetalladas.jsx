@@ -6,6 +6,7 @@ import '../../../css/dashboard-init.css'
 import CheckUserLoggedIn from '../../Restrict'
 import { useHistory } from 'react-router-dom';
 import buildFirebase from '../Assets/firebaseBuilder'
+import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
 const CitasDetalladas = (id) => {
@@ -258,13 +259,7 @@ const CitasDetalladas = (id) => {
                 </div>
             </div>
         </div>
-        < footer className="sticky-footer" >
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer >
+        <Footer></Footer>
 
 
     </div >

@@ -8,6 +8,7 @@ import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
+import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
 
@@ -29,7 +30,6 @@ const Citas = () => {
     const history = useHistory();
 
     useEffect(() => {
-        //database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.split('/')[3]).collection('citas').where('CheckIn', '>=', startDate.toISOString().split('T')[0]).get()
         if (empleadoSeleccionado !== undefined) {
             database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('citas').get()
                 .then(response => {
@@ -164,13 +164,7 @@ const Citas = () => {
             </div>
         </div>
 
-        <footer className="sticky-footer">
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer>
+        <Footer></Footer>
 
     </div >
 

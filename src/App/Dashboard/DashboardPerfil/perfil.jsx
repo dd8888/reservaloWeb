@@ -16,6 +16,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from 'react-responsive-carousel';
 import buildFirebase from '../Assets/firebaseBuilder'
 import buildEmpleados from '../Assets/empleadosBuilder'
+import Footer from '../BorderTemplate/Footer'
 
 const database = buildFirebase()
 var passwordHash = require('password-hash');
@@ -428,13 +429,7 @@ const MainPerfil = () => {
                 </ul>
             </div>
         </div>
-        <footer className="sticky-footer">
-            <div className="container">
-                <div className="text-center">
-                    <small>Copyright © Resérvalo 2020</small>
-                </div>
-            </div>
-        </footer>
+        <Footer></Footer>
     </div >
 }
 
