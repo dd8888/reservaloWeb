@@ -8,6 +8,7 @@ import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { useLocation } from "react-router-dom";
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 
 const database = buildFirebase();
 const ref = React.createRef();
@@ -19,8 +20,8 @@ const Editar = () => {
     const [citaDate, setCitaDate] = useState(new Date());
     const [disp, setDisp] = useState([])
     const [servicioSeleccionado, setPrecio] = useState();
-    const [empleadoSelect, setEmpleadoSelect] = useState();
-    const [empleados, setEmpleados] = useState([]);
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
     const [horaSelec, setHoraSelec] = useState();
     const history = useHistory();
     const [citas, setCitas] = useState([]);

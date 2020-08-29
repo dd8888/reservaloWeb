@@ -13,6 +13,7 @@ import { AuthContext } from '../../Auth';
 import Countdown, { zeroPad } from 'react-countdown';
 import { parseNumber } from 'globalize';
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 
 const database = buildFirebase()
 const cors = require('cors')({ origin: true });
@@ -39,39 +40,8 @@ const Citas = () => {
 
     CheckUserLoggedIn();
     const { currentUser } = useContext(AuthContext);
-    const [empleados, setEmpleados] = useState([]);
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-
-
-                });
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                if (!emails.includes(currentUser.email)) {
-                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                    firebase.auth().signOut();
-                    throw BreakException;
-                } else {
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                }
-                setEmpleados(fetchedEmpleados);
-            })
-
-    }, []/*judas*/)
-    //----Termina comprobar usuario
-
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
 
     const [horarios, setHorarios] = useState([]);
     const [isDisponible, setDisponible] = useState();

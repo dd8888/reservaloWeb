@@ -7,6 +7,7 @@ import '../../../css/dashboard-init.css'
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 
 import Pdf from "react-to-pdf";
 
@@ -25,38 +26,12 @@ const CitasPDF = () => {
     //Comprobar usuario ----
     var BreakException = {};
     const { currentUser } = useContext(AuthContext);
-    const [empleados, setEmpleados] = useState([]);
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
     const [users, setUsers] = useState([])
     const location = useLocation();
 
     useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-
-
-                });
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                if (!emails.includes(currentUser.email)) {
-                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                    firebase.auth().signOut();
-                    throw BreakException;
-                } else {
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                }
-                setEmpleados(fetchedEmpleados);
-            })
         database.collection('UsuariosDev').get()
             .then(response => {
                 const fetchedUsers = [];
@@ -70,8 +45,8 @@ const CitasPDF = () => {
                 setUsers(fetchedUsers);
             })
 
-    }, []/*judas*/)
-    //----Termina comprobar usuario
+    }, [])
+
     function isEmpty(obj) {
         for (var prop in obj) {
             if (obj.hasOwnProperty(prop))
@@ -170,7 +145,6 @@ const CitasPDF = () => {
                 </div>
             </div>
         </div>
-
         <footer className="sticky-footer">
             <div className="container">
                 <div className="text-center">
@@ -178,7 +152,6 @@ const CitasPDF = () => {
                 </div>
             </div>
         </footer>
-
     </div >
 
 };

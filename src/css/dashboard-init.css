@@ -549,11 +549,11 @@ footer.sticky-footer {
   position        : absolute;
   right           : 0;
   bottom          : 0;
-  width           : 83% !important;
+  width           : 100% !important;
   height          : 28px;
   background-color: rgb(230, 73, 89);
   line-height     : 25px;
-  z-index         : 10;
+  z-index         : 100;
 }
 
 @media (min-width: 992px) {
@@ -760,4 +760,8 @@ footer.sticky-footer {
 
 .tabs-color>a:hover {
   color: #E6495A;
+}
+
+.navbar .navbar-expand-lg .navbar-dark .bg-dark .fixed-top .collapse .navbar-collapse {
+  z-index: 1;
 }

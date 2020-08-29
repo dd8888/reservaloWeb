@@ -15,6 +15,7 @@ import { AuthContext } from '../../Auth';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 
 const database = buildFirebase()
 var passwordHash = require('password-hash');
@@ -31,8 +32,8 @@ const MainPerfil = () => {
     const [imagenesPreview, setImagenesPreview] = useState();
     const [imagenesPreviewLink, setImagenesPreviewLink] = useState();
     const [imagenSeleccionada, setImagenSeleccionada] = useState();
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
-    const [empleados, setEmpleados] = useState([]);
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
     const [updateEmp, setUpdateEmp] = useState(1);
     var BreakException = {};
 
@@ -58,29 +59,6 @@ const MainPerfil = () => {
 
     }, [updateEmp]/*judas*/)
 
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-
-                });
-                setEmpleados(fetchedEmpleados);
-
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-            })
-
-    }, [])
 
     const { currentUser } = useContext(AuthContext);
     const [logo, setLogo] = useState();

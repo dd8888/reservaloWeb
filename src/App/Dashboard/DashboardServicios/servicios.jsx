@@ -7,51 +7,19 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
 
 const database = buildFirebase()
 
 
 
 const Servicios = () => {
-    //Comprobar usuario ----
-    var BreakException = {};
     const { currentUser } = useContext(AuthContext);
-    const [empleados, setEmpleados] = useState([]);
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
     let nombreInput = React.createRef();
     let precioInput = React.createRef();
     let duracionInput = React.createRef();
-
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-
-
-                });
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                if (!emails.includes(currentUser.email)) {
-                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                    firebase.auth().signOut();
-                    throw BreakException;
-                } else {
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                }
-                setEmpleados(fetchedEmpleados);
-            })
-
-    }, []/*judas*/)
-    //----Termina comprobar usuario
 
     const [servicios, setServicios] = useState([]);
 
@@ -73,7 +41,7 @@ const Servicios = () => {
                     setServicios(fetchedServicios);
                 })
         }
-    }, [empleadoSeleccionado, updateSer]/*judas*/)
+    }, [empleadoSeleccionado, updateSer])
 
     const [isOpenBorrar, setOpenBorrar] = useState(false);
     const [isOpenCrear, setOpenCrear] = useState(false);

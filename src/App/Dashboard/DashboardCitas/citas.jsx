@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../Auth';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder'
+import buildEmpleados from '../Assets/empleadosBuilder'
+
 const database = buildFirebase()
 
 const ref = React.createRef();
@@ -15,38 +17,9 @@ const Citas = () => {
     //Comprobar usuario ----
     var BreakException = {};
     const { currentUser } = useContext(AuthContext);
-    const [empleados, setEmpleados] = useState([]);
-    const [empleadoSeleccionado, setEmpleadoSeleccionado] = useState();
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
+    const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
+    const empleados = buildEmpleados().empleados;
 
-
-                });
-                fetchedEmpleados.forEach(element => {
-                    emails.push(element.Email)
-                });
-
-                if (!emails.includes(currentUser.email)) {
-                    alert('Este usuario no tiene permisos de acceso. Serás redirigido al login');
-                    firebase.auth().signOut();
-                    throw BreakException;
-                } else {
-                    setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-                }
-                setEmpleados(fetchedEmpleados);
-            })
-
-    }, []/*judas*/)
-    //----Termina comprobar usuario
 
     const [citas, setCitas] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
