@@ -38,27 +38,27 @@ const MainPerfil = () => {
     const [updateEmp, setUpdateEmp] = useState(1);
     var BreakException = {};
 
-    useEffect(() => {
-        database.collection('EmpleadosDev').get()
-            .then(response => {
-                const fetchedEmpleados = [];
-                const emails = [];
-                response.forEach(document => {
-                    const fetchedEmpleado = {
-                        id: document.id,
-                        ...document.data()
-                    };
-                    fetchedEmpleados.push(fetchedEmpleado);
-                    fetchedEmpleados.forEach(element => {
-                        emails.push(element.Email)
-                    });
-                });
-                setEmpleados(fetchedEmpleados);
-                setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
-
-            })
-
-    }, [updateEmp]/*judas*/)
+    /* useEffect(() => {
+         database.collection('EmpleadosDev').get()
+             .then(response => {
+                 const fetchedEmpleados = [];
+                 const emails = [];
+                 response.forEach(document => {
+                     const fetchedEmpleado = {
+                         id: document.id,
+                         ...document.data()
+                     };
+                     fetchedEmpleados.push(fetchedEmpleado);
+                     fetchedEmpleados.forEach(element => {
+                         emails.push(element.Email)
+                     });
+                 });
+                 setEmpleados(fetchedEmpleados);
+                 setEmpleadoSeleccionado(fetchedEmpleados[emails.indexOf(currentUser.email)])
+ 
+             })
+ 
+     }, [updateEmp])*/
 
 
     const { currentUser } = useContext(AuthContext);
@@ -66,16 +66,11 @@ const MainPerfil = () => {
     const [backImage, setBackImage] = useState();
     const [imagenes, setImagenes] = useState([]);
     const [update, setUpdate] = useState();
-
-
-
     const [isOpenCrear, setOpenCrear] = useState(false);
     const [isOpenEditar, setOpenEditar] = useState(false);
-
     const [empleadoSelec, setEmpleadoSelec] = useState();
     const [crearVisible, setCrearVisible] = useState(false);
     const [editarVisible, setEditarVisible] = useState(false);
-
 
     useEffect(() => {
         if (empleadoSeleccionado != undefined) {
@@ -148,6 +143,8 @@ const MainPerfil = () => {
             })
             setUpdateEmp(updateEmp + 1)
             setOpenEditar(true)
+            window.location.reload(false);
+
         }
     }
 
@@ -168,9 +165,14 @@ const MainPerfil = () => {
                 Contraseña: hashedPassword
 
             })
-            firebase.auth().createUserWithEmailAndPassword(emailInput.current.value, password)
-            setUpdateEmp(updateEmp + 1)
-            setOpenCrear(true)
+            try {
+                firebase.auth().createUserWithEmailAndPassword(emailInput.current.value, password)
+                setUpdateEmp(updateEmp + 1)
+                setOpenCrear(true)
+            } catch (error) {
+                alert(error)
+            }
+
         }
     }
 
@@ -196,6 +198,8 @@ const MainPerfil = () => {
             show={isOpenCrear} //Notice how we bind the show property to our component state
             onConfirm={() => {
                 setOpenCrear(false);
+                window.location.reload(false);
+
             }}
 
         >
@@ -215,13 +219,12 @@ const MainPerfil = () => {
                 try {
                     database.collection('EmpleadosDev').doc(empleadoSelec.id).delete()
                     database.collection('NegociosDev').doc(empleadoSeleccionado.RefNegocio.path.split('/')[1]).collection('Negocios').doc(empleadoSeleccionado.RefNegocio.path.split('/')[3]).collection('empleados').doc(empleadoSelec.Nombre).delete();
-                    setUpdateEmp(updateEmp + 1)
                 } catch (err) {
-                    console.log(err)
+                    alert(err)
                 } finally {
                     setOpenBorrar(false)
+                    window.location.reload(false);
                 }
-
             }}
             onCancel={() => setOpenBorrar(false)}
         >
@@ -322,7 +325,7 @@ const MainPerfil = () => {
                                             margin: '0 auto'
                                         }} />
                                         <div className="card perfil-foto" style={{ border: "0px" }}>
-                                            <button onClick={() => setCrearVisible(true)} style={{ marginBottom: "2%", float: 'right', backgroundColor: '#E6495A' }} className="btn btn-default">Nuevo empleado</button>
+                                            <button onClick={() => setCrearVisible(!crearVisible)} style={{ marginBottom: "2%", float: 'right', backgroundColor: '#E6495A' }} className="btn btn-default">Nuevo empleado</button>
                                             <img className="card-img-top"
                                                 src={backImage} height="1" style={{ opacity: 0 }}
                                             ></img>
@@ -348,7 +351,7 @@ const MainPerfil = () => {
                                                             </div>
                                                             <div className="form-group">
                                                                 <label htmlFor="first_name">Email</label>
-                                                                <input ref={emailInput} type="text" className="form-control" id="first_name" placeholder="Email " required autoComplete="on"></input>
+                                                                <input ref={emailInput} type="mail" className="form-control" id="first_name" placeholder="Email " required autoComplete="on"></input>
                                                                 <span className="help-block"></span>
                                                             </div>
                                                         </div>
@@ -409,7 +412,7 @@ const MainPerfil = () => {
                                                                 <td key={empleado.id + "b"}>Manolo</td>
                                                                 <td key={empleado.id + "c"}>{empleado.Email}</td>
                                                                 <td key={empleado.id + "d"}>{empleado.Telefono}</td>
-                                                                <td key={empleado.id + "e"}><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setEditarVisible(true) }} className="btn fa fa-edit" type="button" value=""  ></button></td>
+                                                                <td key={empleado.id + "e"}><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setEditarVisible(!editarVisible) }} className="btn fa fa-edit" type="button" value=""  ></button></td>
                                                                 <td key={empleado.id + "f"}><button style={{ backgroundColor: '#E6495A', margin: 'auto', border: '1px solid black', display: 'block' }} onClick={() => { setEmpleadoSelec(empleado); setOpenBorrar(true) }} className="btn fa fa-trash" type="button" value=""  ></button></td>
                                                             </tr>
                                                             :

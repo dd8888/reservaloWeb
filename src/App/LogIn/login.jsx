@@ -33,7 +33,7 @@ const Login = ({ history }) => {
             const { email, password } = event.target.elements;
             try {
                 await firebase.auth().signInWithEmailAndPassword(email.value, password.value);
-                history.push("/citas")
+                history.push("/perfil")
             } catch (error) {
                 alert(error);
             }
@@ -43,7 +43,7 @@ const Login = ({ history }) => {
 
     const { currentUser } = useContext(AuthContext);
     if (currentUser) {
-        return <Redirect to="/citas" />;
+        return <Redirect to="/perfil" />;
     }
     return <div>
         <div className='body__login'>
