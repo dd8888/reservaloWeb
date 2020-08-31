@@ -277,15 +277,15 @@ const Editar = () => {
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a className="link-color" href="#">Dashboard</a>
+                    <a className="link-color" href="" onClick={(e) => {
+                        e.preventDefault(); history.push({
+                            pathname: "/perfil",
+                        })
+                    }}>Dashboard</a>
                 </li>
-                <li className="breadcrumb-item active">Citas</li>
+                <li className="breadcrumb-item active">Editar citas</li>
             </ol>
             <div className="card mb-3 col-lg-12">
-                <div className="card-header">
-                    <i className="fa fa-table"></i> Citas
-                </div>
-
                 <form className="form-group">
                     <h2>Crear nueva cita</h2>
                     <label htmlFor="phone_number">Número de teléfono</label>

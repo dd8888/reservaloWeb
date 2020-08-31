@@ -120,13 +120,16 @@ const Servicios = () => {
       </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
-                <a className="link-color" href="#">Dashboard</a>
+                <a className="link-color" href="" onClick={(e) => {
+                    e.preventDefault(); history.push({
+                        pathname: "/perfil",
+                    })
+                }}>Dashboard</a>
             </li>
             <li className="breadcrumb-item active">Servicios</li>
         </ol>
         <div className="card mb-3 col-lg-12">
             <div className="card-header">
-                <i className="fa fa-table"></i> Servicios
                 <button onClick={() => setCrearVisible(true)} style={{ float: 'right', backgroundColor: '#E6495A', marginLeft: '1%', marginTop: '-0.3%' }} className="btn btn-default">Nuevo servicio</button>
             </div>
 

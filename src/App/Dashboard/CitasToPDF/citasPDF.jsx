@@ -78,9 +78,13 @@ const CitasPDF = () => {
     return <div className="App">
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
-                <a className="link-color" href="dashboard-main.html">Dashboard</a>
+                <a className="link-color" onClick={(e) => {
+                    e.preventDefault(); history.push({
+                        pathname: "/perfil",
+                    })
+                }}>Dashboard</a>
             </li>
-            <li className="breadcrumb-item active">Citas</li>
+            <li className="breadcrumb-item active">PDF</li>
         </ol>
         <div className="card mb-3 col-lg-12">
             <div className="card-header">

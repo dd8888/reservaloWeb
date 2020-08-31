@@ -217,7 +217,11 @@ const MainPerfil = () => {
       </SweetAlert>
         <ol className="breadcrumb">
             <li className="breadcrumb-item">
-                <a className="link-color" href="#">Dashboard</a>
+                <a className="link-color" href="" onClick={(e) => {
+                    e.preventDefault(); history.push({
+                        pathname: "/perfil",
+                    })
+                }}>Dashboard</a>
             </li>
             <li className="breadcrumb-item active">Perfil</li>
         </ol>

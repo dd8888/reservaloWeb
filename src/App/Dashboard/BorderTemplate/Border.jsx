@@ -86,7 +86,7 @@ const Border = () => {
             </button>
             <div className={"collapse navbar-collapse " + show} id="navbarResponsive">
                 <ul className="navbar-nav navbar-sidenav" id="exampleAccordion">
-                    <li className="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                    <li className="nav-item first-item" data-toggle="tooltip" data-placement="right" title="Link">
                         <NavLink to="/perfil" activeStyle={{
                             color: '#E6495A'
                         }} className="nav-link">

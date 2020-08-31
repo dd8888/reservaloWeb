@@ -94,13 +94,16 @@ const Citas = () => {
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a className="link-color" href="#">Dashboard</a>
+                    <a className="link-color" href="" onClick={(e) => {
+                        e.preventDefault(); history.push({
+                            pathname: "/perfil",
+                        })
+                    }}>Dashboard</a>
                 </li>
-                <li className="breadcrumb-item active">Citas</li>
+                <li className="breadcrumb-item active">Fichar</li>
             </ol>
             <div className="card mb-3 col-lg-12 bordes">
                 <div className="card-header">
-                    <i className="fa fa-qrcode"></i> Fichar
                 </div>
                 <div className="d-flex justify-content-center" >
                     <div style={{ padding: "5%" }} className="text-center">

@@ -293,7 +293,7 @@ const Citas = () => {
     /*
     Prueba query axios
     */
-    useEffect(() => {
+    /*useEffect(() => {
         axios.get('https://us-central1-pruebafirebase-44f30.cloudfunctions.net/getData', {
             params: {
                 "date": citaDate,
@@ -312,7 +312,7 @@ const Citas = () => {
             .finally(function () {
                 // always executed
             });
-    }, [citaDate])
+    }, [citaDate])*/
 
     function ComprobarServicio() {
         return (
@@ -337,7 +337,7 @@ const Citas = () => {
     }
     const [isOpen, setOpen] = useState(false);
 
-    return <div>
+    return <div className="App">
         <SweetAlert
             success
             title="¡Cita creada con éxito!"
@@ -353,14 +353,22 @@ const Citas = () => {
         <div className="container-fluid">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a className="link-color" href="#">Dashboard</a>
+                    <a className="link-color" href="" onClick={(e) => {
+                        e.preventDefault(); history.push({
+                            pathname: "/perfil",
+                        })
+                    }}>Dashboard</a>
                 </li>
-                <li className="breadcrumb-item active">Citas</li>
+                <li className="breadcrumb-item">
+                    <a className="link-color" href="" onClick={(e) => {
+                        e.preventDefault(); history.push({
+                            pathname: "/citas",
+                        })
+                    }}>Citas</a>
+                </li>
+                <li className="breadcrumb-item active">Crear nueva cita</li>
             </ol>
             <div className="card mb-3 col-lg-12">
-                <div className="card-header">
-                    <i className="fa fa-table"></i> Citas
-                </div>
 
                 <form className="form-group">
                     <h2>Crear nueva cita</h2>
