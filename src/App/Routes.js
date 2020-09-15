@@ -13,22 +13,17 @@ import Services from './Servicios';
 import Producto from './Productos';
 import FicharEmpleado from './Fichar';
 import PageNotFound from './PageNotFound';
+import { useIsAuthenticated } from 'react-auth-kit';
+
 const Routes = () => {
-  const { currentUser } = useContext(AuthContext);
-  if (currentUser) {
+  const isAuthenticated = useIsAuthenticated();
+  console.log(isAuthenticated());
+
+  if (isAuthenticated()) {
     return (
       <Switch>
-        <Route path="/citas" component={CitasPage} />
-        <Route path="/citaDetallada" component={CitaDetallada} />
-        <Route path="/crearCita" component={CrearCitasPage} />
-        <Route path="/exportarPDF" component={CitasaPDF} />
-        <Route path="/perfil" component={Perfil}></Route>
-        <Route path="/horarios" component={Horarios}></Route>
-        <Route path="/editarCita" component={EditarCitas}></Route>
-        <Route path="/servicios" component={Services}></Route>
-        <Route path="/fichar" component={FicharEmpleado}></Route>
-        <Route path="/productos" component={Producto}></Route>
-        <Redirect to="/perfil" />
+        <Route path="/404" component={PageNotFound}></Route>
+        <Redirect to="/404" />
       </Switch>
     );
   } else {
@@ -40,4 +35,15 @@ const Routes = () => {
     );
   }
 };
+
 export default Routes;
+
+/*<Route path="/horarios" component={Horarios}></Route>
+        <Route path="/editarCita" component={EditarCitas}></Route>
+        <Route path="/servicios" component={Services}></Route>
+        <Route path="/fichar" component={FicharEmpleado}></Route>
+        <Route path="/productos" component={Producto}></Route>
+        <Route path="/citas" component={CitasPage} />
+        <Route path="/citaDetallada" component={CitaDetallada} />
+        <Route path="/crearCita" component={CrearCitasPage} />
+        <Route path="/exportarPDF" component={CitasaPDF} />*/

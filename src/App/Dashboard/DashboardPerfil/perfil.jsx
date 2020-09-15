@@ -13,6 +13,7 @@ import { Carousel } from 'react-responsive-carousel';
 import buildFirebase from '../Assets/firebaseBuilder';
 import buildEmpleados from '../Assets/empleadosBuilder';
 import Footer from '../BorderTemplate/Footer';
+import { useAuthUser } from 'react-auth-kit';
 
 const database = buildFirebase();
 var passwordHash = require('password-hash');
@@ -54,7 +55,7 @@ const MainPerfil = () => {
  
      }, [updateEmp])*/
 
-  const { currentUser } = useContext(AuthContext);
+  //const { currentUser } = useContext(AuthContext);
   const [logo, setLogo] = useState();
   const [backImage, setBackImage] = useState();
   const [imagenes, setImagenes] = useState([]);
@@ -302,7 +303,7 @@ const MainPerfil = () => {
                           ></img>
                           <h4 className="card-title">Bienvenido</h4>
                           <h6 className="card-subtitle mb-2 text-muted">
-                            {currentUser.email}
+                            {'currentUser.email'}
                           </h6>
                         </div>
                       </div>
