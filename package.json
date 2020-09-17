@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel ./src/index.html --open",
+    "start": "parcel start ./src/index.html",
     "format": "prettier --write \"*.{js,jsx, json, css}\""
   },
   "repository": {
@@ -53,7 +53,8 @@
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.0.0",
     "react-to-pdf": "0.0.11",
-    "recompose": "^0.30.0"
+    "recompose": "^0.30.0",
+    "serve": "^11.3.2"
   },
   "devDependencies": {
     "eslint": "^7.3.1",

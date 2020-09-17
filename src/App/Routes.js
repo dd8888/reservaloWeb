@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Switch, Redirect, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { AuthContext } from './Auth';
 import CitasPage from './CitasPage';
 import CitaDetallada from './CitasDetalladas';
@@ -14,26 +14,24 @@ import Producto from './Productos';
 import FicharEmpleado from './Fichar';
 import PageNotFound from './PageNotFound';
 import { useIsAuthenticated } from 'react-auth-kit';
+import { PrivateRoute } from 'react-auth-kit';
+import Home from './Home';
 
 const Routes = () => {
-  const isAuthenticated = useIsAuthenticated();
-  console.log(isAuthenticated());
-
-  if (isAuthenticated()) {
-    return (
+  return (
+    <BrowserRouter>
       <Switch>
-        <Route path="/404" component={PageNotFound}></Route>
-        <Redirect to="/404" />
+        <Route path={'/'} component={Home} exact></Route>
+        <Route path="/login" component={Index} exact />
+        <PrivateRoute
+          path={'/404'}
+          component={PageNotFound}
+          loginPath={'/login'}
+          exact
+        />
       </Switch>
-    );
-  } else {
-    return (
-      <Switch>
-        <Route path="/login" component={Index} />
-        <Redirect to="/login" />
-      </Switch>
-    );
-  }
+    </BrowserRouter>
+  );
 };
 
 export default Routes;
