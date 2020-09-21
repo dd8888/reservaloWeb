@@ -5,19 +5,26 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 import buildFirebase from '../Assets/firebaseBuilder';
 import buildEmpleados from '../Assets/empleadosBuilder';
 import Footer from '../BorderTemplate/Footer';
+import axios from 'axios';
+import { getUser, refreshToken } from '../Assets/functions';
 
 const database = buildFirebase();
 
 const Servicios = () => {
-  const empleadoSeleccionado = buildEmpleados().empleadoSeleccionado;
   let nombreInput = React.createRef();
   let precioInput = React.createRef();
   let duracionInput = React.createRef();
+  const [user, setUser] = useState();
 
   const [servicios, setServicios] = useState([]);
   const [updateSer, setUpdateSer] = useState(1);
 
-  useEffect(() => {
+  //Crea un objeto user con toda la información del usuario
+  getUser(setUser);
+
+  console.log(user);
+
+  /*useEffect(() => {
     if (empleadoSeleccionado !== undefined) {
       database
         .collection('NegociosDev')
@@ -38,7 +45,7 @@ const Servicios = () => {
           setServicios(fetchedServicios);
         });
     }
-  }, [empleadoSeleccionado, updateSer]);
+  }, [empleadoSeleccionado, updateSer]);*/
 
   const [isOpenBorrar, setOpenBorrar] = useState(false);
   const [isOpenCrear, setOpenCrear] = useState(false);

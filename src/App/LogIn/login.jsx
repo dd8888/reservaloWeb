@@ -23,10 +23,15 @@ const Login = () => {
       if (res.data.code === 200) {
         if (
           signIn({
-            token: '35v3443bn368367n306306wbn407qn420b436b4', //Just a random token
+            token: res.data.result.AccessToken, //Just a random token
             tokenType: 'Bearer', // Token type set as Bearer
-            authState: { name: 'React User', uid: 123456 }, // Dummy auth user state
-            expiresIn: 120, // Token Expriration time, in minutes
+            authState: {
+              mail: formData.Email,
+              id: res.data.result.Id,
+              token: res.data.result.AccessToken,
+              refreshToken: res.data.result.RefreshToken,
+            }, // Dummy auth user state
+            expiresIn: 10, // Token Expriration time, in minutes
           })
         ) {
           // If Login Successfull, then Redirect the user to secure route

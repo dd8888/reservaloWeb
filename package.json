@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel start ./src/index.html",
+    "start": "parcel serve ./src/index.html --port 3000",
     "format": "prettier --write \"*.{js,jsx, json, css}\""
   },
   "repository": {

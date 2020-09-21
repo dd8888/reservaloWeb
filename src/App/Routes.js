@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { AuthContext } from './Auth';
 import CitasPage from './CitasPage';
 import CitaDetallada from './CitasDetalladas';
@@ -21,11 +21,16 @@ const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={'/'} component={Home} exact></Route>
         <Route path="/login" component={Index} exact />
         <PrivateRoute
           path={'/404'}
           component={PageNotFound}
+          loginPath={'/login'}
+          exact
+        />
+        <PrivateRoute
+          path={'/servicios'}
+          component={Services}
           loginPath={'/login'}
           exact
         />
