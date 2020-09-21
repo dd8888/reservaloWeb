@@ -7,6 +7,7 @@ import buildEmpleados from '../Assets/empleadosBuilder';
 import Footer from '../BorderTemplate/Footer';
 import axios from 'axios';
 import { getUser, refreshToken } from '../Assets/functions';
+import { useAuthUser, useSignIn } from 'react-auth-kit';
 
 const database = buildFirebase();
 
@@ -15,6 +16,7 @@ const Servicios = () => {
   let precioInput = React.createRef();
   let duracionInput = React.createRef();
   const [user, setUser] = useState();
+  const authUser = useAuthUser();
 
   const [servicios, setServicios] = useState([]);
   const [updateSer, setUpdateSer] = useState(1);
@@ -22,30 +24,35 @@ const Servicios = () => {
   //Crea un objeto user con toda la información del usuario
   getUser(setUser);
 
-  console.log(user);
-
-  /*useEffect(() => {
-    if (empleadoSeleccionado !== undefined) {
-      database
-        .collection('NegociosDev')
-        .doc(empleadoSeleccionado.RefNegocio.path.split('/')[1])
-        .collection('Negocios')
-        .doc(empleadoSeleccionado.RefNegocio.path.split('/')[3])
-        .collection('servicios')
-        .get()
-        .then((response) => {
-          const fetchedServicios = [];
-          response.forEach((document) => {
-            const fetchedServicio = {
-              id: document.id,
-              ...document.data(),
-            };
-            fetchedServicios.push(fetchedServicio);
-          });
-          setServicios(fetchedServicios);
+  useEffect(() => {
+    if (user !== undefined) {
+      axios
+        .get(
+          'http://163.172.183.16:32545/business/' +
+            user.NegocioEmpleadoId +
+            '/services',
+          {
+            headers: {
+              token: authUser().token,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            const fetchedServicios = [];
+            res.data.result.Servicios.forEach((document) => {
+              console.log(document);
+              const fetchedServicio = {
+                id: document.id,
+                ...document,
+              };
+              fetchedServicios.push(fetchedServicio);
+            });
+            setServicios(fetchedServicios);
+          }
         });
     }
-  }, [empleadoSeleccionado, updateSer]);*/
+  }, [user, updateSer]);
 
   const [isOpenBorrar, setOpenBorrar] = useState(false);
   const [isOpenCrear, setOpenCrear] = useState(false);
@@ -339,9 +346,9 @@ const Servicios = () => {
               <tbody>
                 {servicios.map((servicio, i) => (
                   <tr className="clickable-row" key={i}>
-                    <td>{servicio.nombre}</td>
-                    <td>{servicio.duracion}</td>
-                    <td>{servicio.precio}</td>
+                    <td>{servicio.Nombre}</td>
+                    <td>{servicio.Duracion}</td>
+                    <td>{servicio.Precio}</td>
                     <td>
                       <button
                         style={{

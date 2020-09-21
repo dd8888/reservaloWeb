@@ -27,8 +27,6 @@ export function getUser(setUser) {
               RefreshToken: authUser().refreshToken,
             })
             .then((res) => {
-              console.log(authUser());
-              console.log(res.data);
               if (
                 signIn({
                   token: res.data.result.AccessToken, //Just a random token
