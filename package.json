@@ -30,7 +30,7 @@
     "jQuery": "^1.7.4",
     "jquery": "^3.5.1",
     "lint-staged": "^10.2.11",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "password-hash": "^1.2.2",
     "popper.js": "^1.16.1",
     "prettier": "^2.0.5",
